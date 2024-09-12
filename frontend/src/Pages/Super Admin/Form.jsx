@@ -19,7 +19,7 @@ const Form = ({ onClose }) => {
         marketValue: '',
         estimateValue: '',
     });
-
+    const [image, setImage] = useState(null);
     const [categories, setCategories] = useState([]); 
     const [models, setModels] = useState([]); 
 
@@ -55,10 +55,30 @@ const Form = ({ onClose }) => {
         });
     };
 
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const formDataWithImage = new FormData();
+        
+        // Append all form data
+        Object.keys(formData).forEach(key => {
+            formDataWithImage.append(key, formData[key]);
+        });
+        
+        // Append the image file
+        if (image) {
+            formDataWithImage.append('image', image);
+        }
+
         try {
-            const response = await axios.post('http://localhost:5000/api/submit', formData);
+            const response = await axios.post('http://localhost:5000/api/submit', formDataWithImage, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
             if (response.status === 201) {
                 alert('Data submitted successfully!');
                 onClose();
@@ -234,6 +254,17 @@ const Form = ({ onClose }) => {
                             id="estimateValue"
                             value={formData.estimateValue}
                             onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="mb-2">
+                        <label htmlFor="image" className="form-label" style={{ fontSize: '0.9rem' }}>Upload Image</label>
+                        <input
+                            type="file"
+                            className="form-control form-control-sm"
+                            id="image"
+                            onChange={handleImageChange}
+                            accept="image/*"
                         />
                     </div>
 

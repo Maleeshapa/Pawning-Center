@@ -21,6 +21,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
+
 // Middleware
 app.use(bodyParser.json({ limit: '10mb' })); // limit 
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
@@ -40,11 +41,8 @@ connection.connect((err) => {
     console.log('Connected to MySQL as id ' + connection.threadId);
 });
 
-const storage = multer.memoryStorage(); // Store files in memory
-const upload = multer({ 
-    storage, 
-    limits: { fileSize: 10 * 1024 * 1024 } // Limit file to 10MB
-});
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 //image uploads
 app.post('/api/submit', upload.single('image'), (req, res) => {
@@ -63,7 +61,8 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
         marketValue,
         estimateValue,
     } = req.body;
-    
+
+    const image = req.file ? req.file.buffer : null;
 
     // Check if customer exists
     const checkCustomerQuery = 'SELECT * FROM Customers WHERE nic = ?';
@@ -90,12 +89,12 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
         // Save item details
         function insertProduct() {
             const createItemQuery = `INSERT INTO Products 
-                (recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue ) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                (recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue, image) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
                 
             connection.query(createItemQuery, [
                 recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, 
-                itemName, itemNo, size, marketValue, estimateValue
+                itemName, itemNo, size, marketValue, estimateValue, image
             ], (err) => {
                 if (err) {
                     console.error('Error saving item:', err.stack);
@@ -105,10 +104,25 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
                 res.status(201).json({ message: 'Data saved successfully' });
             });
         }
-        
     });
 });
 
+// Add a new route to serve images
+app.get('/api/image/:id', (req, res) => {
+    const query = 'SELECT image FROM Products WHERE id = ?';
+    connection.query(query, [req.params.id], (err, results) => {
+        if (err) {
+            console.error('Error fetching image:', err);
+            return res.status(500).json({ message: 'Error fetching image' });
+        }
+        if (results.length > 0 && results[0].image) {
+            res.contentType('image/jpeg');
+            res.send(results[0].image);
+        } else {
+            res.status(404).json({ message: 'Image not found' });
+        }
+    });
+});
 
 // API to fetch categories from the database
 app.get('/api/categories', (req, res) => {
@@ -180,47 +194,25 @@ app.get('/api/items', (req, res) => {
 
 // Route to Update Product Payment Details
 app.post('/api/pawn-payment', (req, res) => {
-    const { id, status, monthlyInterest, totalPrice, customerPaid, totalInterest, dueAmount } = req.body;
-  
-    let query;
-    let queryParams;
-  
-    if (status === 'Pawned') {
-      const currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
-      query = `
-        UPDATE products SET 
-          status = ?,
-          monthlyInterest = ?, 
-          totalPrice = ?, 
-          customerPaid = ?,
-          totalInterest = ?,
-          dueAmount = ?,
-          endDate = ?
-        WHERE id = ?
-      `;
-      queryParams = [status, monthlyInterest, totalPrice, customerPaid, totalInterest, dueAmount, currentDate, id];
-    } else {
-      query = `
-        UPDATE products SET 
-          status = ?,
-          monthlyInterest = ?, 
-          totalPrice = ?, 
-          customerPaid = ?,
-          totalInterest = ?,
-          dueAmount = ?
-        WHERE id = ?
-      `;
-      queryParams = [status, monthlyInterest, totalPrice, customerPaid, totalInterest, dueAmount, id];
-    }
-  
-    connection.query(query, queryParams, (err, result) => {
-      if (err) {
-        console.error('Error updating product:', err);
-        return res.status(500).send('Error updating product');
-      }
-      res.send('Product updated successfully');
+    const { id, monthlyInterest, totalPrice, customerPaid, totalInterest,dueAmount } = req.body;
+
+    const query = 
+        `UPDATE products SET 
+            monthlyInterest = ?, 
+            totalPrice = ?, 
+            customerPaid = ?,
+            totalInterest = ?,
+            dueAmount = ?
+        WHERE id = ?`;
+
+    connection.query(query, [monthlyInterest, totalPrice, customerPaid, totalInterest,dueAmount, id], (err, result) => {
+        if (err) {
+            console.error('Error updating product:', err);
+            return res.status(500).send('Error updating product');
+        }
+        res.send('Product updated successfully');
     });
-  });
+});
 
 app.put('/api/remove-item/:id', (req, res) => {
     const itemId = req.params.id;
@@ -434,10 +426,10 @@ app.delete('/api/customers/:id', (req, res) => {
 });
 
 // Delete item 
-app.delete('/api/products/:id', (req, res) => {
+app.delete('/api/items/:id', (req, res) => {
     const { id } = req.params;
 
-    const deleteItemQuery = 'DELETE FROM products WHERE id = ?';
+    const deleteItemQuery = 'DELETE FROM Items WHERE id = ?';
 
     connection.query(deleteItemQuery, [id], (err, result) => {
         if (err) {
