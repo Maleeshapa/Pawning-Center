@@ -124,6 +124,7 @@ app.get('/api/image/:id', (req, res) => {
     });
 });
 
+
 // API to fetch categories from the database
 app.get('/api/categories', (req, res) => {
     const query = 'SELECT categoryName FROM itemcategory';
@@ -194,25 +195,47 @@ app.get('/api/items', (req, res) => {
 
 // Route to Update Product Payment Details
 app.post('/api/pawn-payment', (req, res) => {
-    const { id, monthlyInterest, totalPrice, customerPaid, totalInterest,dueAmount } = req.body;
-
-    const query = 
-        `UPDATE products SET 
-            monthlyInterest = ?, 
-            totalPrice = ?, 
-            customerPaid = ?,
-            totalInterest = ?,
-            dueAmount = ?
-        WHERE id = ?`;
-
-    connection.query(query, [monthlyInterest, totalPrice, customerPaid, totalInterest,dueAmount, id], (err, result) => {
-        if (err) {
-            console.error('Error updating product:', err);
-            return res.status(500).send('Error updating product');
-        }
-        res.send('Product updated successfully');
+    const { id, status, monthlyInterest, totalPrice, customerPaid, totalInterest, dueAmount } = req.body;
+  
+    let query;
+    let queryParams;
+  
+    if (status === 'Pawned') {
+      const currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
+      query = `
+        UPDATE products SET 
+          status = ?,
+          monthlyInterest = ?, 
+          totalPrice = ?, 
+          customerPaid = ?,
+          totalInterest = ?,
+          dueAmount = ?,
+          endDate = ?
+        WHERE id = ?
+      `;
+      queryParams = [status, monthlyInterest, totalPrice, customerPaid, totalInterest, dueAmount, currentDate, id];
+    } else {
+      query = `
+        UPDATE products SET 
+          status = ?,
+          monthlyInterest = ?, 
+          totalPrice = ?, 
+          customerPaid = ?,
+          totalInterest = ?,
+          dueAmount = ?
+        WHERE id = ?
+      `;
+      queryParams = [status, monthlyInterest, totalPrice, customerPaid, totalInterest, dueAmount, id];
+    }
+  
+    connection.query(query, queryParams, (err, result) => {
+      if (err) {
+        console.error('Error updating product:', err);
+        return res.status(500).send('Error updating product');
+      }
+      res.send('Product updated successfully');
     });
-});
+  });
 
 app.put('/api/remove-item/:id', (req, res) => {
     const itemId = req.params.id;
@@ -256,27 +279,6 @@ app.put('/api/buyer/:id', (req, res) => {
         res.status(201).json({ message: 'Data submitted successfully!' });
     });
 });
-
-
-// API to get an item image
-// app.get('/api/items/:id/image', (req, res) => {
-//     const { id } = req.params;
-//     const getItemImageQuery = 'SELECT image FROM Items WHERE id = ?';
-//     connection.query(getItemImageQuery, [id], (err, results) => {
-//         if (err) {
-//             console.error('Error fetching item image:', err);
-//             return res.status(500).json({ message: 'Error fetching item image' });
-//         }
-
-//         if (results.length === 0 || !results[0].image) {
-//             return res.status(404).json({ message: 'Image not found' });
-//         }
-
-//         res.set('Content-Type', 'image/jpeg'); 
-//         res.send(results[0].image);
-//     });
-// });
-
 
 //create a new admin
 app.post('/api/admins', (req, res) => {
@@ -426,10 +428,10 @@ app.delete('/api/customers/:id', (req, res) => {
 });
 
 // Delete item 
-app.delete('/api/items/:id', (req, res) => {
+app.delete('/api/products/:id', (req, res) => {
     const { id } = req.params;
 
-    const deleteItemQuery = 'DELETE FROM Items WHERE id = ?';
+    const deleteItemQuery = 'DELETE FROM products WHERE id = ?';
 
     connection.query(deleteItemQuery, [id], (err, result) => {
         if (err) {
