@@ -47,12 +47,39 @@ const Form = ({ onClose }) => {
         fetchModels();
     }, []);
 
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         const { id, value } = e.target;
         setFormData({
             ...formData,
             [id]: value,
         });
+        if (id === 'nic') {
+            if (value) {
+                try {
+                    const response = await axios.get(`http://localhost:5000/api/customer/${value}`);
+                    if (response.data) {
+                        setFormData(prevData => ({
+                            ...prevData,
+                            customerName: response.data.customerName,
+                            address: response.data.address,
+                            phone: response.data.phone,
+                        }));
+                    }
+                } catch (error) {
+                    if (error.response && error.response.status !== 404) {
+                        console.error('Error fetching customer data:', error);
+                    }
+                }
+            } else {
+                // Clear the auto-filled fields when NIC is empty
+                setFormData(prevData => ({
+                    ...prevData,
+                    customerName: '',
+                    address: '',
+                    phone: '',
+                }));
+            }
+        }
     };
 
     const handleImageChange = (e) => {
@@ -111,24 +138,24 @@ const Form = ({ onClose }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="customerName" className="form-label" style={{ fontSize: '0.9rem' }}>Customer Name</label>
-                        <input
-                            type="text"
-                            className="form-control form-control-sm"
-                            id="customerName"
-                            value={formData.customerName}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-2">
                         <label htmlFor="nic" className="form-label" style={{ fontSize: '0.9rem' }}>NIC</label>
                         <input
                             type="text"
                             className="form-control form-control-sm"
                             id="nic"
                             value={formData.nic}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-2">
+                        <label htmlFor="customerName" className="form-label" style={{ fontSize: '0.9rem' }}>Customer Name</label>
+                        <input
+                            type="text"
+                            className="form-control form-control-sm"
+                            id="customerName"
+                            value={formData.customerName}
                             onChange={handleChange}
                             required
                         />

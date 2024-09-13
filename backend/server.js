@@ -69,7 +69,7 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
     connection.query(checkCustomerQuery, [nic], (err, results) => {
         if (err) {
             console.error('Error checking customer:', err);
-            return res.status(500).json({ message: 'Error checking customer' });
+            return res.status(500).json({ message: 'Error checking customer', error: err.message });
         }
 
         if (results.length === 0) {
@@ -78,7 +78,7 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
             connection.query(createCustomerQuery, [customerName, nic, address, phone], (err) => {
                 if (err) {
                     console.error('Error creating customer:', err);
-                    return res.status(500).json({ message: 'Error creating customer' });
+                    return res.status(500).json({ message: 'Error creating customer', error: err.message });
                 }
                 insertProduct();
             });
@@ -98,7 +98,7 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
             ], (err) => {
                 if (err) {
                     console.error('Error saving item:', err.stack);
-                    return res.status(500).json({ message: 'Error saving item' });
+                    return res.status(500).json({ message: 'Error saving item', error: err.message });
                 }
         
                 res.status(201).json({ message: 'Data saved successfully' });
@@ -163,6 +163,25 @@ app.get('/api/customers', (req, res) => {
     });
 });
 
+// Add this new route to your server.js file
+
+app.get('/api/customer/:nic', (req, res) => {
+    const { nic } = req.params;
+    const query = 'SELECT * FROM Customers WHERE nic = ?';
+    
+    connection.query(query, [nic], (err, results) => {
+        if (err) {
+            console.error('Error fetching customer data:', err);
+            return res.status(500).json({ message: 'Error fetching customer data' });
+        }
+        
+        if (results.length > 0) {
+            res.status(200).json(results[0]);
+        } else {
+            res.status(404).json({ message: 'Customer not found' });
+        }
+    });
+});
 
 // API to get all items
 app.get('/api/products', (req, res) => {
@@ -180,17 +199,17 @@ app.get('/api/products', (req, res) => {
 
 
 // API to get all items
-app.get('/api/items', (req, res) => {
-    const getItemsQuery = 'SELECT * FROM Items';
-    connection.query(getItemsQuery, (err, results) => {
-        if (err) {
-            console.error('Error fetching items:', err);
-            return res.status(500).json({ message: 'Error fetching items' });
-        }
+// app.get('/api/items', (req, res) => {
+//     const getItemsQuery = 'SELECT * FROM Items';
+//     connection.query(getItemsQuery, (err, results) => {
+//         if (err) {
+//             console.error('Error fetching items:', err);
+//             return res.status(500).json({ message: 'Error fetching items' });
+//         }
 
-        res.status(200).json(results);
-    });
-});
+//         res.status(200).json(results);
+//     });
+// });
 
 
 // Route to Update Product Payment Details
