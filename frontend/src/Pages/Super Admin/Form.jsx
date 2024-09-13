@@ -66,6 +66,12 @@ const Form = ({ onClose }) => {
                         }));
                     }
                 } catch (error) {
+                    setFormData(prevData => ({
+                        ...prevData,
+                        customerName: '',
+                        address: '',
+                        phone: '',
+                    }));
                     if (error.response && error.response.status !== 404) {
                         console.error('Error fetching customer data:', error);
                     }
