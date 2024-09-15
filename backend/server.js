@@ -44,8 +44,8 @@ connection.connect((err) => {
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-//image uploads
-app.post('/api/submit', upload.single('image'), (req, res) => {
+//insert data
+app.post('/api/submit', (req, res) => {
     const {
         recepitNo,
         customerName,
@@ -61,8 +61,6 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
         marketValue,
         estimateValue,
     } = req.body;
-
-    const image = req.file ? req.file.buffer : null;
 
     // Check if customer exists
     const checkCustomerQuery = 'SELECT * FROM Customers WHERE nic = ?';
@@ -89,12 +87,12 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
         // Save item details
         function insertProduct() {
             const createItemQuery = `INSERT INTO Products 
-                (recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue, image) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                (recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
                 
             connection.query(createItemQuery, [
                 recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, 
-                itemName, itemNo, size, marketValue, estimateValue, image
+                itemName, itemNo, size, marketValue, estimateValue
             ], (err) => {
                 if (err) {
                     console.error('Error saving item:', err.stack);
@@ -107,23 +105,39 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
     });
 });
 
-// Add a new route to serve images
-app.get('/api/image/:id', (req, res) => {
-    const query = 'SELECT image FROM Products WHERE id = ?';
-    connection.query(query, [req.params.id], (err, results) => {
-        if (err) {
-            console.error('Error fetching image:', err);
-            return res.status(500).json({ message: 'Error fetching image' });
-        }
-        if (results.length > 0 && results[0].image) {
-            res.contentType('image/jpeg');
-            res.send(results[0].image);
-        } else {
-            res.status(404).json({ message: 'Image not found' });
-        }
-    });
-});
 
+//product image upload
+app.post('/upload', upload.single('image'), (req, res) => {
+    const { file } = req;
+    const { imagePro} = file;
+  
+    // SQL query to insert image data as BLOB into MySQL
+    const sql = `INSERT INTO product_img (imagePro) VALUES (?)`;
+    db.query(sql, [imagePro], (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error uploading image');
+      }
+      res.status(200).send('Image uploaded successfully');
+    });
+  });
+  
+  // API endpoint to fetch image by ID
+  app.get('/image/:id', (req, res) => {
+    const sql = `SELECT imagePro FROM product_img WHERE id = ?`;
+    db.query(sql, [req.params.id], (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error fetching image');
+      }
+      if (result.length === 0) {
+        return res.status(404).send('Image not found');
+      }
+  
+      res.setHeader('Content-Type', result[0].mime_type);
+      res.send(result[0].image_data);
+    });
+  });
 
 // API to fetch categories from the database
 app.get('/api/categories', (req, res) => {
@@ -195,22 +209,6 @@ app.get('/api/products', (req, res) => {
         res.status(200).json(results);
     });
 });
-
-
-
-// API to get all items
-// app.get('/api/items', (req, res) => {
-//     const getItemsQuery = 'SELECT * FROM Items';
-//     connection.query(getItemsQuery, (err, results) => {
-//         if (err) {
-//             console.error('Error fetching items:', err);
-//             return res.status(500).json({ message: 'Error fetching items' });
-//         }
-
-//         res.status(200).json(results);
-//     });
-// });
-
 
 // Route to Update Product Payment Details
 app.post('/api/pawn-payment', (req, res) => {
@@ -559,10 +557,6 @@ app.get('/api/items/report', (req, res) => {
         });
     });
 });
-
-
-
-app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
 // Authentication middleware

@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import './Form.css';
 
-const Form = ({ onClose, onSubmitSuccess  }) => {
+const Form = ({ onClose, onSubmitSuccess }) => {
     const [formData, setFormData] = useState({
         recepitNo: '',
         customerName: '',
@@ -19,16 +19,16 @@ const Form = ({ onClose, onSubmitSuccess  }) => {
         marketValue: '',
         estimateValue: '',
     });
-    const [image, setImage] = useState(null);
-    const [categories, setCategories] = useState([]); 
-    const [models, setModels] = useState([]); 
+
+    const [categories, setCategories] = useState([]);
+    const [models, setModels] = useState([]);
 
     // Fetch categories from the database when the component mounts
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/categories');
-                setCategories(response.data); // Set the fetched categories to state
+                setCategories(response.data);
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }
@@ -37,7 +37,7 @@ const Form = ({ onClose, onSubmitSuccess  }) => {
         const fetchModels = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/models');
-                setModels(response.data); // Set the fetched models to state
+                setModels(response.data);
             } catch (error) {
                 console.error('Error fetching models:', error);
             }
@@ -53,6 +53,7 @@ const Form = ({ onClose, onSubmitSuccess  }) => {
             ...formData,
             [id]: value,
         });
+
         if (id === 'nic') {
             if (value) {
                 try {
@@ -88,33 +89,13 @@ const Form = ({ onClose, onSubmitSuccess  }) => {
         }
     };
 
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formDataWithImage = new FormData();
-        
-        // Append all form data
-        Object.keys(formData).forEach(key => {
-            formDataWithImage.append(key, formData[key]);
-        });
-        
-        // Append the image file
-        if (image) {
-            formDataWithImage.append('image', image);
-        }
-
         try {
-            const response = await axios.post('http://localhost:5000/api/submit', formDataWithImage, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            const response = await axios.post('http://localhost:5000/api/submit', formData);
             if (response.status === 201) {
                 alert('Data submitted successfully!');
-                onSubmitSuccess();  
+                onSubmitSuccess();
                 onClose();
             } else {
                 alert('Unexpected response from server');
@@ -225,7 +206,6 @@ const Form = ({ onClose, onSubmitSuccess  }) => {
                             id="itemModel"
                             value={formData.itemModel}
                             onChange={handleChange}
-                            
                         >
                             <option value="" disabled>Select Item Model</option>
                             {models.map((model, index) => (
@@ -290,20 +270,9 @@ const Form = ({ onClose, onSubmitSuccess  }) => {
                         />
                     </div>
 
-                    <div className="mb-2">
-                        <label htmlFor="image" className="form-label" style={{ fontSize: '0.9rem' }}>Upload Image</label>
-                        <input
-                            type="file"
-                            className="form-control form-control-sm"
-                            id="image"
-                            onChange={handleImageChange}
-                            accept="image/*"
-                        />
-                    </div>
-
-                    <div className="text-end mt-4">
-                        <button type="submit" className="btn btn-sm btn-primary">Submit</button>
-                        <button type="button" className="btn btn-sm btn-secondary ms-2" onClick={onClose}>Cancel</button>
+                    <div className="text-center">
+                        <button type="submit" className="btn btn-primary btn-sm">Submit</button>
+                        <button type="button" className="btn btn-secondary btn-sm ms-2" onClick={onClose}>Cancel</button>
                     </div>
                 </form>
             </div>

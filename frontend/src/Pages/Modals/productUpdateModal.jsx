@@ -18,18 +18,7 @@ const ProductUpdateModal = ({ selectedProduct, setSelectedProduct, handleSaveCha
                     <div className="modal-body">
                         {selectedProduct && (
                             <form>
-                                {/* Display the image */}
-                                {selectedProduct.id && (
-                                    <div className="mb-3">
-                                        <label className="form-label">Product Image</label>
-                                        <img 
-                                            src={`http://localhost:5000/api/image/${selectedProduct.id}`} 
-                                            alt="Product" 
-                                            className="img-fluid"
-                                            style={{ maxWidth: '200px', maxHeight: '200px' }}
-                                        />
-                                    </div>
-                                )}
+                                
                                 <div className="mb-2">
                                     <label className="form-label">Receipt No</label>
                                     <input

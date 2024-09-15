@@ -18,6 +18,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Pawn from "./Pages/Super Admin/Pawn";
 import Sell from "./Pages/Super Admin/Sell";
 import Remove from "./Pages/Super Admin/Remove";
+import Image from "./Pages/Super Admin/Imag";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/Login" element={<Login />} />
+          <Route path="/image" element={<Image/>}/>
 
           <Route path="/Dashboard" element={
             <ProtectedRoute allowedAccountTypes={['superadmin']}>
