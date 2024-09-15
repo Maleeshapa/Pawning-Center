@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import './Form.css';
 
-const Form = ({ onClose }) => {
+const Form = ({ onClose, onSubmitSuccess  }) => {
     const [formData, setFormData] = useState({
         recepitNo: '',
         customerName: '',
@@ -114,8 +114,8 @@ const Form = ({ onClose }) => {
             });
             if (response.status === 201) {
                 alert('Data submitted successfully!');
+                onSubmitSuccess();  
                 onClose();
-                window.location.reload();
             } else {
                 alert('Unexpected response from server');
             }

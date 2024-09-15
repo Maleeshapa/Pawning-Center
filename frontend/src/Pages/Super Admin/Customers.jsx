@@ -11,16 +11,16 @@ const Customers = () => {
     const [showModal, setShowModal] = useState(false);
     const [openModal, setOpenModal] = useState(false); // Ensure this state is defined
 
-    useEffect(() => {
-        const fetchCustomers = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/api/customers');
-                setCustomers(response.data);
-            } catch (error) {
-                console.error('Error fetching customers:', error);
-            }
-        };
+    const fetchCustomers = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/customers');
+            setCustomers(response.data);
+        } catch (error) {
+            console.error('Error fetching customers:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchCustomers();
     }, []);
 
@@ -60,6 +60,10 @@ const Customers = () => {
     const handleAddCustomer = () => {
         setSelectedCustomer(null); // Reset selected customer
         setOpenModal(true); // Show Add Customer modal
+    };
+
+    const handleFormSubmitSuccess = () => {
+        fetchCustomers(); // Refresh the customer list
     };
 
     return (
@@ -197,7 +201,8 @@ const Customers = () => {
 
                     {/* Add Customer Modal */}
                     {openModal && (
-                        <Form onClose={() => setOpenModal(false)} />
+                        <Form onClose={() => setOpenModal(false)}
+                        onSubmitSuccess={handleFormSubmitSuccess} />
                     )}
                 </div>
             </div>
