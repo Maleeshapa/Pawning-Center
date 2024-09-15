@@ -126,25 +126,47 @@ const Pawn = () => {
             startY: 50,
             styles: { fontSize: 6, cellPadding: 2 },
             columnStyles: {
-                0: { cellWidth: 40 },
-                1: { cellWidth: 60 },
-                2: { cellWidth: 50 },
-                3: { cellWidth: 40 },
-                4: { cellWidth: 40 },
-                5: { cellWidth: 50 },
-                6: { cellWidth: 40 },
-                7: { cellWidth: 30 },
-                8: { cellWidth: 40 },
-                9: { cellWidth: 40 },
-                10: { cellWidth: 40 },
-                11: { cellWidth: 40 },
-                12: { cellWidth: 40 },
-                13: { cellWidth: 40 },
+                0: { cellWidth: 50 },
+                1: { cellWidth: 70 },
+                2: { cellWidth: 60 },
+                3: { cellWidth: 50 },
+                4: { cellWidth: 50 },
+                5: { cellWidth: 60 },
+                6: { cellWidth: 50 },
+                7: { cellWidth: 40 },
+                8: { cellWidth: 50 },
+                9: { cellWidth: 50 },
+                10: { cellWidth: 50 },
+                11: { cellWidth: 50 },
+                12: { cellWidth: 50 },
+                13: { cellWidth: 50 },
             },
             headStyles: { fillColor: [66, 135, 245], textColor: 255 },
             alternateRowStyles: { fillColor: [240, 240, 240] },
         });
-
+        doc.autoTable({
+            body: [
+                ['Totals:', '', '', '', '', '', '', '', '', totalEstimateValue.toFixed(2), totalInterest.toFixed(2), totalCustomerPaid.toFixed(2), '', totalProfit.toFixed(2)]
+            ],
+            startY: doc.autoTable.previous.finalY + 10, // Position it after the table
+            styles: { fontSize: 8, halign: 'right' },
+            columnStyles: {
+                0: { cellWidth: 50 },
+            1: { cellWidth: 70 },
+            2: { cellWidth: 60 },
+            3: { cellWidth: 50 },
+            4: { cellWidth: 50 },
+            5: { cellWidth: 60 },
+            6: { cellWidth: 50 },
+            7: { cellWidth: 40 },
+            8: { cellWidth: 50 },
+            9: { fontStyle: 'bold', cellWidth: 50 }, // Estimate Price total
+            10: { fontStyle: 'bold', cellWidth: 50 }, // Total Interest
+            11: { fontStyle: 'bold', cellWidth: 50 }, // Customer Paid total
+            12: { cellWidth: 50 },
+            13: { fontStyle: 'bold', cellWidth: 50 }, 
+            }
+        });
         // Save the PDF
         doc.save(`Pawn_History_${startDate}_to_${endDate}.pdf`);
         setShowModal(false);
