@@ -45,6 +45,14 @@
 .reportTab{
     background-color: #FFB3A3;
 }
+
+.pawnTab{
+    background-color: #C8EAE9;
+}
+
+.removeTab{
+    background-color: #E2E3E5;
+}
 .setTab{
     background-color: #cbffa3;
 }

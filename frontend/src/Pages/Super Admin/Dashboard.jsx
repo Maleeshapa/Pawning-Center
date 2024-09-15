@@ -47,10 +47,28 @@ const Dashboard = () => {
                             </div>
                             <div className="col-md-4 mb-3" id="dMain">
                                 <NavLink 
-                                    to="/Report" 
+                                    to="/Pawn" 
                                     className="p-3 tabs reportTab d-flex align-items-center justify-content-center text-decoration-none"
                                 >
-                                    Monthly Report
+                                    Pawn History
+                                </NavLink>
+                            </div> 
+
+                            <div className="col-md-4 mb-3" id="dMain">
+                                <NavLink 
+                                    to="/sell" 
+                                    className="p-3 tabs pawnTab d-flex align-items-center justify-content-center text-decoration-none"
+                                >
+                                    Sold History
+                                </NavLink>
+                            </div> 
+
+                            <div className="col-md-4 mb-3" id="dMain">
+                                <NavLink 
+                                    to="/Remove" 
+                                    className="p-3 tabs removeTab d-flex align-items-center justify-content-center text-decoration-none"
+                                >
+                                    Remove History
                                 </NavLink>
                             </div> 
 
