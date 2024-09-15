@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 13, 2024 at 01:25 PM
+-- Generation Time: Sep 15, 2024 at 01:23 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -91,12 +91,15 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`id`, `customerName`, `nic`, `address`, `phone`) VALUES
-(2, 'xxx', 'xxx', 'xxx', 'xxx'),
+(2, 'xxxx', 'xxxx', 'xxxx', 'xxxx'),
 (4, 'xyz', 'xyz', 'xyz', 'xyz'),
 (6, 'ppp', 'ppp', 'ppp', 'ppp'),
 (7, 'ooo', 'ooo', 'ooo', 'ooo'),
 (8, 'iiii', 'iiii', 'iiii', 'iiii'),
-(9, 'yyyy', 'yyyy', 'yyyy', 'yyyy');
+(9, 'yyyy', 'yyyy', 'yyyy', 'yyyy'),
+(15, '78', '78', '78', '78'),
+(16, '45', '45', '45', '45'),
+(17, '75', '57', '57', '57');
 
 -- --------------------------------------------------------
 
@@ -181,11 +184,13 @@ CREATE TABLE `products` (
   `size` varchar(45) DEFAULT NULL,
   `marketValue` int(11) DEFAULT NULL,
   `estimateValue` int(11) DEFAULT NULL,
+  `totalDue` int(255) DEFAULT NULL,
   `interest` int(255) DEFAULT NULL,
   `monthlyInterest` int(100) DEFAULT NULL,
   `totalInterest` int(11) NOT NULL,
-  `totalPrice` int(255) DEFAULT NULL,
+  `totalOutstanding` int(255) DEFAULT NULL,
   `customerPaid` int(11) NOT NULL,
+  `discount` int(255) NOT NULL,
   `dueAmount` int(11) NOT NULL,
   `status` varchar(45) DEFAULT NULL,
   `buyerName` varchar(200) DEFAULT NULL,
@@ -201,12 +206,11 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `recepitNo`, `customerName`, `nic`, `address`, `phone`, `startDate`, `endDate`, `itemCategory`, `itemModel`, `itemName`, `itemNo`, `size`, `marketValue`, `estimateValue`, `interest`, `monthlyInterest`, `totalInterest`, `totalPrice`, `customerPaid`, `dueAmount`, `status`, `buyerName`, `buyerNic`, `buyerAddress`, `buyerPhone`, `sellDate`, `sellPrice`, `image`) VALUES
-(7, 'ppp', 'ppp', 'ppp', 'ppp', 'ppp', '2024-09-14', '2024-09-11', 'Phone', 'Samsung', 'ppp', 'ppp', '', 80, 90, NULL, 1, 1, 91, 80, 10, 'Pawned', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(8, 'ooo', 'ooo', 'ooo', 'ooo', 'ooo', '2024-09-20', '2024-09-14', 'Phone', 'Toyoto', 'ooo', 'ooo', 'ooo', 800, 900, NULL, NULL, 0, NULL, 0, 0, 'Removed', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(9, 'iiii', 'iiii', 'iiii', 'iiii', 'iiii', '2024-09-02', NULL, 'Phone', 'Toyoto', 'iiii', 'iiii', 'iiii', 600, 500, NULL, NULL, 0, NULL, 0, 0, 'Sold', 'ty', 'ty', 'ty', 'ty', '2024-10-05', 700, NULL),
-(10, 'yyyy', 'yyyy', 'yyyy', 'yyyy', 'yyyy', '2024-09-28', NULL, 'Vehicle', 'Toyoto', 'yyyy', 'yyyy', 'yyyy', 500, 400, NULL, NULL, 0, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(11, '44', 'ppp', 'ppp', 'ppp', 'ppp', '2024-09-21', '2024-09-13', 'Vehicle', 'Samsung', 'pp', 'pp', 'pp', 90, 80, NULL, NULL, 0, NULL, 0, 0, 'Pawned', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `products` (`id`, `recepitNo`, `customerName`, `nic`, `address`, `phone`, `startDate`, `endDate`, `itemCategory`, `itemModel`, `itemName`, `itemNo`, `size`, `marketValue`, `estimateValue`, `totalDue`, `interest`, `monthlyInterest`, `totalInterest`, `totalOutstanding`, `customerPaid`, `discount`, `dueAmount`, `status`, `buyerName`, `buyerNic`, `buyerAddress`, `buyerPhone`, `sellDate`, `sellPrice`, `image`) VALUES
+(8, 'ooo', 'ooo', 'ooo', 'ooo', 'ooo', '2024-09-20', '2024-09-14', 'Phone', 'Toyoto', 'ooo', 'ooo', 'ooo', 800, 900, NULL, NULL, NULL, 0, NULL, 0, 0, 0, 'Removed', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(9, 'iiii', 'iiii', 'iiii', 'iiii', 'iiii', '2024-09-02', NULL, 'Phone', 'Toyoto', 'iiii', 'iiii', 'iiii', 600, 500, NULL, NULL, NULL, 0, NULL, 0, 0, 0, 'Sold', 'ty', 'ty', 'ty', 'ty', '2024-10-05', 700, NULL),
+(10, 'yyyy', 'yyyy', 'yyyy', 'yyyy', 'yyyy', '2024-09-28', '2024-09-15', 'Vehicle', 'Toyoto', 'yyyy', 'yyyy', 'yyyy', 500, 400, 10, NULL, 20, 100, 30, 460, 0, 10, 'Pawned', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(17, '56', '75', '57', '57', '57', '2024-09-06', NULL, 'Phone', 'Samsung', '57', '57', '57', 57, 57, 0, NULL, 3, 3, 60, 55, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -318,7 +322,7 @@ ALTER TABLE `calculation`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `itemcategory`
@@ -342,7 +346,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `transactions`
