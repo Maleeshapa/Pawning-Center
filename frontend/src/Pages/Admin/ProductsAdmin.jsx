@@ -181,7 +181,7 @@ const ProductsAdmin = () => {
                         <table className="table table-striped table-hover small-table table-sm p-1">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    {/* <th>ID</th> */}
                                     <th>Receipt Number</th>
                                     <th>Name</th>
                                     <th>NIC</th>
@@ -196,8 +196,8 @@ const ProductsAdmin = () => {
                                     <th>Market price</th>
                                     <th>Estimated Price</th>
                                     <th>End Date</th>
-                                    <th>Interest %</th>
-                                    <th>Total Price</th>
+                                    {/* <th>Interest %</th>
+                                    <th>Total Price</th> */}
                                     <th>Status</th>
                                     <th>Actions</th>
                                     <th> </th>
@@ -206,7 +206,7 @@ const ProductsAdmin = () => {
                             <tbody>
                                 {filteredProducts.map((product, index) => (
                                     <tr key={product.id}>
-                                        <td>{index + 1}</td>
+                                        {/* <td>{index + 1}</td> */}
                                         <td> {product.recepitNo}</td>
                                         <td>{product.customerName}</td>
                                         <td>{product.nic}</td>
@@ -222,8 +222,8 @@ const ProductsAdmin = () => {
                                         <td>{product.estimateValue}</td>
 
                                         <td>{product.endDate ? new Date(product.endDate).toLocaleDateString() : 'N/A'}</td>
-                                        <td>{product.interest}</td>
-                                        <td>{product.totalPrice}</td>
+                                        {/* <td>{product.interest}</td>
+                                        <td>{product.totalPrice}</td> */}
                                         {/* <td>{product.status}</td> */}
 
 
