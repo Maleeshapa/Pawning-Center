@@ -160,7 +160,7 @@ const ProductUpdateModal = ({ selectedProduct, setSelectedProduct, handleSaveCha
                                     />
                                 </div>
 
-                                <div className="mb-2">
+                                {/* <div className="mb-2">
                                     <label className="form-label">Interest (%)</label>
                                     <input
                                         type="number"
@@ -168,7 +168,7 @@ const ProductUpdateModal = ({ selectedProduct, setSelectedProduct, handleSaveCha
                                         value={selectedProduct.interest}
                                         onChange={(e) => handleInputChange('interest', e.target.value)}
                                     />
-                                </div>
+                                </div> */}
 
                                 {/* <div className="mb-2">
                                     <label className="form-label">Duration (Months)</label>
@@ -180,7 +180,7 @@ const ProductUpdateModal = ({ selectedProduct, setSelectedProduct, handleSaveCha
                                     />
                                 </div> */}
 
-                                <div className="mb-2">
+                                {/* <div className="mb-2">
                                     <label className="form-label">Total Price</label>
                                     <input
                                         type="number"
@@ -188,7 +188,7 @@ const ProductUpdateModal = ({ selectedProduct, setSelectedProduct, handleSaveCha
                                         value={selectedProduct.totalPrice}
                                         readOnly
                                     />
-                                </div>
+                                </div> */}
                             </form>
                         )}
                     </div>

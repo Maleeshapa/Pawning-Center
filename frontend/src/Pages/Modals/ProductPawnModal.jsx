@@ -2,37 +2,49 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const ProductPawnModal = ({ selectedProduct, handleClose }) => {
+    const [estimateValue, setEstimateValue] = useState('');
+    const [totalDue, setTotalDue] = useState('');
     const [monthlyInterest, setMonthlyInterest] = useState('');
-    const [totalPrice, setTotalPrice] = useState('');
-    const [customerPaid, setCustomerPaid] = useState('');
+    const [totalOutstanding, setTotalOutstanding] = useState('');
+    const [paid, setPaid] = useState('');
+    const [discount, setDiscount] = useState('');
     const [dueAmount, setDueAmount] = useState('');
     const [totalInterest, setTotalInterest] = useState('');
 
     useEffect(() => {
         if (selectedProduct) {
-            const calculatedTotalPrice = parseFloat(selectedProduct.estimateValue) + parseFloat(selectedProduct.monthlyInterest);
-            setTotalPrice(calculatedTotalPrice);
-            setTotalInterest(calculatedTotalPrice - parseFloat(selectedProduct.estimateValue));
-            setMonthlyInterest(selectedProduct.monthlyInterest);
-            setDueAmount(parseFloat(selectedProduct.dueAmount || 0)); // Initial due amount from the selected product
+            setEstimateValue(parseFloat(selectedProduct.estimateValue) || 0);
+            setTotalDue(parseFloat(selectedProduct.totalDue) || parseFloat(selectedProduct.estimateValue) || 0);
+            setTotalInterest(parseFloat(selectedProduct.totalInterest) || 0);
+            setDueAmount(parseFloat(selectedProduct.dueAmount) || parseFloat(selectedProduct.estimateValue) || 0);
         }
     }, [selectedProduct]);
+
+    useEffect(() => {
+        const calculatedTotalOutstanding = totalDue + parseFloat(monthlyInterest || 0);
+        setTotalOutstanding(calculatedTotalOutstanding);
+        updateDueAmount(calculatedTotalOutstanding, parseFloat(paid || 0), parseFloat(discount || 0));
+    }, [totalDue, monthlyInterest, paid, discount]);
+
+    const updateDueAmount = (outstanding, paidAmount, discountAmount) => {
+        const calculated = outstanding - paidAmount - discountAmount;
+        setDueAmount(Math.max(calculated, 0)); // Ensure due amount is not negative
+    };
 
     const handleInterestChange = (e) => {
         const interestValue = parseFloat(e.target.value || 0);
         setMonthlyInterest(interestValue);
-        const newTotalPrice = parseFloat(selectedProduct.estimateValue) + interestValue;
-        setTotalPrice(newTotalPrice);
-        setTotalInterest(newTotalPrice - parseFloat(selectedProduct.estimateValue));
+        setTotalInterest(prevTotalInterest => prevTotalInterest + interestValue);
     };
 
-    const handleCustomerPaidChange = (e) => {
+    const handlePaidChange = (e) => {
         const paidValue = parseFloat(e.target.value || 0);
-        setCustomerPaid(paidValue); // Simply update customerPaid without affecting dueAmount
+        setPaid(paidValue);
     };
 
-    const handleDueAmountChange = (e) => {
-        setDueAmount(parseFloat(e.target.value || 0)); // Update due amount manually based on user input
+    const handleDiscountChange = (e) => {
+        const discountValue = parseFloat(e.target.value || 0);
+        setDiscount(discountValue);
     };
 
     const handleSave = async (e) => {
@@ -40,11 +52,13 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
         try {
             const response = await axios.post('http://localhost:5000/api/pawn-payment', {
                 id: selectedProduct.id,
+                totalDue: dueAmount, // Update totalDue with new dueAmount
                 monthlyInterest,
-                totalPrice,
-                customerPaid: selectedProduct.customerPaid + customerPaid,
                 totalInterest,
-                dueAmount // Use the manually inputted due amount
+                totalOutstanding,
+                customerPaid: parseFloat(selectedProduct.customerPaid || 0) + parseFloat(paid || 0),
+                dueAmount,
+                discount
             });
             if (response.status === 200) {
                 alert('Data saved successfully!');
@@ -65,11 +79,13 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
             const response = await axios.post('http://localhost:5000/api/pawn-payment', {
                 id: selectedProduct.id,
                 status: 'Pawned',
+                totalDue: dueAmount,
                 monthlyInterest,
-                totalPrice,
-                customerPaid: selectedProduct.customerPaid + customerPaid,
                 totalInterest,
-                dueAmount
+                totalOutstanding,
+                customerPaid: parseFloat(selectedProduct.customerPaid || 0) + parseFloat(paid || 0),
+                dueAmount,
+                discount
             });
             if (response.status === 200) {
                 alert('Pawned successfully!');
@@ -98,11 +114,16 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
                                 <>
                                     <div className="mb-3">
                                         <label htmlFor="estimateValue" className="form-label">Estimate Value</label>
-                                        <input type="text" className="form-control" id="estimateValue" value={selectedProduct.estimateValue} readOnly />
+                                        <input type="text" className="form-control" id="estimateValue" value={estimateValue} readOnly />
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="monthlyInterest" className="form-label">Interest (%)</label>
+                                        <label htmlFor="totalDue" className="form-label">Total Due</label>
+                                        <input type="text" className="form-control" id="totalDue" value={totalDue} readOnly />
+                                    </div>
+
+                                    <div className="mb-3">
+                                        <label htmlFor="monthlyInterest" className="form-label">Interest</label>
                                         <input
                                             type="number"
                                             className="form-control"
@@ -113,27 +134,30 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="totalPrice" className="form-label">Total Price</label>
-                                        <input type="text" className="form-control" id="totalPrice" value={totalPrice} readOnly />
+                                        <label htmlFor="totalOutstanding" className="form-label">Total Outstanding</label>
+                                        <input type="text" className="form-control" id="totalOutstanding" value={totalOutstanding} readOnly />
                                     </div>
 
-                                    <hr />
+                                    <div className="mb-3">
+                                        <label htmlFor="paid" className="form-label">Paid</label>
+                                        <input type="number" className="form-control" id="paid" value={paid} onChange={handlePaidChange} />
+                                    </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="customerPaid" className="form-label">Customer Paid</label>
-                                        <input type="number" className="form-control" id="customerPaid" value={customerPaid} onChange={handleCustomerPaidChange} />
+                                        <label htmlFor="discount" className="form-label">Discount</label>
+                                        <input type="number" className="form-control" id="discount" value={discount} onChange={handleDiscountChange} />
                                     </div>
 
                                     <div className="mb-3">
                                         <label htmlFor="dueAmount" className="form-label">Due Amount</label>
-                                        <input type="number" className="form-control" id="dueAmount" value={dueAmount} onChange={handleDueAmountChange} />
+                                        <input type="text" className="form-control" id="dueAmount" value={dueAmount} readOnly />
                                     </div>
                                 </>
                             )}
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleClose}>Close</button>
-                            <button type="submit" className="btn btn-primary">Save</button>
+                            <button type="submit" className="btn btn-primary">Save Changes</button>
                             <button type="button" className="btn btn-success" onClick={handlePaymentReceived}>Payment Received</button>
                         </div>
                     </form>

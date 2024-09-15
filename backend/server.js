@@ -214,47 +214,50 @@ app.get('/api/products', (req, res) => {
 
 // Route to Update Product Payment Details
 app.post('/api/pawn-payment', (req, res) => {
-    const { id, status, monthlyInterest, totalPrice, customerPaid, totalInterest, dueAmount } = req.body;
+    const { id, status, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount } = req.body;
   
     let query;
     let queryParams;
   
     if (status === 'Pawned') {
-      const currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
-      query = `
-        UPDATE products SET 
-          status = ?,
-          monthlyInterest = ?, 
-          totalPrice = ?, 
-          customerPaid = ?,
-          totalInterest = ?,
-          dueAmount = ?,
-          endDate = ?
-        WHERE id = ?
-      `;
-      queryParams = [status, monthlyInterest, totalPrice, customerPaid, totalInterest, dueAmount, currentDate, id];
+        const currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
+        query = `
+            UPDATE products SET 
+            status = ?,
+            totalDue = ?,
+            monthlyInterest = ?, 
+            totalInterest = ?,
+            totalOutstanding = ?,
+            customerPaid = ?,
+            dueAmount = ?,
+            discount = ?,
+            endDate = ?
+            WHERE id = ?
+        `;
+        queryParams = [status, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount, currentDate, id];
     } else {
-      query = `
-        UPDATE products SET 
-          status = ?,
-          monthlyInterest = ?, 
-          totalPrice = ?, 
-          customerPaid = ?,
-          totalInterest = ?,
-          dueAmount = ?
-        WHERE id = ?
-      `;
-      queryParams = [status, monthlyInterest, totalPrice, customerPaid, totalInterest, dueAmount, id];
+        query = `
+            UPDATE products SET 
+            totalDue = ?,
+            monthlyInterest = ?, 
+            totalInterest = ?,
+            totalOutstanding = ?,
+            customerPaid = ?,
+            dueAmount = ?,
+            discount = ?
+            WHERE id = ?
+        `;
+        queryParams = [totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount, id];
     }
   
     connection.query(query, queryParams, (err, result) => {
-      if (err) {
-        console.error('Error updating product:', err);
-        return res.status(500).send('Error updating product');
-      }
-      res.send('Product updated successfully');
+        if (err) {
+            console.error('Error updating product:', err);
+            return res.status(500).send('Error updating product');
+        }
+        res.send('Product updated successfully');
     });
-  });
+});
 
 app.put('/api/remove-item/:id', (req, res) => {
     const itemId = req.params.id;
