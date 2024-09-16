@@ -146,7 +146,7 @@ const ProductsAdmin = () => {
                 headers: { 'Content-Type': 'application/json' },
             });
             if (response.status === 200) {
-                alert('Item removed successfully');
+                alert('Item Removed successfully');
                 // Update the local state to reflect the change
                 setProducts(products.map(p => 
                     p.id === product.id ? { ...p, status: 'Removed' } : p
@@ -240,7 +240,7 @@ const ProductsAdmin = () => {
                                                 fontWeight: 'bold',  
                                             }}
                                         >
-                                            {product.status || 'Pending'}
+                                            {product.status || 'ගෙවලා නැති'}
                                         </td>
 
 
@@ -269,16 +269,16 @@ const ProductsAdmin = () => {
                                         <td>
 
                                             <button className="btn btn-success me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#pawnPayModal" onClick={() => handlePawnPayClick(product)}>
-                                                Pawn Pay
+                                                උකස් ගෙවීම
                                             </button>
 
 
                                             <button className="btn btn-primary me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#sellModal" onClick={() => handleSellClick(product)}>
-                                                Sell
+                                                විකුනීම
                                             </button>
 
                                             <button className="btn btn-warning btn-sm"  onClick={() => removeItem(product)} >
-                                                Remove item
+                                                භාන්ඩය ඉවත් කිරීම
                                             </button>
 
 

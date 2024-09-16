@@ -113,17 +113,17 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
                             {selectedProduct && (
                                 <>
                                     <div className="mb-3">
-                                        <label htmlFor="estimateValue" className="form-label">Estimate Value</label>
+                                        <label htmlFor="estimateValue" className="form-label">Estimate Value - ඇස්තමෙන්තුගත අගය</label>
                                         <input type="text" className="form-control" id="estimateValue" value={estimateValue} readOnly />
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="totalDue" className="form-label">Total Due</label>
+                                        <label htmlFor="totalDue" className="form-label">Total Due - මුලු හිගය මුදල</label>
                                         <input type="text" className="form-control" id="totalDue" value={totalDue} readOnly />
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="monthlyInterest" className="form-label">Interest</label>
+                                        <label htmlFor="monthlyInterest" className="form-label">Interest - මාසික පොලී මුදල</label>
                                         <input
                                             type="number"
                                             className="form-control"
@@ -134,22 +134,22 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="totalOutstanding" className="form-label">Total Outstanding</label>
+                                        <label htmlFor="totalOutstanding" className="form-label">Total Outstanding - හිගය + මාසික පොලිය</label>
                                         <input type="text" className="form-control" id="totalOutstanding" value={totalOutstanding} readOnly />
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="paid" className="form-label">Paid</label>
+                                        <label htmlFor="paid" className="form-label">Paid -  ගෙවු මුදල</label>
                                         <input type="number" className="form-control" id="paid" value={paid} onChange={handlePaidChange} />
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="discount" className="form-label">Discount</label>
+                                        <label htmlFor="discount" className="form-label">Discount - වට්ටම</label>
                                         <input type="number" className="form-control" id="discount" value={discount} onChange={handleDiscountChange} />
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="dueAmount" className="form-label">Due Amount</label>
+                                        <label htmlFor="dueAmount" className="form-label">Due Amount - නව හිග මුදල</label>
                                         <input type="text" className="form-control" id="dueAmount" value={dueAmount} readOnly />
                                     </div>
                                 </>
@@ -158,7 +158,7 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleClose}>Close</button>
                             <button type="submit" className="btn btn-primary">Save Changes</button>
-                            <button type="button" className="btn btn-success" onClick={handlePaymentReceived}>Payment Received</button>
+                            <button type="button" className="btn btn-success" onClick={handlePaymentReceived}>ගනුදෙනුව ඉවරයි</button>
                         </div>
                     </form>
                 </div>

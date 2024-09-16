@@ -195,7 +195,7 @@ const Pawn = () => {
             <div className="row flex-nowrap">
                 <Sidebar />
                 <div className="col py-3 content-area">
-                    <h1 className="text-center caption mb-4">Pawn History</h1>
+                    <h1 className="text-center caption mb-4">උකස් ඉතිහාසය</h1>
 
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
                         <div className="input-group w-100 w-md-50 mb-3 mb-md-0">
@@ -206,7 +206,7 @@ const Pawn = () => {
                             className="btn btn-primary btn-sm me-2"
                             onClick={() => { setShowModal(true); }}
                         >
-                            Generate Report
+                            උකස් අදායම් වර්තාව
                         </button>
                     </div>
 

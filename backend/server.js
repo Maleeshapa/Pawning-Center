@@ -600,7 +600,7 @@ app.get('/api/items/report', (req, res) => {
     const query = `
       SELECT id, customerName, nic, itemName, startDate, endDate, priceOfItem, totalPrice 
       FROM Items 
-      WHERE status = 'Payment Received' AND startDate BETWEEN ? AND ?
+      WHERE status = 'ගනුදෙනුව ඉවරයි' AND startDate BETWEEN ? AND ?
     `;
 
     connection.query(query, [startDate, endDate], (err, results) => {
@@ -703,6 +703,43 @@ const authenticateToken = (req, res, next) => {
         next();
     });
 };
+
+// POST route to handle form submission
+app.post('/api/items-add', (req, res) => {
+    const { categoryName, modelName } = req.body;
+
+    console.log('Received Data:', req.body);  // Log the incoming request data
+
+    if (!categoryName || !modelName) {
+        console.log('Missing categoryName or modelName');
+        return res.status(400).send('Category name and model name are required');
+    }
+
+    // Insert into itemcategory table
+    const categoryQuery = 'INSERT INTO itemcategory (categoryName) VALUES (?)';
+    connection.query(categoryQuery, [categoryName], (err, categoryResult) => {
+        if (err) {
+            console.error('Error inserting into itemcategory:', err);  // Log detailed error
+            return res.status(500).send('Error inserting category');
+        }
+
+        const categoryId = categoryResult.insertId;
+        console.log('Inserted Category ID:', categoryId);  // Log the inserted category ID
+
+        // Insert into itemmodel table
+        const modelQuery = 'INSERT INTO itemmodel (modelName, categoryId) VALUES (?, ?)';
+        connection.query(modelQuery, [modelName, categoryId], (err, modelResult) => {
+            if (err) {
+                console.error('Error inserting into itemmodel:', err);  // Log detailed error
+                return res.status(500).send('Error inserting model');
+            }
+
+            console.log('Successfully inserted into itemmodel');
+            res.status(200).send('Data successfully inserted');
+        });
+    });
+});
+
 
 // Protected route 
 app.get('/api/protected', authenticateToken, (req, res) => {

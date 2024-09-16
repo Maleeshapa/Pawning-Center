@@ -153,7 +153,7 @@ const Products = () => {
                 headers: { 'Content-Type': 'application/json' },
             });
             if (response.status === 200) {
-                alert('Item removed successfully');
+                alert('Item Removed successfully');
                 // Update the local state to reflect the change
                 setProducts(products.map(p =>
                     p.id === product.id ? { ...p, status: 'Removed' } : p
@@ -173,11 +173,11 @@ const Products = () => {
             <div className="row flex-nowrap">
                 <Sidebar />
                 <div className="col py-3 content-area">
-                    <h1 className="text-center caption mb-4">Products Details</h1>
+                    <h1 className="text-center caption mb-4">ගනුදෙනු විස්තර</h1>
 
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
                         <div className="input-group w-100 w-md-50 mb-3 mb-md-0">
-                            <input type="text" className="form-control" placeholder="Search by Name, NIC, or Item Name"
+                            <input type="text" className="form-control " placeholder="Search by Name, NIC, or Item Name"
                                 value={searchQuery} onChange={handleSearchChange} />
                         </div>
 
@@ -194,7 +194,6 @@ const Products = () => {
                                     <th>NIC</th>
                                     <th>Address</th>
                                     <th>Phone</th>
-                                    <th>Start Date</th>
                                     <th>Item Category</th>
                                     <th>Item Model</th>
                                     <th>Item Name</th>
@@ -202,9 +201,11 @@ const Products = () => {
                                     <th>Item Size</th>
                                     <th>Market price</th>
                                     <th>Estimated Price</th>
+                                    <th>Start Date</th>
                                     <th>End Date</th>
                                     {/* <th>Interest %</th>
                                     <th>Total Price</th> */}
+                                    <th>පින්තූරය</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                     <th> </th>
@@ -219,7 +220,6 @@ const Products = () => {
                                         <td>{product.nic}</td>
                                         <td>{product.address}</td>
                                         <td>{product.phone}</td>
-                                        <td>{new Date(product.startDate).toLocaleDateString()}</td>
                                         <td>{product.itemCategory}</td>
                                         <td> {product.itemModel}</td>
                                         <td>{product.itemName}</td>
@@ -227,8 +227,13 @@ const Products = () => {
                                         <td> {product.size}</td>
                                         <td>{product.marketValue}</td>
                                         <td>{product.estimateValue}</td>
-
+                                        <td>{new Date(product.startDate).toLocaleDateString()}</td> 
                                         <td>{product.endDate ? new Date(product.endDate).toLocaleDateString() : 'N/A'}</td>
+                                        <td><button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#imageModal" onClick={() => handleViewImage(product)}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 50 50">
+                                                    <path d="M 14 4 C 8.486 4 4 8.486 4 14 L 4 36 C 4 41.514 8.486 46 14 46 L 36 46 C 41.514 46 46 41.514 46 36 L 46 14 C 46 8.486 41.514 4 36 4 L 14 4 z M 21.132812 13 L 28.867188 13 C 29.740188 13 30.560719 13.464891 31.011719 14.212891 L 32.845703 17.273438 C 33.114703 17.721438 33.608812 18 34.132812 18 L 39.5 18 C 40.327 18 41 18.673 41 19.5 L 41 35.5 C 41 36.327 40.327 37 39.5 37 L 10.5 37 C 9.673 37 9 36.327 9 35.5 L 9 19.5 C 9 18.673 9.673 18 10.5 18 L 15.867188 18 C 16.390187 18 16.885297 17.721484 17.154297 17.271484 L 18.988281 14.212891 C 19.438281 13.464891 20.259812 13 21.132812 13 z M 12 14 L 14 14 C 14.552 14 15 14.448 15 15 L 15 16 L 11 16 L 11 15 C 11 14.448 11.448 14 12 14 z M 34 19.5 A 1 1 0 0 0 34 21.5 A 1 1 0 0 0 34 19.5 z M 25 20 C 20.864 20 17.5 23.364 17.5 27.5 C 17.5 31.636 20.864 35 25 35 C 29.136 35 32.5 31.636 32.5 27.5 C 32.5 23.364 29.136 20 25 20 z M 25 22 C 28.032 22 30.5 24.468 30.5 27.5 C 30.5 30.532 28.032 33 25 33 C 21.968 33 19.5 30.532 19.5 27.5 C 19.5 24.468 21.968 22 25 22 z"></path>
+                                                </svg>
+                                            </button></td>
                                         {/* <td>{product.interest}</td>
                                         <td>{product.totalPrice}</td> */}
                                         {/* <td>{product.status}</td> */}
@@ -247,7 +252,7 @@ const Products = () => {
                                                 fontWeight: 'bold',
                                             }}
                                         >
-                                            {product.status || 'Pending'}
+                                            {product.status || 'ගෙවලා නැති'}
                                         </td>
 
 
@@ -268,31 +273,22 @@ const Products = () => {
                                                 </svg>
                                             </button>
 
-                                            {' '}
-                                            <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#imageModal" onClick={() => handleViewImage(product)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50">
-                                                    <path d="M 14 4 C 8.486 4 4 8.486 4 14 L 4 36 C 4 41.514 8.486 46 14 46 L 36 46 C 41.514 46 46 41.514 46 36 L 46 14 C 46 8.486 41.514 4 36 4 L 14 4 z M 21.132812 13 L 28.867188 13 C 29.740188 13 30.560719 13.464891 31.011719 14.212891 L 32.845703 17.273438 C 33.114703 17.721438 33.608812 18 34.132812 18 L 39.5 18 C 40.327 18 41 18.673 41 19.5 L 41 35.5 C 41 36.327 40.327 37 39.5 37 L 10.5 37 C 9.673 37 9 36.327 9 35.5 L 9 19.5 C 9 18.673 9.673 18 10.5 18 L 15.867188 18 C 16.390187 18 16.885297 17.721484 17.154297 17.271484 L 18.988281 14.212891 C 19.438281 13.464891 20.259812 13 21.132812 13 z M 12 14 L 14 14 C 14.552 14 15 14.448 15 15 L 15 16 L 11 16 L 11 15 C 11 14.448 11.448 14 12 14 z M 34 19.5 A 1 1 0 0 0 34 21.5 A 1 1 0 0 0 34 19.5 z M 25 20 C 20.864 20 17.5 23.364 17.5 27.5 C 17.5 31.636 20.864 35 25 35 C 29.136 35 32.5 31.636 32.5 27.5 C 32.5 23.364 29.136 20 25 20 z M 25 22 C 28.032 22 30.5 24.468 30.5 27.5 C 30.5 30.532 28.032 33 25 33 C 21.968 33 19.5 30.532 19.5 27.5 C 19.5 24.468 21.968 22 25 22 z"></path>
-                                                </svg>
-                                            </button>
-
-
-
                                         </td>
 
 
                                         <td>
 
                                             <button className="btn btn-success me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#pawnPayModal" onClick={() => handlePawnPayClick(product)}>
-                                                Pawn Pay
+                                                උකස් ගෙවීම
                                             </button>
 
 
                                             <button className="btn btn-primary me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#sellModal" onClick={() => handleSellClick(product)}>
-                                                Sell
+                                                විකුනීම
                                             </button>
 
                                             <button className="btn btn-warning btn-sm" onClick={() => removeItem(product)} >
-                                                Remove item
+                                                භාන්ඩ ඉවත් කිරීම
                                             </button>
 
 

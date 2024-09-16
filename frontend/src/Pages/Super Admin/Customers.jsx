@@ -79,7 +79,7 @@ const Customers = () => {
             <div className="row flex-nowrap">
                 <Sidebar />
                 <div className="col py-3 content-area">
-                    <h1 className="text-center mb-4 caption">Customer Details</h1>
+                    <h1 className="text-center mb-4 caption">පාරිභොගික විස්තර</h1>
 
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
                         <div className="input-group w-100 w-md-50 mb-3 mb-md-0">
@@ -95,7 +95,7 @@ const Customers = () => {
 
                         <div className="ms-md-3 mt-3 mt-md-0">
                             <button className="btnAdd btnall btn-sm" onClick={handleAddCustomer}>
-                                Add Customer
+                                නව ගනුදෙනුවක්+
                             </button>
                         </div>
                     </div>
@@ -104,12 +104,12 @@ const Customers = () => {
                         <table className="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>NIC</th>
-                                    <th>Address</th>
-                                    <th>Phone</th>
-                                    <th>Image</th>
+                                    <th>අංකය</th>
+                                    <th>නම</th>
+                                    <th>ජා:හැදුනුම්පත</th>
+                                    <th>ලිපිනය</th>
+                                    <th>දුරකතනය</th>
+                                    <th>ජා:හැ පීන්තුරය</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>

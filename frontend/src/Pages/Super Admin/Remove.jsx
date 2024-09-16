@@ -159,7 +159,7 @@ const Remove = () => {
 
 
                                             <button className="btn btn-primary me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#sellModal" onClick={() => handleSellClick(product)}>
-                                                Sell
+                                                විකුනීම
                                             </button>
 
                                             <button className="btn btn-warning btn-sm"  onClick={() => removeItem(product)} >

@@ -215,11 +215,11 @@ const Report = () => {
                     <td className="table-success">{item.totalPrice}</td>
                     <td
                       style={{
-                        color: item.status === 'Payment Received' ? 'green' : 'red',
-                        fontWeight: item.status === 'Payment Received' ? 'bold' : 'bold',
+                        color: item.status === 'ගනුදෙනුව ඉවරයි' ? 'green' : 'red',
+                        fontWeight: item.status === 'ගනුදෙනුව ඉවරයි' ? 'bold' : 'bold',
                       }}
                     >
-                      {item.status || 'Pending'}
+                      {item.status || 'ගෙවලා නැති'}
                     </td>
                     <td className="table-info">
                       {item.totalPrice - item.priceOfItem}
