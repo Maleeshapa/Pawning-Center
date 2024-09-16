@@ -46,7 +46,8 @@ const upload = multer({ storage: storage });
 
 app.post('/api/submit', upload.fields([
     { name: 'productImages', maxCount: 10 },
-    { name: 'customerImages', maxCount: 2 }
+    { name: 'customerImages', maxCount: 2 },
+    { name: 'customerImagesBack', maxCount: 2 }
 ]), (req, res) => {
     const {
         recepitNo,
@@ -66,6 +67,7 @@ app.post('/api/submit', upload.fields([
 
     const productImages = req.files['productImages'];
     const customerImages = req.files['customerImages'];
+    const customerImagesBack = req.files['customerImagesBack'];
 
     // Check if customer exists
     const checkCustomerQuery = 'SELECT * FROM Customers WHERE nic = ?';
@@ -86,11 +88,13 @@ app.post('/api/submit', upload.fields([
                 }
                 customerId = result.insertId;
                 insertCustomerImages(customerId);
+                insertCustomerImagesBack(customerId);
                 insertProduct(customerId);
             });
         } else {
             customerId = results[0].id;
             insertCustomerImages(customerId);
+            insertCustomerImagesBack(customerId);
             insertProduct(customerId);
         }
 
@@ -98,6 +102,19 @@ app.post('/api/submit', upload.fields([
             if (customerImages && customerImages.length > 0) {
                 const insertCustomerImageQuery = 'INSERT INTO customer_image (customer_id, file_name, image_data) VALUES (?, ?, ?)';
                 customerImages.forEach((image) => {
+                    connection.query(insertCustomerImageQuery, [customerId, image.originalname, image.buffer], (err) => {
+                        if (err) {
+                            console.error('Error saving customer image:', err);
+                        }
+                    });
+                });
+            }
+        }
+
+        function insertCustomerImagesBack(customerId) {
+            if (customerImagesBack && customerImagesBack.length > 0) {
+                const insertCustomerImageQuery = 'INSERT INTO customer_image (customer_id, file_name, image_data) VALUES (?, ?)';
+                customerImagesBack.forEach((image) => {
                     connection.query(insertCustomerImageQuery, [customerId, image.originalname, image.buffer], (err) => {
                         if (err) {
                             console.error('Error saving customer image:', err);
@@ -472,28 +489,37 @@ app.put('/api/products/:id', (req, res) => {
 app.delete('/api/customers/:id', (req, res) => {
     const { id } = req.params;
 
-
     console.log('Received customer ID for deletion:', id);
 
     if (!id) {
         return res.status(400).json({ message: 'Customer ID is required' });
     }
 
-    const deleteCustomerQuery = 'DELETE FROM Customers WHERE id = ?';
-
-    connection.query(deleteCustomerQuery, [id], (err, result) => {
+    // Step 1: Delete customer images
+    const deleteCustomerImagesQuery = 'DELETE FROM customer_image WHERE customer_id = ?';
+    connection.query(deleteCustomerImagesQuery, [id], (err) => {
         if (err) {
-            console.error('Error deleting customer:', err);
-            return res.status(500).json({ message: 'Failed to delete customer' });
+            console.error('Error deleting customer images:', err);
+            return res.status(500).json({ message: 'Failed to delete customer images' });
         }
 
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Customer not found' });
-        }
+        // Step 2: Delete the customer record
+        const deleteCustomerQuery = 'DELETE FROM Customers WHERE id = ?';
+        connection.query(deleteCustomerQuery, [id], (err, result) => {
+            if (err) {
+                console.error('Error deleting customer:', err);
+                return res.status(500).json({ message: 'Failed to delete customer' });
+            }
 
-        res.status(200).json({ message: 'Customer deleted successfully' });
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: 'Customer not found' });
+            }
+
+            res.status(200).json({ message: 'Customer and associated images deleted successfully' });
+        });
     });
 });
+
 
 // Delete item 
 // app.delete('/api/products/:id', (req, res) => {

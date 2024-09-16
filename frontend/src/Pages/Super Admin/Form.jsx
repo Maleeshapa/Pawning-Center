@@ -24,6 +24,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
     const [models, setModels] = useState([]);
     const [productImages, setProductImages] = useState([]);
     const [customerImages, setCustomerImages] = useState([]);
+    const [customerImagesBack, setCustomerImagesBack] = useState([]);
 
     // Fetch categories from the database when the component mounts
     useEffect(() => {
@@ -98,6 +99,9 @@ const Form = ({ onClose, onSubmitSuccess }) => {
     const handleCustomerImageChange = (e) => {
         setCustomerImages([...e.target.files]);
     };
+    const handleCustomerImageBackChange = (e) => {
+        setCustomerImagesBack([...e.target.files]);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -110,6 +114,9 @@ const Form = ({ onClose, onSubmitSuccess }) => {
         });
         customerImages.forEach((image) => {
             formDataWithImages.append('customerImages', image);
+        });
+        customerImagesBack.forEach((image) => {
+            formDataWithImages.append('customerImagesBack', image);
         });
 
         try {
@@ -199,7 +206,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     
 
                     <div className="mb-2">
-                        <label htmlFor="customerImages" className="form-label" style={{ fontSize: '0.9rem' }}>Upload Customer Images</label>
+                        <label htmlFor="customerImages" className="form-label" style={{ fontSize: '0.9rem' }}>nic</label>
                         <input 
                             type="file" 
                             className="form-control form-control-sm" 
@@ -210,6 +217,20 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                             required
                         />
                     </div>
+
+                    <div className="mb-2">
+                        <label htmlFor="customerImagesBack" className="form-label" style={{ fontSize: '0.9rem' }}>nic back</label>
+                        <input 
+                            type="file" 
+                            className="form-control form-control-sm" 
+                            id="customerImagesBack"
+                            onChange={handleCustomerImageBackChange} 
+                            accept="image/*" 
+                            multiple
+                            required
+                        />
+                    </div>
+
 
                     <div className="mb-2">
                         <label htmlFor="startDate" className="form-label" style={{ fontSize: '0.9rem' }}>Start Date</label>
