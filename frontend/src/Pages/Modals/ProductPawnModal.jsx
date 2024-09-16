@@ -130,6 +130,7 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
                                             id="monthlyInterest"
                                             value={monthlyInterest}
                                             onChange={handleInterestChange}
+                                            step="1" onWheel={(e) => e.preventDefault()}
                                         />
                                     </div>
 
@@ -140,12 +141,12 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
 
                                     <div className="mb-3">
                                         <label htmlFor="paid" className="form-label">Paid -  ගෙවු මුදල</label>
-                                        <input type="number" className="form-control" id="paid" value={paid} onChange={handlePaidChange} />
+                                        <input type="number" className="form-control" id="paid" value={paid} onChange={handlePaidChange} step="1" onWheel={(e) => e.preventDefault()}/>
                                     </div>
 
                                     <div className="mb-3">
                                         <label htmlFor="discount" className="form-label">Discount - වට්ටම</label>
-                                        <input type="number" className="form-control" id="discount" value={discount} onChange={handleDiscountChange} />
+                                        <input type="number" className="form-control" id="discount" value={discount} onChange={handleDiscountChange} step="1" onWheel={(e) => e.preventDefault()} />
                                     </div>
 
                                     <div className="mb-3">

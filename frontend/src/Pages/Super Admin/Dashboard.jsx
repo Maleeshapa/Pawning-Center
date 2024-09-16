@@ -4,80 +4,74 @@ import Sidebar from '../../components/Sidebar';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
 const Dashboard = () => {
-
+    const [products, setProducts] = useState([]);
     const [totalProfit, setTotalProfit] = useState(0);
-    const [customerCount, setCustomerCount] = useState(0);
     const [totalRevenue, setTotalRevenue] = useState(0);
+    const [customerCount, setCustomerCount] = useState(0);
 
     useEffect(() => {
-        const fetchDashboardData = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/api/Products');
-                const paidItems = response.data.filter(item => item.status === 'Payment Received');
+        // Fetch products data from the API
+        axios.get('http://localhost:5000/api/products')
+            .then(response => {
+                const productsData = response.data;
+                setProducts(productsData);
 
-                const profit = paidItems.reduce((acc, item) => acc + item.totalPrice, 0);
-                const revenue = paidItems.reduce((acc, item) => acc + item.priceOfItem, 0);
+                // Calculate total profit and total revenue
+                const totalProfit = productsData.reduce((acc, product) =>
+                    acc + (product.sellPrice - product.customerPaid - product.discount - product.estimateValue || 0),
+                    0
+                );
 
-                setTotalProfit(profit);
-                setTotalRevenue(revenue);
+                const totalRevenue = productsData.reduce((acc, product) =>
+                    acc + (product.sellPrice - product.customerPaid || 0),
+                    0
+                );
 
-            } catch (error) {
-                console.error('Error fetching dashboard data:', error);
-            }
-        };
-
-        fetchDashboardData();
+                setTotalProfit(totalProfit);
+                setTotalRevenue(totalRevenue);
+            })
+            .catch(error => {
+                console.error('Error fetching products:', error);
+            });
     }, []);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchCustomerCount = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/customers');
                 const customers = response.data;
 
+                // Count unique customers by customerName
                 const uniqueCustomers = new Set(customers.map(item => item.customerName));
                 setCustomerCount(uniqueCustomers.size);
-
             } catch (error) {
-                console.error('Error fetching statistics:', error);
+                console.error('Error fetching customer count:', error);
             }
         };
 
-        fetchData();
+        fetchCustomerCount();
     }, []);
 
     return (
         <div className="container-fluid">
             <div className="row flex-nowrap">
                 <Sidebar />
-
                 <div className="col py-3 content-area">
                     <h3 className='caption'>Dashboard</h3>
                     <main className="col-md-12 p-3 bg-white">
-
+                        <div>
+                            <p>Total Profit: ${totalProfit.toFixed(2)}</p>
+                            <p>Total Revenue: ${totalRevenue.toFixed(2)}</p>
+                        </div>
                         <div className="row">
                             <div className="col-md-4">
                                 <div className="stats-box">
-                                    <h4>Total Revenue</h4>
-                                    <p> ${totalRevenue}</p>
-                                </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="stats-box">
-                                    <h4>Total Profit</h4>
-                                    <p>${totalProfit}</p>
-                                </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="stats-box">
                                     <h4>Customer Count</h4>
-                                    <p> {customerCount}</p>
+                                    <p>{customerCount}</p>
                                 </div>
                             </div>
                         </div>
-
                         <div className="row">
                             <div className="col-md-4 mb-3" id="dMain">
                                 <NavLink
@@ -87,14 +81,6 @@ const Dashboard = () => {
                                     පාරිභොගික විස්තර
                                 </NavLink>
                             </div>
-                            {/* <div className="col-md-4 mb-3" id="dMain">
-                                <NavLink 
-                                    to="/Interest" 
-                                    className="p-3 tabs calTab  d-flex align-items-center justify-content-center text-decoration-none"
-                                >
-                                    Calculate Interest
-                                </NavLink>
-                            </div> */}
                             <div className="col-md-4 mb-3" id="dMain">
                                 <NavLink
                                     to="/Products"
@@ -119,7 +105,6 @@ const Dashboard = () => {
                                     උකස් ගනුදෙනු ඉතිහසය
                                 </NavLink>
                             </div>
-
                             <div className="col-md-4 mb-3" id="dMain">
                                 <NavLink
                                     to="/sell"
@@ -128,7 +113,6 @@ const Dashboard = () => {
                                     විකුනුම් ඉතිහසය
                                 </NavLink>
                             </div>
-
                             <div className="col-md-4 mb-3" id="dMain">
                                 <NavLink
                                     to="/Remove"
@@ -137,7 +121,6 @@ const Dashboard = () => {
                                     ඉවත්කල භන්ඩ විස්තර
                                 </NavLink>
                             </div>
-
                             <div className="col-md-4 mb-3" id="dMain">
                                 <NavLink
                                     to="/item"
@@ -146,15 +129,6 @@ const Dashboard = () => {
                                     නව අයිතම +
                                 </NavLink>
                             </div>
-
-                            {/*  <div className="col-md-4 mb-3" id="dMain">
-                                <NavLink 
-                                    to="/Settings" 
-                                    className="p-3 tabs setTab d-flex align-items-center justify-content-center text-decoration-none"
-                                >
-                                    Account Settings
-                                </NavLink>
-                            </div>*/}
                         </div>
                     </main>
                 </div>

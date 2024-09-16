@@ -215,10 +215,7 @@ const Pawn = () => {
                         <div className="modal-container">
                             <div className="modal-content">
 
-
                                 <h2 className="text-center mb-4">Generate Pawn Report</h2>
-
-
 
                                 <div className="modal-body">
                                     <div className="mb-3">

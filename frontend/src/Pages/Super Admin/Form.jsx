@@ -214,7 +214,6 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                             onChange={handleCustomerImageChange} 
                             accept="image/*" 
                             multiple
-                            required
                         />
                     </div>
 
@@ -318,7 +317,6 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                             onChange={handleProductImageChange} 
                             accept="image/*" 
                             multiple
-                            required
                         />
                     </div>
 
