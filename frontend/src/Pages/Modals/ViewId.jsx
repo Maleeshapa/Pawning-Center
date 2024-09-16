@@ -3,13 +3,13 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is included
 import 'bootstrap/dist/js/bootstrap.bundle.min'; // Ensure Bootstrap JS is included
 
-const ViewImage = ({ customer }) => {
+const ViewImage = ({ selectedCustomer }) => {
   const [imageUrl, setImageUrl] = useState(null);
 
   useEffect(() => {
-    if (customer && customer.id) {
-      console.log('Fetching image for customer ID:', customer.id);
-      axios.get(`http://localhost:5000/api/customer_images/${customer.id}/image`, {
+    if (selectedCustomer && selectedCustomer.id) {
+      console.log('Fetching image for customer ID:', selectedCustomer.id);
+      axios.get(`http://localhost:5000/api/customer_images/${selectedCustomer.id}/image`, {
         responseType: 'blob',
       })
       .then(response => {
@@ -31,21 +31,21 @@ const ViewImage = ({ customer }) => {
       modal.show();
     }
 
-  }, [customer]);
+  }, [selectedCustomer]);
 
   return (
     <div className="modal fade" id="imageIdModal" tabIndex="-1" aria-labelledby="imageIdModalLabel" aria-hidden="true">
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="imageModalLabel">Product Image</h5>
+            <h5 className="modal-title" id="imageModalLabel">customer Image</h5>
             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div className="modal-body">
             {imageUrl ? (
-              <img src={imageUrl} style={{ maxWidth: '100%', maxHeight: '400px' }} alt="Product" className="img-fluid" />
+              <img src={imageUrl} style={{ maxWidth: '100%', maxHeight: '400px' }} alt="customer" className="img-fluid" />
             ) : (
-              <p>No image available for this product</p>
+              <p>No image available for this customer</p>
             )}
           </div>
         </div>
