@@ -5,36 +5,29 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Dashboard = () => {
-    const [products, setProducts] = useState([]);
-    const [totalProfit, setTotalProfit] = useState(0);
-    const [totalRevenue, setTotalRevenue] = useState(0);
     const [customerCount, setCustomerCount] = useState(0);
 
+    const [metrics, setMetrics] = useState({ totalProfit: 0, totalRevenue: 0 });
+
     useEffect(() => {
-        // Fetch products data from the API
-        axios.get('http://localhost:5000/api/products')
-            .then(response => {
-                const productsData = response.data;
-                setProducts(productsData);
-
-                // Calculate total profit and total revenue
-                const totalProfit = productsData.reduce((acc, product) =>
-                    acc + (product.sellPrice - product.customerPaid - product.discount - product.estimateValue || 0),
-                    0
-                );
-
-                const totalRevenue = productsData.reduce((acc, product) =>
-                    acc + (product.sellPrice - product.customerPaid || 0),
-                    0
-                );
-
-                setTotalProfit(totalProfit);
-                setTotalRevenue(totalRevenue);
-            })
-            .catch(error => {
-                console.error('Error fetching products:', error);
-            });
+      // Fetch data from your API
+      const fetchData = async () => {
+        try {
+          const response = await fetch('/api/dashboard-metrics');
+          const data = await response.json();
+          setMetrics(data);
+        } catch (error) {
+          console.error('Error fetching dashboard metrics:', error);
+        }
+      };
+  
+      fetchData();
     }, []);
+  
+    const chartData = [
+      { name: 'Profit', value: metrics.totalProfit },
+      { name: 'Revenue', value: metrics.totalRevenue },
+    ];
 
     useEffect(() => {
         const fetchCustomerCount = async () => {
@@ -60,9 +53,22 @@ const Dashboard = () => {
                 <div className="col py-3 content-area">
                     <h3 className='caption'>Dashboard</h3>
                     <main className="col-md-12 p-3 bg-white">
-                        <div>
-                            <p>Total Profit: ${totalProfit.toFixed(2)}</p>
-                            <p>Total Revenue: ${totalRevenue.toFixed(2)}</p>
+                        
+                        {/* <div className="row">
+                            <div className="col-md-4">
+                                <div className="stats-box">
+                                    <h4>Total Profit</h4>
+                                    <p>${metrics.totalProfit.toLocaleString()}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-4">
+                                <div className="stats-box">
+                                    <h4>Total Reveune</h4>
+                                    <p>${metrics.totalRevenue.toLocaleString()}</p>
+                                </div>
+                            </div>
                         </div>
                         <div className="row">
                             <div className="col-md-4">
@@ -71,7 +77,7 @@ const Dashboard = () => {
                                     <p>{customerCount}</p>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="row">
                             <div className="col-md-4 mb-3" id="dMain">
                                 <NavLink
