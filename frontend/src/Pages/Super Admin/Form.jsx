@@ -22,6 +22,8 @@ const Form = ({ onClose, onSubmitSuccess }) => {
 
     const [categories, setCategories] = useState([]);
     const [models, setModels] = useState([]);
+    const [productImages, setProductImages] = useState([]);
+    const [customerImages, setCustomerImages] = useState([]);
 
     // Fetch categories from the database when the component mounts
     useEffect(() => {
@@ -89,21 +91,29 @@ const Form = ({ onClose, onSubmitSuccess }) => {
         }
     };
 
-    const [image, setImage] = useState(null);
+    const handleProductImageChange = (e) => {
+        setProductImages([...e.target.files]);
+    };
 
-    const handleImageChange = (e) => {
-        setFormData({ ...formData, image: e.target.files[0] });
+    const handleCustomerImageChange = (e) => {
+        setCustomerImages([...e.target.files]);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formDataWithImage = new FormData();
+        const formDataWithImages = new FormData();
         for (const key in formData) {
-            formDataWithImage.append(key, formData[key]);
+            formDataWithImages.append(key, formData[key]);
         }
+        productImages.forEach((image) => {
+            formDataWithImages.append('productImages', image);
+        });
+        customerImages.forEach((image) => {
+            formDataWithImages.append('customerImages', image);
+        });
 
         try {
-            const response = await axios.post('http://localhost:5000/api/submit', formDataWithImage, {
+            const response = await axios.post('http://localhost:5000/api/submit', formDataWithImages, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -186,6 +196,21 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                         />
                     </div>
 
+                    
+
+                    <div className="mb-2">
+                        <label htmlFor="customerImages" className="form-label" style={{ fontSize: '0.9rem' }}>Upload Customer Images</label>
+                        <input 
+                            type="file" 
+                            className="form-control form-control-sm" 
+                            id="customerImages"
+                            onChange={handleCustomerImageChange} 
+                            accept="image/*" 
+                            multiple
+                            required
+                        />
+                    </div>
+
                     <div className="mb-2">
                         <label htmlFor="startDate" className="form-label" style={{ fontSize: '0.9rem' }}>Start Date</label>
                         <input
@@ -264,8 +289,16 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="image" className="form-label" style={{ fontSize: '0.9rem' }}>upload image</label>
-                        <input type="file" className="form-control form-control-sm" onChange={handleImageChange} accept="image/*" required />
+                        <label htmlFor="productImages" className="form-label" style={{ fontSize: '0.9rem' }}>Upload Product Images</label>
+                        <input 
+                            type="file" 
+                            className="form-control form-control-sm" 
+                            id="productImages"
+                            onChange={handleProductImageChange} 
+                            accept="image/*" 
+                            multiple
+                            required
+                        />
                     </div>
 
                     <div className="mb-2">

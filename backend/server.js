@@ -44,7 +44,10 @@ connection.connect((err) => {
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-app.post('/api/submit', upload.single('image'), (req, res) => {
+app.post('/api/submit', upload.fields([
+    { name: 'productImages', maxCount: 10 },
+    { name: 'customerImages', maxCount: 2 }
+]), (req, res) => {
     const {
         recepitNo,
         customerName,
@@ -61,8 +64,8 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
         estimateValue,
     } = req.body;
 
-    const fileName = req.file.originalname;
-    const imageData = req.file.buffer;
+    const productImages = req.files['productImages'];
+    const customerImages = req.files['customerImages'];
 
     // Check if customer exists
     const checkCustomerQuery = 'SELECT * FROM Customers WHERE nic = ?';
@@ -72,39 +75,69 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
             return res.status(500).json({ message: 'Error checking customer', error: err.message });
         }
 
+        let customerId;
         if (results.length === 0) {
             // Create new customer
             const createCustomerQuery = 'INSERT INTO Customers (customerName, nic, address, phone) VALUES (?, ?, ?, ?)';
-            connection.query(createCustomerQuery, [customerName, nic, address, phone], (err) => {
+            connection.query(createCustomerQuery, [customerName, nic, address, phone], (err, result) => {
                 if (err) {
                     console.error('Error creating customer:', err);
                     return res.status(500).json({ message: 'Error creating customer', error: err.message });
                 }
-                insertProduct();
+                customerId = result.insertId;
+                insertCustomerImages(customerId);
+                insertProduct(customerId);
             });
         } else {
-            insertProduct();
+            customerId = results[0].id;
+            insertCustomerImages(customerId);
+            insertProduct(customerId);
+        }
+
+        function insertCustomerImages(customerId) {
+            if (customerImages && customerImages.length > 0) {
+                const insertCustomerImageQuery = 'INSERT INTO customer_image (customer_id, file_name, image_data) VALUES (?, ?, ?)';
+                customerImages.forEach((image) => {
+                    connection.query(insertCustomerImageQuery, [customerId, image.originalname, image.buffer], (err) => {
+                        if (err) {
+                            console.error('Error saving customer image:', err);
+                        }
+                    });
+                });
+            }
         }
 
         function insertProduct() {
-            const createItemQuery = `INSERT INTO Products (recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            const createItemQuery = `INSERT INTO Products (recepitNo,customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue) VALUES (?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             connection.query(createItemQuery, [recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue], (err, result) => {
                 if (err) {
                     console.error('Error saving item:', err);
                     return res.status(500).json({ message: 'Error saving item', error: err.message });
                 }
 
-                // Save the image
-                const productId = result.insertId; // Get the ID of the newly created product
-                const insertImageQuery = 'INSERT INTO product_images (product_id, file_name, image_data) VALUES (?, ?, ?)';
-                connection.query(insertImageQuery, [productId, fileName, imageData], (err) => {
-                    if (err) {
-                        console.error('Error saving image to database:', err);
-                        return res.status(500).json({ message: 'Error saving image' });
-                    }
-                    res.status(201).json({ message: 'Data saved successfully' });
-                });
+                const productId = result.insertId;
+                insertProductImages(productId);
             });
+        }
+
+        function insertProductImages(productId) {
+            if (productImages && productImages.length > 0) {
+                const insertProductImageQuery = 'INSERT INTO product_images (product_id, file_name, image_data) VALUES (?, ?, ?)';
+                let insertedImages = 0;
+                productImages.forEach((image, index) => {
+                    connection.query(insertProductImageQuery, [productId, image.originalname, image.buffer], (err) => {
+                        if (err) {
+                            console.error('Error saving product image:', err);
+                        }
+                        insertedImages++;
+                        if (insertedImages === productImages.length) {
+                            res.status(201).json({ message: 'Data saved successfully' });
+                        }
+                    });
+                });
+            } else {
+                res.status(201).json({ message: 'Data saved successfully' });
+            }
         }
     });
 });
@@ -112,25 +145,47 @@ app.post('/api/submit', upload.single('image'), (req, res) => {
 // Add this route to your server.js file
 app.get('/api/products_images/:id/image', (req, res) => {
     const productId = req.params.id;
-  
+
     const getImageQuery = 'SELECT image_data FROM product_images WHERE product_id = ?';
     connection.query(getImageQuery, [productId], (err, result) => {
-      if (err) {
-        console.error('Error fetching image:', err);
-        return res.status(500).json({ message: 'Error fetching image', error: err.message });
-      }
-  
-      if (result.length > 0) {
-        const image = result[0].image_data;
-        console.log('Image data fetched for product ID:', productId);
-        res.setHeader('Content-Type', 'image/jpeg'); // Adjust MIME type if necessary
-        res.send(image);
-      } else {
-        console.error('Image not found for product ID:', productId);
-        res.status(404).json({ message: 'Image not found' });
-      }
+        if (err) {
+            console.error('Error fetching image:', err);
+            return res.status(500).json({ message: 'Error fetching image', error: err.message });
+        }
+
+        if (result.length > 0) {
+            const image = result[0].image_data;
+            console.log('Image data fetched for product ID:', productId);
+            res.setHeader('Content-Type', 'image/jpeg'); // Adjust MIME type if necessary
+            res.send(image);
+        } else {
+            console.error('Image not found for product ID:', productId);
+            res.status(404).json({ message: 'Image not found' });
+        }
     });
-  });
+});
+
+app.get('/api/customer_images/:id/image', (req, res) => {
+    const cusID = req.params.id;
+
+    const getImageQuery = 'SELECT image_data FROM customer_image WHERE customer_id = ?';
+    connection.query(getImageQuery, [cusID], (err, result) => {
+        if (err) {
+            console.error('Error fetching image:', err);
+            return res.status(500).json({ message: 'Error fetching image', error: err.message });
+        }
+
+        if (result.length > 0) {
+            const image = result[0].image_data;
+            console.log('Image data fetched for product ID:', cusID);
+            res.setHeader('Content-Type', 'image/jpeg'); // Adjust MIME type if necessary
+            res.send(image);
+        } else {
+            console.error('Image not found for product ID:', cusID);
+            res.status(404).json({ message: 'Image not found' });
+        }
+    });
+});
 
 // API to fetch categories from the database
 app.get('/api/categories', (req, res) => {
