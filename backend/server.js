@@ -41,166 +41,96 @@ connection.connect((err) => {
     console.log('Connected to MySQL as id ' + connection.threadId);
 });
 
-//insert data
-// app.post('/api/submit', (req, res) => {
-//     const {
-//         recepitNo,
-//         customerName,
-//         nic,
-//         address,
-//         phone,
-//         startDate,
-//         itemCategory,
-//         itemModel,
-//         itemName,
-//         itemNo,
-//         size,
-//         marketValue,
-//         estimateValue,
-//     } = req.body;
-
-//     // Check if customer exists
-//     const checkCustomerQuery = 'SELECT * FROM Customers WHERE nic = ?';
-//     connection.query(checkCustomerQuery, [nic], (err, results) => {
-//         if (err) {
-//             console.error('Error checking customer:', err);
-//             return res.status(500).json({ message: 'Error checking customer', error: err.message });
-//         }
-
-//         if (results.length === 0) {
-//             // Create new customer
-//             const createCustomerQuery = 'INSERT INTO Customers (customerName, nic, address, phone) VALUES (?, ?, ?, ?)';
-//             connection.query(createCustomerQuery, [customerName, nic, address, phone], (err) => {
-//                 if (err) {
-//                     console.error('Error creating customer:', err);
-//                     return res.status(500).json({ message: 'Error creating customer', error: err.message });
-//                 }
-//                 insertProduct();
-//             });
-//         } else {
-//             insertProduct();
-//         }
-
-//         // Save item details
-//         function insertProduct() {
-//             const createItemQuery = `INSERT INTO Products 
-//                 (recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue) 
-//                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-//             connection.query(createItemQuery, [
-//                 recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel,
-//                 itemName, itemNo, size, marketValue, estimateValue
-//             ], (err) => {
-//                 if (err) {
-//                     console.error('Error saving item:', err.stack);
-//                     return res.status(500).json({ message: 'Error saving item', error: err.message });
-//                 }
-
-//                 res.status(201).json({ message: 'Data saved successfully' });
-//             });
-//         }
-//     });
-// });
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 app.post('/api/submit', upload.single('image'), (req, res) => {
     const {
-      recepitNo,
-      customerName,
-      nic,
-      address,
-      phone,
-      startDate,
-      itemCategory,
-      itemModel,
-      itemName,
-      itemNo,
-      size,
-      marketValue,
-      estimateValue,
+        recepitNo,
+        customerName,
+        nic,
+        address,
+        phone,
+        startDate,
+        itemCategory,
+        itemModel,
+        itemName,
+        itemNo,
+        size,
+        marketValue,
+        estimateValue,
     } = req.body;
-  
+
     const fileName = req.file.originalname;
     const imageData = req.file.buffer;
-  
+
     // Check if customer exists
     const checkCustomerQuery = 'SELECT * FROM Customers WHERE nic = ?';
     connection.query(checkCustomerQuery, [nic], (err, results) => {
-      if (err) {
-        console.error('Error checking customer:', err);
-        return res.status(500).json({ message: 'Error checking customer', error: err.message });
-      }
-  
-      if (results.length === 0) {
-        // Create new customer
-        const createCustomerQuery = 'INSERT INTO Customers (customerName, nic, address, phone) VALUES (?, ?, ?, ?)';
-        connection.query(createCustomerQuery, [customerName, nic, address, phone], (err) => {
-          if (err) {
-            console.error('Error creating customer:', err);
-            return res.status(500).json({ message: 'Error creating customer', error: err.message });
-          }
-          insertProduct();
-        });
-      } else {
-        insertProduct();
-      }
-  
-      function insertProduct() {
-        const createItemQuery = `INSERT INTO Products (recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        connection.query(createItemQuery, [recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue], (err, result) => {
-          if (err) {
-            console.error('Error saving item:', err);
-            return res.status(500).json({ message: 'Error saving item', error: err.message });
-          }
-  
-          // Save the image
-          const productId = result.insertId; // Get the ID of the newly created product
-          const insertImageQuery = 'INSERT INTO product_images (product_id, file_name, image_data) VALUES (?, ?, ?)';
-          connection.query(insertImageQuery, [productId, fileName, imageData], (err) => {
-            if (err) {
-              console.error('Error saving image to database:', err);
-              return res.status(500).json({ message: 'Error saving image' });
-            }
-            res.status(201).json({ message: 'Data saved successfully' });
-          });
-        });
-      }
-    });
-  });
+        if (err) {
+            console.error('Error checking customer:', err);
+            return res.status(500).json({ message: 'Error checking customer', error: err.message });
+        }
 
-  app.get('/api/image/:id', (req, res) => {
+        if (results.length === 0) {
+            // Create new customer
+            const createCustomerQuery = 'INSERT INTO Customers (customerName, nic, address, phone) VALUES (?, ?, ?, ?)';
+            connection.query(createCustomerQuery, [customerName, nic, address, phone], (err) => {
+                if (err) {
+                    console.error('Error creating customer:', err);
+                    return res.status(500).json({ message: 'Error creating customer', error: err.message });
+                }
+                insertProduct();
+            });
+        } else {
+            insertProduct();
+        }
+
+        function insertProduct() {
+            const createItemQuery = `INSERT INTO Products (recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            connection.query(createItemQuery, [recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue], (err, result) => {
+                if (err) {
+                    console.error('Error saving item:', err);
+                    return res.status(500).json({ message: 'Error saving item', error: err.message });
+                }
+
+                // Save the image
+                const productId = result.insertId; // Get the ID of the newly created product
+                const insertImageQuery = 'INSERT INTO product_images (product_id, file_name, image_data) VALUES (?, ?, ?)';
+                connection.query(insertImageQuery, [productId, fileName, imageData], (err) => {
+                    if (err) {
+                        console.error('Error saving image to database:', err);
+                        return res.status(500).json({ message: 'Error saving image' });
+                    }
+                    res.status(201).json({ message: 'Data saved successfully' });
+                });
+            });
+        }
+    });
+});
+
+// Add this route to your server.js file
+app.get('/api/products_images/:id/image', (req, res) => {
     const productId = req.params.id;
-    const query = 'SELECT image_data FROM product_images WHERE product_id = ?';
-    connection.query(query, [productId], (err, results) => {
+  
+    const getImageQuery = 'SELECT image_data FROM product_images WHERE product_id = ?';
+    connection.query(getImageQuery, [productId], (err, result) => {
       if (err) {
-        console.error('Error fetching image data:', err);
-        return res.status(500).json({ message: 'Error fetching image data' });
+        console.error('Error fetching image:', err);
+        return res.status(500).json({ message: 'Error fetching image', error: err.message });
       }
-      if (results.length > 0) {
-        res.json(results[0].image_data);
+  
+      if (result.length > 0) {
+        const image = result[0].image_data;
+        console.log('Image data fetched for product ID:', productId);
+        res.setHeader('Content-Type', 'image/jpeg'); // Adjust MIME type if necessary
+        res.send(image);
       } else {
+        console.error('Image not found for product ID:', productId);
         res.status(404).json({ message: 'Image not found' });
       }
     });
   });
-
-
-// API endpoint to upload image
-// app.post('/api/upload', upload.single('image'), (req, res) => {
-//     const fileName = req.file.originalname;
-//     const imageData = req.file.buffer;
-  
-//     const query = 'INSERT INTO product_images (file_name, image_data) VALUES (?, ?)';
-//     connection.query(query, [fileName, imageData], (err) => {
-//       if (err) {
-//         console.error('Error saving image to database:', err);
-//         return res.status(500).json({ message: 'Error saving image' });
-//       }
-//       res.status(201).json({ message: 'Image uploaded successfully' });
-//     });
-//   });
 
 // API to fetch categories from the database
 app.get('/api/categories', (req, res) => {
@@ -511,24 +441,77 @@ app.delete('/api/customers/:id', (req, res) => {
 });
 
 // Delete item 
+// app.delete('/api/products/:id', (req, res) => {
+//     const { id } = req.params;
+
+//     const deleteItemQuery = 'DELETE FROM products WHERE id = ?';
+
+//     connection.query(deleteItemQuery, [id], (err, result) => {
+//         if (err) {
+//             console.error('Error deleting item:', err);
+//             return res.status(500).json({ message: 'Failed to delete item' });
+//         }
+
+//         if (result.affectedRows === 0) {
+//             return res.status(404).json({ message: 'Item not found' });
+//         }
+
+//         res.status(200).json({ message: 'Item deleted successfully' });
+//     });
+// });
+
 app.delete('/api/products/:id', (req, res) => {
     const { id } = req.params;
 
-    const deleteItemQuery = 'DELETE FROM products WHERE id = ?';
-
-    connection.query(deleteItemQuery, [id], (err, result) => {
+    // Begin transaction to ensure atomicity
+    connection.beginTransaction(err => {
         if (err) {
-            console.error('Error deleting item:', err);
-            return res.status(500).json({ message: 'Failed to delete item' });
+            console.error('Error starting transaction:', err);
+            return res.status(500).json({ message: 'Failed to start transaction' });
         }
 
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Item not found' });
-        }
+        // First, delete associated images
+        const deleteImagesQuery = 'DELETE FROM product_images WHERE product_id = ?';
+        connection.query(deleteImagesQuery, [id], (err) => {
+            if (err) {
+                return connection.rollback(() => {
+                    console.error('Error deleting images:', err);
+                    res.status(500).json({ message: 'Failed to delete images' });
+                });
+            }
 
-        res.status(200).json({ message: 'Item deleted successfully' });
+            // Then, delete the product
+            const deleteItemQuery = 'DELETE FROM products WHERE id = ?';
+            connection.query(deleteItemQuery, [id], (err, result) => {
+                if (err) {
+                    return connection.rollback(() => {
+                        console.error('Error deleting item:', err);
+                        res.status(500).json({ message: 'Failed to delete item' });
+                    });
+                }
+
+                if (result.affectedRows === 0) {
+                    return connection.rollback(() => {
+                        res.status(404).json({ message: 'Item not found' });
+                    });
+                }
+
+                // Commit the transaction if both operations are successful
+                connection.commit(err => {
+                    if (err) {
+                        return connection.rollback(() => {
+                            console.error('Error committing transaction:', err);
+                            res.status(500).json({ message: 'Failed to commit transaction' });
+                        });
+                    }
+
+                    res.status(200).json({ message: 'Item and associated images deleted successfully' });
+                });
+            });
+        });
     });
 });
+
 
 
 app.get('/api/items/report', (req, res) => {
