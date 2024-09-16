@@ -33,7 +33,7 @@ const ViewImage = ({ selectedProduct }) => {
           </div>
           <div className="modal-body">
             {imageUrl ? (
-              <img src={imageUrl} style={{ maxWidth: '100%', maxHeight: '400px' }} alt="Product" className="img-fluid" />
+              <img src={imageUrl} style={{ maxWidth: '100%', maxHeight: '500px' }} alt="Product" className="img-fluid" />
             ) : (
               <p>No image available for this product</p>
             )}

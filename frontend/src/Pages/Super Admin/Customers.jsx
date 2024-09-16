@@ -109,6 +109,7 @@ const Customers = () => {
                                     <th>NIC</th>
                                     <th>Address</th>
                                     <th>Phone</th>
+                                    <th>Image</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>

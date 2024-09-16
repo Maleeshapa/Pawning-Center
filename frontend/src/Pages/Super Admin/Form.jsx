@@ -218,7 +218,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                         />
                     </div>
 
-                    <div className="mb-2">
+                    {/* <div className="mb-2">
                         <label htmlFor="customerImagesBack" className="form-label" style={{ fontSize: '0.9rem' }}>nic back</label>
                         <input 
                             type="file" 
@@ -229,7 +229,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                             multiple
                             required
                         />
-                    </div>
+                    </div> */}
 
 
                     <div className="mb-2">
