@@ -21,10 +21,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-
 // Middleware
 app.use(bodyParser.json({ limit: '10mb' })); // limit 
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -41,103 +41,166 @@ connection.connect((err) => {
     console.log('Connected to MySQL as id ' + connection.threadId);
 });
 
+//insert data
+// app.post('/api/submit', (req, res) => {
+//     const {
+//         recepitNo,
+//         customerName,
+//         nic,
+//         address,
+//         phone,
+//         startDate,
+//         itemCategory,
+//         itemModel,
+//         itemName,
+//         itemNo,
+//         size,
+//         marketValue,
+//         estimateValue,
+//     } = req.body;
+
+//     // Check if customer exists
+//     const checkCustomerQuery = 'SELECT * FROM Customers WHERE nic = ?';
+//     connection.query(checkCustomerQuery, [nic], (err, results) => {
+//         if (err) {
+//             console.error('Error checking customer:', err);
+//             return res.status(500).json({ message: 'Error checking customer', error: err.message });
+//         }
+
+//         if (results.length === 0) {
+//             // Create new customer
+//             const createCustomerQuery = 'INSERT INTO Customers (customerName, nic, address, phone) VALUES (?, ?, ?, ?)';
+//             connection.query(createCustomerQuery, [customerName, nic, address, phone], (err) => {
+//                 if (err) {
+//                     console.error('Error creating customer:', err);
+//                     return res.status(500).json({ message: 'Error creating customer', error: err.message });
+//                 }
+//                 insertProduct();
+//             });
+//         } else {
+//             insertProduct();
+//         }
+
+//         // Save item details
+//         function insertProduct() {
+//             const createItemQuery = `INSERT INTO Products 
+//                 (recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue) 
+//                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+//             connection.query(createItemQuery, [
+//                 recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel,
+//                 itemName, itemNo, size, marketValue, estimateValue
+//             ], (err) => {
+//                 if (err) {
+//                     console.error('Error saving item:', err.stack);
+//                     return res.status(500).json({ message: 'Error saving item', error: err.message });
+//                 }
+
+//                 res.status(201).json({ message: 'Data saved successfully' });
+//             });
+//         }
+//     });
+// });
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-//insert data
-app.post('/api/submit', (req, res) => {
+app.post('/api/submit', upload.single('image'), (req, res) => {
     const {
-        recepitNo,
-        customerName,
-        nic,
-        address,
-        phone,
-        startDate,
-        itemCategory,
-        itemModel,
-        itemName,
-        itemNo,
-        size,
-        marketValue,
-        estimateValue,
+      recepitNo,
+      customerName,
+      nic,
+      address,
+      phone,
+      startDate,
+      itemCategory,
+      itemModel,
+      itemName,
+      itemNo,
+      size,
+      marketValue,
+      estimateValue,
     } = req.body;
-
+  
+    const fileName = req.file.originalname;
+    const imageData = req.file.buffer;
+  
     // Check if customer exists
     const checkCustomerQuery = 'SELECT * FROM Customers WHERE nic = ?';
     connection.query(checkCustomerQuery, [nic], (err, results) => {
-        if (err) {
-            console.error('Error checking customer:', err);
-            return res.status(500).json({ message: 'Error checking customer', error: err.message });
-        }
-
-        if (results.length === 0) {
-            // Create new customer
-            const createCustomerQuery = 'INSERT INTO Customers (customerName, nic, address, phone) VALUES (?, ?, ?, ?)';
-            connection.query(createCustomerQuery, [customerName, nic, address, phone], (err) => {
-                if (err) {
-                    console.error('Error creating customer:', err);
-                    return res.status(500).json({ message: 'Error creating customer', error: err.message });
-                }
-                insertProduct();
-            });
-        } else {
-            insertProduct();
-        }
-
-        // Save item details
-        function insertProduct() {
-            const createItemQuery = `INSERT INTO Products 
-                (recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-                
-            connection.query(createItemQuery, [
-                recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, 
-                itemName, itemNo, size, marketValue, estimateValue
-            ], (err) => {
-                if (err) {
-                    console.error('Error saving item:', err.stack);
-                    return res.status(500).json({ message: 'Error saving item', error: err.message });
-                }
-        
-                res.status(201).json({ message: 'Data saved successfully' });
-            });
-        }
-    });
-});
-
-
-//product image upload
-app.post('/upload', upload.single('image'), (req, res) => {
-    const { file } = req;
-    const { imagePro} = file;
-  
-    // SQL query to insert image data as BLOB into MySQL
-    const sql = `INSERT INTO product_img (imagePro) VALUES (?)`;
-    db.query(sql, [imagePro], (err, result) => {
       if (err) {
-        console.error(err);
-        return res.status(500).send('Error uploading image');
+        console.error('Error checking customer:', err);
+        return res.status(500).json({ message: 'Error checking customer', error: err.message });
       }
-      res.status(200).send('Image uploaded successfully');
+  
+      if (results.length === 0) {
+        // Create new customer
+        const createCustomerQuery = 'INSERT INTO Customers (customerName, nic, address, phone) VALUES (?, ?, ?, ?)';
+        connection.query(createCustomerQuery, [customerName, nic, address, phone], (err) => {
+          if (err) {
+            console.error('Error creating customer:', err);
+            return res.status(500).json({ message: 'Error creating customer', error: err.message });
+          }
+          insertProduct();
+        });
+      } else {
+        insertProduct();
+      }
+  
+      function insertProduct() {
+        const createItemQuery = `INSERT INTO Products (recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        connection.query(createItemQuery, [recepitNo, customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue], (err, result) => {
+          if (err) {
+            console.error('Error saving item:', err);
+            return res.status(500).json({ message: 'Error saving item', error: err.message });
+          }
+  
+          // Save the image
+          const productId = result.insertId; // Get the ID of the newly created product
+          const insertImageQuery = 'INSERT INTO product_images (product_id, file_name, image_data) VALUES (?, ?, ?)';
+          connection.query(insertImageQuery, [productId, fileName, imageData], (err) => {
+            if (err) {
+              console.error('Error saving image to database:', err);
+              return res.status(500).json({ message: 'Error saving image' });
+            }
+            res.status(201).json({ message: 'Data saved successfully' });
+          });
+        });
+      }
     });
   });
-  
-  // API endpoint to fetch image by ID
-  app.get('/image/:id', (req, res) => {
-    const sql = `SELECT imagePro FROM product_img WHERE id = ?`;
-    db.query(sql, [req.params.id], (err, result) => {
+
+  app.get('/api/image/:id', (req, res) => {
+    const productId = req.params.id;
+    const query = 'SELECT image_data FROM product_images WHERE product_id = ?';
+    connection.query(query, [productId], (err, results) => {
       if (err) {
-        console.error(err);
-        return res.status(500).send('Error fetching image');
+        console.error('Error fetching image data:', err);
+        return res.status(500).json({ message: 'Error fetching image data' });
       }
-      if (result.length === 0) {
-        return res.status(404).send('Image not found');
+      if (results.length > 0) {
+        res.json(results[0].image_data);
+      } else {
+        res.status(404).json({ message: 'Image not found' });
       }
-  
-      res.setHeader('Content-Type', result[0].mime_type);
-      res.send(result[0].image_data);
     });
   });
+
+
+// API endpoint to upload image
+// app.post('/api/upload', upload.single('image'), (req, res) => {
+//     const fileName = req.file.originalname;
+//     const imageData = req.file.buffer;
+  
+//     const query = 'INSERT INTO product_images (file_name, image_data) VALUES (?, ?)';
+//     connection.query(query, [fileName, imageData], (err) => {
+//       if (err) {
+//         console.error('Error saving image to database:', err);
+//         return res.status(500).json({ message: 'Error saving image' });
+//       }
+//       res.status(201).json({ message: 'Image uploaded successfully' });
+//     });
+//   });
 
 // API to fetch categories from the database
 app.get('/api/categories', (req, res) => {
@@ -153,7 +216,7 @@ app.get('/api/categories', (req, res) => {
 
 // API to fetch models from the database
 app.get('/api/models', (req, res) => {
-    const query = 'SELECT modelName FROM itemmodel'; 
+    const query = 'SELECT modelName FROM itemmodel';
     connection.query(query, (err, results) => {
         if (err) {
             console.error('Error fetching models:', err);
@@ -182,13 +245,13 @@ app.get('/api/customers', (req, res) => {
 app.get('/api/customer/:nic', (req, res) => {
     const { nic } = req.params;
     const query = 'SELECT * FROM Customers WHERE nic = ?';
-    
+
     connection.query(query, [nic], (err, results) => {
         if (err) {
             console.error('Error fetching customer data:', err);
             return res.status(500).json({ message: 'Error fetching customer data' });
         }
-        
+
         if (results.length > 0) {
             res.status(200).json(results[0]);
         } else {
@@ -213,10 +276,10 @@ app.get('/api/products', (req, res) => {
 // Route to Update Product Payment Details
 app.post('/api/pawn-payment', (req, res) => {
     const { id, status, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount } = req.body;
-  
+
     let query;
     let queryParams;
-  
+
     if (status === 'Pawned') {
         const currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
         query = `
@@ -247,7 +310,7 @@ app.post('/api/pawn-payment', (req, res) => {
         `;
         queryParams = [totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount, id];
     }
-  
+
     connection.query(query, queryParams, (err, result) => {
         if (err) {
             console.error('Error updating product:', err);
@@ -260,7 +323,7 @@ app.post('/api/pawn-payment', (req, res) => {
 app.put('/api/remove-item/:id', (req, res) => {
     const itemId = req.params.id;
     const query = 'UPDATE products SET status = ? WHERE id = ?';
-    
+
     connection.query(query, ['Removed', itemId], (err, result) => {
         if (err) {
             console.error('Error removing item:', err);
@@ -276,7 +339,7 @@ app.put('/api/remove-item/:id', (req, res) => {
 app.put('/api/buyer/:id', (req, res) => {
     const { status, buyerName, buyerNic, buyerAddress, buyerPhone, sellDate, sellPrice } = req.body;
     const { id } = req.params; // Get product ID from URL params
-    
+
     const query = `
         UPDATE products SET 
         status = ?,
@@ -423,10 +486,10 @@ app.put('/api/products/:id', (req, res) => {
 // Delete customer 
 app.delete('/api/customers/:id', (req, res) => {
     const { id } = req.params;
-    
-   
+
+
     console.log('Received customer ID for deletion:', id);
-    
+
     if (!id) {
         return res.status(400).json({ message: 'Customer ID is required' });
     }
@@ -475,25 +538,25 @@ app.get('/api/items/report', (req, res) => {
       FROM Items 
       WHERE status = 'Payment Received' AND startDate BETWEEN ? AND ?
     `;
-  
+
     connection.query(query, [startDate, endDate], (err, results) => {
-      if (err) {
-        console.error('Error fetching report data:', err);
-        return res.status(500).json({ error: 'Database error' });
-      }
-      res.json(results);
+        if (err) {
+            console.error('Error fetching report data:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        res.json(results);
     });
-  });
+});
 
 
-  app.get('/api/generate-report', (req, res) => {
+app.get('/api/generate-report', (req, res) => {
     const { startDate, endDate } = req.query;
 
     if (!startDate || !endDate) {
         return res.status(400).json({ message: 'Start date and end date are required' });
     }
 
-   
+
     const query = `
         SELECT
             id,
@@ -518,7 +581,7 @@ app.get('/api/items/report', (req, res) => {
             return res.status(500).json({ message: 'Error fetching data' });
         }
 
-        
+
         const doc = new jsPDF();
         doc.autoTable({
             head: [['ID', 'Receipt No', 'Customer Name', 'Category', 'Model', 'Item Name', 'Item No', 'Size', 'Market Value', 'Estimated Value', 'Status', 'Sold Date']],
@@ -534,12 +597,12 @@ app.get('/api/items/report', (req, res) => {
                 item.marketValue,
                 item.estimateValue,
                 item.status,
-                item.soldDate.toISOString().slice(0, 10) 
+                item.soldDate.toISOString().slice(0, 10)
             ]),
             theme: 'grid'
         });
 
-      
+
         const pdfPath = path.join(__dirname, 'report.pdf');
         const pdfStream = doc.output('arraybuffer');
         fs.writeFile(pdfPath, Buffer.from(pdfStream), (err) => {
@@ -548,7 +611,7 @@ app.get('/api/items/report', (req, res) => {
                 return res.status(500).json({ message: 'Error saving PDF file' });
             }
 
-           
+
             res.sendFile(pdfPath, { root: __dirname }, (err) => {
                 if (err) {
                     console.error('Error sending PDF file:', err);
@@ -580,8 +643,8 @@ const authenticateToken = (req, res, next) => {
 // Protected route 
 app.get('/api/protected', authenticateToken, (req, res) => {
     res.status(200).json({ message: 'You have accessed a protected route!', accountType: req.user.accountType });
-  });
-  
+});
+
 
 // Logout route
 app.post('/api/logout', (req, res) => {

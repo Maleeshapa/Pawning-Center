@@ -89,10 +89,25 @@ const Form = ({ onClose, onSubmitSuccess }) => {
         }
     };
 
+    const [image, setImage] = useState(null);
+
+    const handleImageChange = (e) => {
+        setFormData({ ...formData, image: e.target.files[0] });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const formDataWithImage = new FormData();
+        for (const key in formData) {
+            formDataWithImage.append(key, formData[key]);
+        }
+
         try {
-            const response = await axios.post('http://localhost:5000/api/submit', formData);
+            const response = await axios.post('http://localhost:5000/api/submit', formDataWithImage, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             if (response.status === 201) {
                 alert('Data submitted successfully!');
                 onSubmitSuccess();
@@ -246,6 +261,11 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                             value={formData.size}
                             onChange={handleChange}
                         />
+                    </div>
+
+                    <div className="mb-2">
+                        <label htmlFor="image" className="form-label" style={{ fontSize: '0.9rem' }}>upload image</label>
+                        <input type="file" className="form-control form-control-sm" onChange={handleImageChange} accept="image/*" required />
                     </div>
 
                     <div className="mb-2">
