@@ -18,7 +18,7 @@ const Pawn = () => {
         const fetchProducts = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/products');
-                const soldProducts = response.data.filter(product => product.status === 'Pawned');
+                const soldProducts = response.data.filter(product => product.status === 'Release');
                 setProducts(soldProducts);
                 console.log('Fetched products:', soldProducts);
             } catch (error) {
@@ -79,8 +79,16 @@ const Pawn = () => {
             return;
         }
 
+        const formatDateTime = (dateString) => {
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', {
+                dateStyle: 'short', // For example: '9/27/2024'
+                timeStyle: 'short'  // For example: '5:11 PM'
+            });
+        };
+
         // Define table headers
-        const headers = [["Receipt No", "Customer Name", "Customer NIC", "Category", "Model", "Item", "Item No", "Size", "Market Price", "Estimate Price", "Total Interest", "Customer Paid", "Discount", "Profit"]];
+        const headers = [["Receipt No", "Customer Name", "Customer NIC", "Category", "Model", "Item", "Item No", "Size","Start Date","End Date", "Estimated Value", "Pawning Advance", "Total Interest", "Customer Paid", "Discount", "Profit"]];
         let totalEstimateValue = 0;
         let totalInterest = 0;
         let totalCustomerPaid = 0;
@@ -104,6 +112,8 @@ const Pawn = () => {
                 product.itemName,
                 product.itemNo,
                 product.size,
+                formatDateTime(product.startDate),
+                product.endDate ? formatDateTime(product.endDate) : 'N/A',
                 product.marketValue,
                 product.estimateValue,
                 product.totalInterest,
@@ -117,7 +127,7 @@ const Pawn = () => {
 
         // Add title
         doc.text('Pawn History Report', 20, 20);
-        doc.text(`From: ${startDate} To: ${endDate}`, 20, 35);
+        doc.text(`From: ${formatDateTime(startDate)} To: ${formatDateTime(endDate)}`, 20, 35);
 
         // Create PDF table with adjusted styles
         doc.autoTable({
@@ -140,6 +150,8 @@ const Pawn = () => {
                 11: { cellWidth: 50 },
                 12: { cellWidth: 50 },
                 13: { cellWidth: 50 },
+                14: { cellWidth: 50 },
+                15: { cellWidth: 50 },
             },
             headStyles: { fillColor: [66, 135, 245], textColor: 255 },
             alternateRowStyles: { fillColor: [240, 240, 240] },
@@ -160,15 +172,17 @@ const Pawn = () => {
             6: { cellWidth: 50 },
             7: { cellWidth: 40 },
             8: { cellWidth: 50 },
-            9: { fontStyle: 'bold', cellWidth: 50 }, // Estimate Price total
-            10: { fontStyle: 'bold', cellWidth: 50 }, // Total Interest
-            11: { fontStyle: 'bold', cellWidth: 50 }, // Customer Paid total
-            12: { cellWidth: 50 },
-            13: { fontStyle: 'bold', cellWidth: 50 }, 
+            9: { cellWidth: 50 },
+            10: { cellWidth: 50 },
+            11: { fontStyle: 'bold', cellWidth: 50 }, // Pawning Advance total
+            12: { fontStyle: 'bold', cellWidth: 50 }, // Total Interest
+            13: { fontStyle: 'bold', cellWidth: 50 }, // Customer Paid total
+            14: { cellWidth: 50 },
+            15: { fontStyle: 'bold', cellWidth: 50 }, 
             }
         });
         // Save the PDF
-        doc.save(`Pawn_History_${startDate}_to_${endDate}.pdf`);
+    doc.save(`Pawn_History_${formatDateTime(startDate).replace(/[/:]/g, '-')}_to_${formatDateTime(endDate).replace(/[/:]/g, '-')}.pdf`);
         setShowModal(false);
     };
 

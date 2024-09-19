@@ -66,6 +66,7 @@ ul {
 
 ul li {
     list-style: none;
+    
 }
 
 .nav.flex-column .nav-link {
@@ -74,6 +75,16 @@ ul li {
 .sidebar-center{
     display: inline-block;
     margin: 0 auto;
+}
+
+.nav-item span {
+    font-size: 10px;
+}
+
+@media (max-width: 1360px) {
+    .nav-item span {
+        font-size: 10px;
+    }
 }
 @media (max-width: 768px) {
     .caption {
@@ -114,7 +125,7 @@ ul li {
 .sidebar {
     background-color: #343a40;
     color: #ffffff;
-    height: 100vh;
+    height: 120vh;
     display: flex;
     flex-direction: column;
     width: 250px;

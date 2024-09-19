@@ -203,16 +203,16 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                         />
                     </div>
 
-                    
+
 
                     <div className="mb-2">
                         <label htmlFor="customerImages" className="form-label" style={{ fontSize: '0.9rem' }}>nic</label>
-                        <input 
-                            type="file" 
-                            className="form-control form-control-sm" 
+                        <input
+                            type="file"
+                            className="form-control form-control-sm"
                             id="customerImages"
-                            onChange={handleCustomerImageChange} 
-                            accept="image/*" 
+                            onChange={handleCustomerImageChange}
+                            accept="image/*"
                             multiple
                         />
                     </div>
@@ -234,7 +234,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     <div className="mb-2">
                         <label htmlFor="startDate" className="form-label" style={{ fontSize: '0.9rem' }}>Start Date</label>
                         <input
-                            type="date"
+                            type="datetime-local"
                             className="form-control form-control-sm"
                             id="startDate"
                             value={formData.startDate}
@@ -260,6 +260,18 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
+                        <label htmlFor="itemName" className="form-label" style={{ fontSize: '0.9rem' }}>Item Name</label>
+                        <input
+                            type="text"
+                            className="form-control form-control-sm"
+                            id="itemName"
+                            value={formData.itemName}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-2">
                         <label htmlFor="itemModel" className="form-label" style={{ fontSize: '0.9rem' }}>Item Model</label>
                         <select
                             className="form-select form-select-sm"
@@ -275,19 +287,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="itemName" className="form-label" style={{ fontSize: '0.9rem' }}>Item Name</label>
-                        <input
-                            type="text"
-                            className="form-control form-control-sm"
-                            id="itemName"
-                            value={formData.itemName}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-2">
-                        <label htmlFor="itemNo" className="form-label" style={{ fontSize: '0.9rem' }}>Item Number</label>
+                        <label htmlFor="itemNo" className="form-label" style={{ fontSize: '0.9rem' }}>Serial No/ IMEI </label>
                         <input
                             type="text"
                             className="form-control form-control-sm"
@@ -298,7 +298,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="size" className="form-label" style={{ fontSize: '0.9rem' }}>Item Size</label>
+                        <label htmlFor="size" className="form-label" style={{ fontSize: '0.9rem' }}>Item Weight</label>
                         <input
                             type="text"
                             className="form-control form-control-sm"
@@ -309,19 +309,19 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="productImages" className="form-label" style={{ fontSize: '0.9rem' }}>Upload Product Images</label>
-                        <input 
-                            type="file" 
-                            className="form-control form-control-sm" 
+                        <label htmlFor="productImages" className="form-label" style={{ fontSize: '0.9rem' }}>Product Images</label>
+                        <input
+                            type="file"
+                            className="form-control form-control-sm"
                             id="productImages"
-                            onChange={handleProductImageChange} 
-                            accept="image/*" 
+                            onChange={handleProductImageChange}
+                            accept="image/*"
                             multiple
                         />
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="marketValue" className="form-label" style={{ fontSize: '0.9rem' }}>Market Price</label>
+                        <label htmlFor="marketValue" className="form-label" style={{ fontSize: '0.9rem' }}>Estimate value</label>
                         <input
                             type="number"
                             className="form-control form-control-sm"
@@ -332,7 +332,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="estimateValue" className="form-label" style={{ fontSize: '0.9rem' }}>Estimated Price</label>
+                        <label htmlFor="estimateValue" className="form-label" style={{ fontSize: '0.9rem' }}>Pawning Advance</label>
                         <input
                             type="number"
                             className="form-control form-control-sm"

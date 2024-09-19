@@ -6,7 +6,7 @@ const ProductSellModal = ({ selectedProduct, setSelectedProduct, handleSaveChang
 
 
     const [formData, setFormData] = useState({
-        status: 'Sold', 
+        status: 'Sold',
         buyerName: '',
         buyerNic: '',
         buyerAddress: '',
@@ -44,7 +44,7 @@ const ProductSellModal = ({ selectedProduct, setSelectedProduct, handleSaveChang
             alert('Error submitting data');
         }
     };
-    
+
 
     return (
         <div className="modal fade" id="sellModal" tabIndex="-1" aria-labelledby="sellModalLabel" aria-hidden="true">
@@ -120,16 +120,6 @@ const ProductSellModal = ({ selectedProduct, setSelectedProduct, handleSaveChang
                                 </div>
 
                                 <div className="mb-2">
-                                    <label className="form-label">Item Model</label>
-                                    <input
-                                        type="text"
-                                        className="form-control form-control-sm"
-                                        value={selectedProduct.itemModel}
-                                        readonly
-                                    />
-                                </div>
-
-                                <div className="mb-2">
                                     <label className="form-label">Item Name</label>
                                     <input
                                         type="text"
@@ -140,7 +130,19 @@ const ProductSellModal = ({ selectedProduct, setSelectedProduct, handleSaveChang
                                 </div>
 
                                 <div className="mb-2">
-                                    <label className="form-label">Item Number</label>
+                                    <label className="form-label">Item Model</label>
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-sm"
+                                        value={selectedProduct.itemModel}
+                                        readonly
+                                    />
+                                </div>
+
+
+
+                                <div className="mb-2">
+                                    <label className="form-label">Serial No/ IMEI</label>
                                     <input
                                         type="text"
                                         className="form-control form-control-sm"
@@ -170,7 +172,7 @@ const ProductSellModal = ({ selectedProduct, setSelectedProduct, handleSaveChang
                                 </div> */}
 
                                 <div className="mb-2">
-                                    <label className="form-label">Market Price of Item</label>
+                                    <label className="form-label">Estimated Price</label>
                                     <input
                                         type="number"
                                         className="form-control form-control-sm"
@@ -180,7 +182,7 @@ const ProductSellModal = ({ selectedProduct, setSelectedProduct, handleSaveChang
                                 </div>
 
                                 <div className="mb-2">
-                                    <label className="form-label">Estimated Price of Item</label>
+                                    <label className="form-label">Pawning Advance</label>
                                     <input
                                         type="number"
                                         className="form-control form-control-sm"

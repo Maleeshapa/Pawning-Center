@@ -80,11 +80,11 @@ const ProductsAdmin = () => {
                         'Content-Type': 'application/json'
                     }
                 });
-    
+
                 console.log('Product updated:', response.data);
                 setProducts(products.map(product => product.id === selectedProduct.id ? response.data : product));
                 setSelectedProduct(null);
-                
+
                 const modal = document.getElementById('updateModal');
                 const modalInstance = window.bootstrap.Modal.getInstance(modal);
                 if (modalInstance) {
@@ -148,7 +148,7 @@ const ProductsAdmin = () => {
             if (response.status === 200) {
                 alert('Item Removed successfully');
                 // Update the local state to reflect the change
-                setProducts(products.map(p => 
+                setProducts(products.map(p =>
                     p.id === product.id ? { ...p, status: 'Removed' } : p
                 ));
             } else {
@@ -159,7 +159,7 @@ const ProductsAdmin = () => {
             alert('Error removing item');
         }
     };
-    
+
 
     return (
         <div className="container-fluid">
@@ -230,14 +230,14 @@ const ProductsAdmin = () => {
                                         <td
                                             style={{
                                                 color:
-                                                    product.status === 'Pawned'
+                                                    product.status === 'Release'
                                                         ? 'green'
                                                         : product.status === 'Sold'
                                                             ? 'blue'
                                                             : product.status === 'Removed'
                                                                 ? 'orange'
-                                                                : 'red',  
-                                                fontWeight: 'bold',  
+                                                                : 'red',
+                                                fontWeight: 'bold',
                                             }}
                                         >
                                             {product.status || 'ගෙවලා නැති'}
@@ -247,7 +247,7 @@ const ProductsAdmin = () => {
 
                                         <td>
 
-                                            <button  type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal" onClick={() => handleUpdate(product)}>
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal" onClick={() => handleUpdate(product)}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                                     <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"></path>
                                                 </svg>
@@ -268,19 +268,35 @@ const ProductsAdmin = () => {
 
                                         <td>
 
-                                            <button className="btn btn-success me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#pawnPayModal" onClick={() => handlePawnPayClick(product)}>
-                                                උකස් ගෙවීම
-                                            </button>
+                                            {product.status === 'Release' || product.status === 'Sold' ? (
+                                                <div>
+                                                    <button className="btn btn-secondary me-2 btn-sm">
+                                                        උකස් ගෙවීම
+                                                    </button>
 
+                                                    <button className="btn btn-secondary me-2 btn-sm">
+                                                        විකුනීම
+                                                    </button>
 
-                                            <button className="btn btn-primary me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#sellModal" onClick={() => handleSellClick(product)}>
-                                                විකුනීම
-                                            </button>
+                                                    <button className="btn btn-secondary btn-sm">
+                                                        භාන්ඩ ඉවත් කිරීම
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <button className="btn btn-success me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#pawnPayModal" onClick={() => handlePawnPayClick(product)}>
+                                                        උකස් ගෙවීම
+                                                    </button>
 
-                                            <button className="btn btn-warning btn-sm"  onClick={() => removeItem(product)} >
-                                                භාන්ඩය ඉවත් කිරීම
-                                            </button>
+                                                    <button className="btn btn-primary me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#sellModal" onClick={() => handleSellClick(product)}>
+                                                        විකුනීම
+                                                    </button>
 
+                                                    <button className="btn btn-warning btn-sm" onClick={() => removeItem(product)}>
+                                                        භාන්ඩ ඉවත් කිරීම
+                                                    </button>
+                                                </>
+                                            )}
 
                                         </td>
                                     </tr>

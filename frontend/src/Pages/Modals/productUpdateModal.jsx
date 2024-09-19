@@ -18,7 +18,7 @@ const ProductUpdateModal = ({ selectedProduct, setSelectedProduct, handleSaveCha
                     <div className="modal-body">
                         {selectedProduct && (
                             <form>
-                                
+
                                 <div className="mb-2">
                                     <label className="form-label">Receipt No</label>
                                     <input
@@ -80,16 +80,6 @@ const ProductUpdateModal = ({ selectedProduct, setSelectedProduct, handleSaveCha
                                 </div>
 
                                 <div className="mb-2">
-                                    <label className="form-label">Item Model</label>
-                                    <input
-                                        type="text"
-                                        className="form-control form-control-sm"
-                                        value={selectedProduct.itemModel}
-                                        onChange={(e) => handleInputChange('itemModel', e.target.value)}
-                                    />
-                                </div>
-
-                                <div className="mb-2">
                                     <label className="form-label">Item Name</label>
                                     <input
                                         type="text"
@@ -100,7 +90,17 @@ const ProductUpdateModal = ({ selectedProduct, setSelectedProduct, handleSaveCha
                                 </div>
 
                                 <div className="mb-2">
-                                    <label className="form-label">Item Number</label>
+                                    <label className="form-label">Item Model</label>
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-sm"
+                                        value={selectedProduct.itemModel}
+                                        onChange={(e) => handleInputChange('itemModel', e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="mb-2">
+                                    <label className="form-label">Serial No/ IMEI</label>
                                     <input
                                         type="text"
                                         className="form-control form-control-sm"
@@ -112,9 +112,9 @@ const ProductUpdateModal = ({ selectedProduct, setSelectedProduct, handleSaveCha
                                 <div className="mb-2">
                                     <label className="form-label">Start Date</label>
                                     <input
-                                        type="date"
+                                        type="datetime-local"
                                         className="form-control form-control-sm"
-                                        value={selectedProduct.startDate.slice(0, 10)}
+                                        value={selectedProduct.startDate ? selectedProduct.startDate.slice(0, 16) : ''}
                                         onChange={(e) => handleInputChange('startDate', e.target.value)}
                                     />
                                 </div>
@@ -130,7 +130,7 @@ const ProductUpdateModal = ({ selectedProduct, setSelectedProduct, handleSaveCha
                                 </div>
 
                                 <div className="mb-2">
-                                    <label className="form-label">Market Price of Item</label>
+                                    <label className="form-label">Estimate Price</label>
                                     <input
                                         type="number"
                                         className="form-control form-control-sm"
@@ -140,7 +140,7 @@ const ProductUpdateModal = ({ selectedProduct, setSelectedProduct, handleSaveCha
                                 </div>
 
                                 <div className="mb-2">
-                                    <label className="form-label">Estimated Price of Item</label>
+                                    <label className="form-label">Pawning Advance</label>
                                     <input
                                         type="number"
                                         className="form-control form-control-sm"

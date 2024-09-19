@@ -78,7 +78,7 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
         try {
             const response = await axios.post('http://localhost:5000/api/pawn-payment', {
                 id: selectedProduct.id,
-                status: 'Pawned',
+                status: 'Release',
                 totalDue: dueAmount,
                 monthlyInterest,
                 totalInterest,
@@ -88,7 +88,7 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
                 discount
             });
             if (response.status === 200) {
-                alert('Pawned successfully!');
+                alert('Release successfully!');
                 handleClose();
                 window.location.reload();
             } else {
@@ -113,7 +113,7 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
                             {selectedProduct && (
                                 <>
                                     <div className="mb-3">
-                                        <label htmlFor="estimateValue" className="form-label">Estimate Value - ඇස්තමෙන්තුගත අගය</label>
+                                        <label htmlFor="estimateValue" className="form-label">Pawning Advance - ඇස්තමෙන්තුගත අගය</label>
                                         <input type="text" className="form-control" id="estimateValue" value={estimateValue} readOnly />
                                     </div>
 
