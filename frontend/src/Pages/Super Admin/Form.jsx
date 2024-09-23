@@ -273,7 +273,15 @@ const Form = ({ onClose, onSubmitSuccess }) => {
 
                     <div className="mb-2">
                         <label htmlFor="itemModel" className="form-label" style={{ fontSize: '0.9rem' }}>Item Model</label>
-                        <select
+                        <input
+                            type="text"
+                            className="form-control form-control-sm"
+                            id="itemModel"
+                            value={formData.itemModel}
+                            onChange={handleChange}
+                            required
+                        />
+                        {/* <select
                             className="form-select form-select-sm"
                             id="itemModel"
                             value={formData.itemModel}
@@ -283,7 +291,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                             {models.map((model, index) => (
                                 <option key={index} value={model.modelName}>{model.modelName}</option>
                             ))}
-                        </select>
+                        </select> */}
                     </div>
 
                     <div className="mb-2">
