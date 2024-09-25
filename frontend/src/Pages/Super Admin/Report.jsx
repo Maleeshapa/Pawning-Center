@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../../components/Sidebar';
 import axios from 'axios';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable'; 
+import 'jspdf-autotable';
 import './Report.css';
+import config from '../../../config';
 
 const Report = () => {
   const [items, setItems] = useState([]);
@@ -16,7 +17,7 @@ const Report = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/items');
+        const response = await axios.get(`${config.BASE_URL}/api/items`);
         setItems(response.data);
       } catch (error) {
         console.error('Error fetching items:', error);
@@ -51,7 +52,7 @@ const Report = () => {
 
   const handleDownloadReport = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/items/report', {
+      const response = await axios.get(`${config.BASE_URL}/api/items/report`, {
         params: {
           startDate,
           endDate,
@@ -61,7 +62,7 @@ const Report = () => {
       const itemsData = response.data;
       generatePDF(itemsData);
 
-      setShowModal(false); 
+      setShowModal(false);
     } catch (error) {
       console.error('Error fetching items for report:', error);
     }
@@ -87,7 +88,7 @@ const Report = () => {
       tableRows.push(itemData);
     });
 
-    
+
     doc.autoTable({
       head: [tableColumn],
       body: tableRows,
@@ -106,12 +107,12 @@ const Report = () => {
       ]
     });
 
-  
+
     doc.save('report.pdf');
   };
 
   const handleCancel = () => {
-    setShowModal(false); 
+    setShowModal(false);
   };
 
   return (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import config from '../../../config';
 
 const ProductPawnModal = ({ selectedProduct, handleClose }) => {
     const [estimateValue, setEstimateValue] = useState('');
@@ -50,7 +51,7 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
     const handleSave = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/api/pawn-payment', {
+            const response = await axios.post(`${config.BASE_URL}/api/pawn-payment`, {
                 id: selectedProduct.id,
                 totalDue: dueAmount, // Update totalDue with new dueAmount
                 monthlyInterest,
@@ -76,7 +77,7 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
     const handlePaymentReceived = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/api/pawn-payment', {
+            const response = await axios.post(`${config.BASE_URL}/api/pawn-payment`, {
                 id: selectedProduct.id,
                 status: 'Pawned',
                 totalDue: dueAmount,
@@ -141,7 +142,7 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
 
                                     <div className="mb-3">
                                         <label htmlFor="paid" className="form-label">Paid -  ගෙවු මුදල</label>
-                                        <input type="number" className="form-control" id="paid" value={paid} onChange={handlePaidChange} step="1" onWheel={(e) => e.preventDefault()}/>
+                                        <input type="number" className="form-control" id="paid" value={paid} onChange={handlePaidChange} step="1" onWheel={(e) => e.preventDefault()} />
                                     </div>
 
                                     <div className="mb-3">

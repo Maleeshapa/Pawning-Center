@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import './Form.css';
+import config from '../../../config';
 
 const Form = ({ onClose, onSubmitSuccess }) => {
     const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/categories');
+                const response = await axios.get(`${config.BASE_URL}/api/categories`);
                 setCategories(response.data);
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -39,7 +40,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
 
         const fetchModels = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/models');
+                const response = await axios.get(`${config.BASE_URL}/api/models`);
                 setModels(response.data);
             } catch (error) {
                 console.error('Error fetching models:', error);
@@ -60,7 +61,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
         if (id === 'nic') {
             if (value) {
                 try {
-                    const response = await axios.get(`http://localhost:5000/api/customer/${value}`);
+                    const response = await axios.get(`${config.BASE_URL}/api/customer/${value}`);
                     if (response.data) {
                         setFormData(prevData => ({
                             ...prevData,
@@ -120,7 +121,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
         });
 
         try {
-            const response = await axios.post('http://localhost:5000/api/submit', formDataWithImages, {
+            const response = await axios.post(`${config.BASE_URL}/api/submit`, formDataWithImages, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -203,16 +204,16 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                         />
                     </div>
 
-                    
+
 
                     <div className="mb-2">
                         <label htmlFor="customerImages" className="form-label" style={{ fontSize: '0.9rem' }}>nic</label>
-                        <input 
-                            type="file" 
-                            className="form-control form-control-sm" 
+                        <input
+                            type="file"
+                            className="form-control form-control-sm"
                             id="customerImages"
-                            onChange={handleCustomerImageChange} 
-                            accept="image/*" 
+                            onChange={handleCustomerImageChange}
+                            accept="image/*"
                             multiple
                         />
                     </div>
@@ -310,12 +311,12 @@ const Form = ({ onClose, onSubmitSuccess }) => {
 
                     <div className="mb-2">
                         <label htmlFor="productImages" className="form-label" style={{ fontSize: '0.9rem' }}>Upload Product Images</label>
-                        <input 
-                            type="file" 
-                            className="form-control form-control-sm" 
+                        <input
+                            type="file"
+                            className="form-control form-control-sm"
                             id="productImages"
-                            onChange={handleProductImageChange} 
-                            accept="image/*" 
+                            onChange={handleProductImageChange}
+                            accept="image/*"
                             multiple
                         />
                     </div>

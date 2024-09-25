@@ -1,13 +1,14 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Sidebar.css';
+import config from '../../config';
 
 const Sidebar = () => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
-            await fetch('http://localhost:5000/api/logout', {
+            await fetch(`${config.BASE_URL}/api/logout`, {
                 method: 'POST',
                 credentials: 'include',
             });

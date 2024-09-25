@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import config from '../../config';
 
 const ProtectedRoute = ({ children, allowedAccountTypes }) => {
   const navigate = useNavigate();
@@ -7,9 +8,9 @@ const ProtectedRoute = ({ children, allowedAccountTypes }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/protected', {
+        const response = await fetch(`${config.BASE_URL}/api/protected`, {
           method: 'GET',
-          credentials: 'include', 
+          credentials: 'include',
         });
 
         if (!response.ok) {

@@ -4,6 +4,7 @@ import axios from 'axios';
 import './Customers.css';
 import Form from './Form';
 import ViewId from '../Modals/ViewId'
+import config from '../../../config';
 
 const Customers = () => {
     const [customers, setCustomers] = useState([]);
@@ -14,7 +15,7 @@ const Customers = () => {
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/customers');
+            const response = await axios.get(`${config.BASE_URL}/api/customers`);
             setCustomers(response.data);
         } catch (error) {
             console.error('Error fetching customers:', error);
@@ -35,7 +36,7 @@ const Customers = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this customer?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/customers/${id}`);
+                await axios.delete(`${config.BASE_URL}/api/customers/${id}`);
                 setCustomers(customers.filter(customer => customer.id !== id));
             } catch (error) {
                 console.error('Error deleting customer:', error);
@@ -47,7 +48,7 @@ const Customers = () => {
     const handleUpdate = async () => {
         if (selectedCustomer) {
             try {
-                await axios.put(`http://localhost:5000/api/customers/${selectedCustomer.id}`, selectedCustomer);
+                await axios.put(`${config.BASE_URL}/api/customers/${selectedCustomer.id}`, selectedCustomer);
                 setCustomers(customers.map(customer =>
                     customer.id === selectedCustomer.id ? selectedCustomer : customer
                 ));
@@ -148,9 +149,9 @@ const Customers = () => {
                             </tbody>
                         </table>
                         <ViewId
-                        selectedCustomer={selectedCustomer}
-                        onClose={() => setShowImageIdModal(false)}
-                    />
+                            selectedCustomer={selectedCustomer}
+                            onClose={() => setShowImageIdModal(false)}
+                        />
                     </div>
 
                     {/* Update Modal */}

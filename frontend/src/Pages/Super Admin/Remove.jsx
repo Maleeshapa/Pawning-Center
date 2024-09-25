@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 // import jsPDF from 'jspdf';
 // import 'jspdf-autotable';
+import config from '../../../config';
 
 const Remove = () => {
     const [products, setProducts] = useState([]);
@@ -14,7 +15,7 @@ const Remove = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/products');
+                const response = await axios.get(`${config.BASE_URL}/api/products`);
                 const removedProducts = response.data.filter(product => product.status === 'Removed');
                 setProducts(removedProducts);
             } catch (error) {
@@ -48,21 +49,21 @@ const Remove = () => {
     //                 throw new Error('Invalid ID');
     //             }
 
-    //             await axios.delete(`http://localhost:5000/api/products/${id}`);
+    //             await axios.delete(`${config.BASE_URL}/api/products/${id}`);
     //             setProducts(products.filter(product => product.id !== id));
     //         } catch (error) {
     //             console.error('Error deleting product:', error);
     //         }
     //     }
     // };
-    
+
 
     const formatDateForDb = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
         return date.toISOString().slice(0, 19).replace('T', ' '); // 'YYYY-MM-DD HH:MM:SS'
     };
-    
+
 
     return (
         <div className="container-fluid">
@@ -86,16 +87,16 @@ const Remove = () => {
                                 <tr>
                                     <th>ID</th>
                                     <th>Receipt Number</th>
-                                    <th>Customer Name</th>                                                                       
+                                    <th>Customer Name</th>
                                     <th>Item Category</th>
                                     <th>Item Model</th>
                                     <th>Item Name</th>
                                     <th>Item Number</th>
                                     <th>Item Size</th>
                                     <th>Market price</th>
-                                    <th>Estimated Price (Loss) </th>                                     
+                                    <th>Estimated Price (Loss) </th>
                                     <th>Status</th>
-                                    
+
                                     <th> </th>
                                 </tr>
                             </thead>
@@ -105,7 +106,7 @@ const Remove = () => {
                                         <td>{index + 1}</td>
                                         <td> {product.recepitNo}</td>
                                         <td>{product.customerName}</td>
-                                        
+
                                         <td>{product.itemCategory}</td>
                                         <td> {product.itemModel}</td>
                                         <td>{product.itemName}</td>
@@ -114,15 +115,15 @@ const Remove = () => {
 
                                         <td>{product.marketValue}</td>
                                         <td style={{
-                                                color:'red',
-                                                fontWeight: 'bold',  
-                                            }}>{product.estimateValue}</td>                                                                             
+                                            color: 'red',
+                                            fontWeight: 'bold',
+                                        }}>{product.estimateValue}</td>
 
 
                                         <td
                                             style={{
-                                                color:'orange',
-                                                fontWeight: 'bold',  
+                                                color: 'orange',
+                                                fontWeight: 'bold',
                                             }}
                                         >
                                             {product.status}
@@ -174,7 +175,7 @@ const Remove = () => {
                         </table>
                     </div>
 
-                  
+
                 </div>
             </div>
         </div>

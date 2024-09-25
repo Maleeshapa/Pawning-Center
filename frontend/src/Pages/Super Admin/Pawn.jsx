@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import config from '../../../config';
 
 const Pawn = () => {
     const [products, setProducts] = useState([]);
@@ -17,7 +18,7 @@ const Pawn = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/products');
+                const response = await axios.get(`${config.BASE_URL}/api/products`);
                 const soldProducts = response.data.filter(product => product.status === 'Pawned');
                 setProducts(soldProducts);
                 console.log('Fetched products:', soldProducts);
@@ -46,26 +47,26 @@ const Pawn = () => {
     const filterByDateRange = () => {
         const start = new Date(startDate);
         const end = new Date(endDate);
-    
+
         // Filter based on product's startDate and endDate
         const filtered = filteredProducts.filter(product => {
             const productStartDate = new Date(product.startDate);
             const productEndDate = new Date(product.endDate);
-    
+
             if (isNaN(productStartDate.getTime())) {
                 console.log('Invalid start date for product:', product);
                 return false;
             }
-    
+
             // Check if the product's startDate or endDate falls within the selected range
             const isInRange = productStartDate >= start && productStartDate <= end;
             return isInRange;
         });
-    
+
         console.log('Filtered products:', filtered); // Debug log
         return filtered;
     };
-    
+
 
     // Step 3: Generate PDF
     const generatePDF = () => {
@@ -88,13 +89,13 @@ const Pawn = () => {
         // Define table rows
         const rows = data.map((product) => {
             const profit = product.customerPaid - product.estimateValue - product.discount;
-    
+
             // Accumulate totals
             totalEstimateValue += product.estimateValue || 0;
             totalInterest += product.totalInterest || 0;
             totalCustomerPaid += product.customerPaid || 0;
             totalProfit += profit;
-    
+
             return [
                 product.recepitNo,
                 product.customerName,
@@ -152,19 +153,19 @@ const Pawn = () => {
             styles: { fontSize: 8, halign: 'right' },
             columnStyles: {
                 0: { cellWidth: 50 },
-            1: { cellWidth: 70 },
-            2: { cellWidth: 60 },
-            3: { cellWidth: 50 },
-            4: { cellWidth: 50 },
-            5: { cellWidth: 60 },
-            6: { cellWidth: 50 },
-            7: { cellWidth: 40 },
-            8: { cellWidth: 50 },
-            9: { fontStyle: 'bold', cellWidth: 50 }, // Estimate Price total
-            10: { fontStyle: 'bold', cellWidth: 50 }, // Total Interest
-            11: { fontStyle: 'bold', cellWidth: 50 }, // Customer Paid total
-            12: { cellWidth: 50 },
-            13: { fontStyle: 'bold', cellWidth: 50 }, 
+                1: { cellWidth: 70 },
+                2: { cellWidth: 60 },
+                3: { cellWidth: 50 },
+                4: { cellWidth: 50 },
+                5: { cellWidth: 60 },
+                6: { cellWidth: 50 },
+                7: { cellWidth: 40 },
+                8: { cellWidth: 50 },
+                9: { fontStyle: 'bold', cellWidth: 50 }, // Estimate Price total
+                10: { fontStyle: 'bold', cellWidth: 50 }, // Total Interest
+                11: { fontStyle: 'bold', cellWidth: 50 }, // Customer Paid total
+                12: { cellWidth: 50 },
+                13: { fontStyle: 'bold', cellWidth: 50 },
             }
         });
         // Save the PDF
@@ -305,7 +306,7 @@ const Pawn = () => {
                                             <td class="table-primary">{product.customerPaid}</td>
                                             <td>{product.discount}</td>
 
-                                            
+
                                             <td class="table-info">{profit}</td>
 
                                             <td style={{ color: 'blue', fontWeight: 'bold' }}>

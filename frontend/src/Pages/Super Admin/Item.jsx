@@ -2,6 +2,7 @@ import './Dashboard.css';
 import Sidebar from '../../components/Sidebar';
 import React, { useState } from 'react';
 import axios from 'axios';
+import config from '../../../config';
 
 const Item = () => {
     const [categoryName, setCategoryName] = useState('');
@@ -17,7 +18,7 @@ const Item = () => {
 
         try {
             // Post data to the backend
-            const response = await axios.post('http://localhost:5000/api/items-add', formData);
+            const response = await axios.post(`${config.BASE_URL}/api/items-add`, formData);
             console.log('Data submitted:', response.data);
             // Reset form fields
             setCategoryName('');

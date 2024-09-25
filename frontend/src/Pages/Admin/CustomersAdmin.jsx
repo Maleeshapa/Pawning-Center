@@ -3,18 +3,19 @@ import axios from 'axios';
 import './Customers.css'
 import SidebarAdmin from '../../components/SidebarAdmin';
 import FormAdmin from './FormAdmin';
+import config from '../../../config'
 
 const CustomersAdmin = () => {
     const [customers, setCustomers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCustomer, setSelectedCustomer] = useState(null); // For selected customer to edit
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [openModal, setOpenModal] = useState(false);  
-    
+    const [openModal, setOpenModal] = useState(false);
+
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/customers');
+                const response = await axios.get(`${config.BASE_URL}/api/customers`);
                 setCustomers(response.data);
             } catch (error) {
                 console.error('Error fetching customers:', error);
@@ -24,7 +25,7 @@ const CustomersAdmin = () => {
         fetchCustomers();
     }, []);
 
-    
+
 
     // Filter customers based on search term
     const filteredCustomers = customers.filter(customer =>
@@ -36,7 +37,7 @@ const CustomersAdmin = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this customer?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/customers/${id}`);
+                await axios.delete(`${config.BASE_URL}/api/customers/${id}`);
                 setCustomers(customers.filter(customer => customer.id !== id)); // Update local state
             } catch (error) {
                 console.error('Error deleting customer:', error);
@@ -48,7 +49,7 @@ const CustomersAdmin = () => {
     const handleUpdate = async () => {
         if (selectedCustomer) {
             try {
-                await axios.put(`http://localhost:5000/api/customers/${selectedCustomer.id}`, selectedCustomer);
+                await axios.put(`${config.BASE_URL}/api/customers/${selectedCustomer.id}`, selectedCustomer);
                 setCustomers(customers.map(customer =>
                     customer.id === selectedCustomer.id ? selectedCustomer : customer
                 ));
@@ -196,7 +197,7 @@ const CustomersAdmin = () => {
                         </div>
                     )}
 
-                    
+
                     {openModal && (
                         <FormAdmin onClose={() => setOpenModal(false)} />
                     )}

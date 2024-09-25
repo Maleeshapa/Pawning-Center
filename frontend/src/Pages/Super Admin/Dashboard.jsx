@@ -3,6 +3,7 @@ import './Dashboard.css';
 import Sidebar from '../../components/Sidebar';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import config from '../../../config';
 
 const Dashboard = () => {
     const [customerCount, setCustomerCount] = useState(0);
@@ -10,29 +11,29 @@ const Dashboard = () => {
     const [metrics, setMetrics] = useState({ totalProfit: 0, totalRevenue: 0 });
 
     useEffect(() => {
-      // Fetch data from your API
-      const fetchData = async () => {
-        try {
-          const response = await fetch('/api/dashboard-metrics');
-          const data = await response.json();
-          setMetrics(data);
-        } catch (error) {
-          console.error('Error fetching dashboard metrics:', error);
-        }
-      };
-  
-      fetchData();
+        // Fetch data from your API
+        const fetchData = async () => {
+            try {
+                const response = await fetch('/api/dashboard-metrics');
+                const data = await response.json();
+                setMetrics(data);
+            } catch (error) {
+                console.error('Error fetching dashboard metrics:', error);
+            }
+        };
+
+        fetchData();
     }, []);
-  
+
     const chartData = [
-      { name: 'Profit', value: metrics.totalProfit },
-      { name: 'Revenue', value: metrics.totalRevenue },
+        { name: 'Profit', value: metrics.totalProfit },
+        { name: 'Revenue', value: metrics.totalRevenue },
     ];
 
     useEffect(() => {
         const fetchCustomerCount = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/customers');
+                const response = await axios.get(`${config.BASE_URL}/api/customers`);
                 const customers = response.data;
 
                 // Count unique customers by customerName
@@ -53,7 +54,7 @@ const Dashboard = () => {
                 <div className="col py-3 content-area">
                     <h3 className='caption'>Dashboard</h3>
                     <main className="col-md-12 p-3 bg-white">
-                        
+
                         {/* <div className="row">
                             <div className="col-md-4">
                                 <div className="stats-box">

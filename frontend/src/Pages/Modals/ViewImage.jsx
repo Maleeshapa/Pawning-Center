@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import config from '../../../config';
 
 const ViewImage = ({ selectedProduct }) => {
   const [imageUrl, setImageUrl] = useState(null);
@@ -7,17 +8,17 @@ const ViewImage = ({ selectedProduct }) => {
   useEffect(() => {
     if (selectedProduct && selectedProduct.id) {
       console.log('Fetching image for product ID:', selectedProduct.id);
-      axios.get(`http://localhost:5000/api/products_images/${selectedProduct.id}/image`, {
+      axios.get(`${config.BASE_URL}/api/products_images/${selectedProduct.id}/image`, {
         responseType: 'blob',
       })
-      .then(response => {
-        console.log('Image fetched successfully');
-        const imageUrl = URL.createObjectURL(response.data);
-        setImageUrl(imageUrl);
-      })
-      .catch(err => {
-        console.error('Error fetching image:', err);
-      });
+        .then(response => {
+          console.log('Image fetched successfully');
+          const imageUrl = URL.createObjectURL(response.data);
+          setImageUrl(imageUrl);
+        })
+        .catch(err => {
+          console.error('Error fetching image:', err);
+        });
     } else {
       console.warn('No product selected or missing ID');
     }

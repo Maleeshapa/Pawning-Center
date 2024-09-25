@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is included
 import 'bootstrap/dist/js/bootstrap.bundle.min'; // Ensure Bootstrap JS is included
+import config from '../../../config';
 
 const ViewImage = ({ selectedCustomer }) => {
   const [imageUrl, setImageUrl] = useState(null);
@@ -9,17 +10,17 @@ const ViewImage = ({ selectedCustomer }) => {
   useEffect(() => {
     if (selectedCustomer && selectedCustomer.id) {
       console.log('Fetching image for customer ID:', selectedCustomer.id);
-      axios.get(`http://localhost:5000/api/customer_images/${selectedCustomer.id}/image`, {
+      axios.get(`${config.BASE_URL}/api/customer_images/${selectedCustomer.id}/image`, {
         responseType: 'blob',
       })
-      .then(response => {
-        console.log('Image fetched successfully');
-        const imageUrl = URL.createObjectURL(response.data);
-        setImageUrl(imageUrl);
-      })
-      .catch(err => {
-        console.error('Error fetching image:', err);
-      });
+        .then(response => {
+          console.log('Image fetched successfully');
+          const imageUrl = URL.createObjectURL(response.data);
+          setImageUrl(imageUrl);
+        })
+        .catch(err => {
+          console.error('Error fetching image:', err);
+        });
     } else {
       console.warn('No customer selected or missing ID');
     }

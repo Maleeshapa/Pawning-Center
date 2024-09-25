@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import config from '../../../config';
 
 const Sell = () => {
     const [products, setProducts] = useState([]);
@@ -17,7 +18,7 @@ const Sell = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/products');
+                const response = await axios.get(`${config.BASE_URL}/api/products`);
                 const soldProducts = response.data.filter(product => product.status === 'Sold');
                 setProducts(soldProducts);
             } catch (error) {
@@ -112,39 +113,39 @@ const Sell = () => {
                     {showModal && (
                         <div className="modal-container">
                             <div className="modal-content">
-                                
-                                    
-                                    <h2 className="text-center mb-4">Generate Sell Report</h2>
-                                    
-                                    
-                                    
-                                    <div className="modal-body">
-                                        <div className="mb-3">
+
+
+                                <h2 className="text-center mb-4">Generate Sell Report</h2>
+
+
+
+                                <div className="modal-body">
+                                    <div className="mb-3">
                                         <label htmlFor="startDate" className="form-label">From</label>
-                                            <input
-                                                type="date"
-                                                className="form-control"
-                                                id="startDate"
-                                                value={startDate}
-                                                onChange={(e) => setStartDate(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="mb-3">
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            id="startDate"
+                                            value={startDate}
+                                            onChange={(e) => setStartDate(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="mb-3">
                                         <label htmlFor="endDate" className="form-label">To</label>
-                                            <input
-                                                type="date"
-                                                className="form-control"
-                                                id="endDate"
-                                                value={endDate}
-                                                onChange={(e) => setEndDate(e.target.value)}
-                                            />
-                                        </div>
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            id="endDate"
+                                            value={endDate}
+                                            onChange={(e) => setEndDate(e.target.value)}
+                                        />
                                     </div>
-                                    <div className="d-flex justify-content-end">
-                                        <button className="btn btn-secondary me-2" onClick={() => setShowModal(false)}>Close</button>
-                                        <button className="btn btn-primary" onClick={generatePDF}>Download Report</button>
-                                    </div>
-                                
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <button className="btn btn-secondary me-2" onClick={() => setShowModal(false)}>Close</button>
+                                    <button className="btn btn-primary" onClick={generatePDF}>Download Report</button>
+                                </div>
+
                             </div>
                         </div>
                     )}

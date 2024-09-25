@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import config from "../../../config";
 
 const ProductSellModal = ({ selectedProduct, setSelectedProduct, handleSaveChanges, handleClose }) => {
-
-
-
     const [formData, setFormData] = useState({
-        status: 'Sold', 
+        status: 'Sold',
         buyerName: '',
         buyerNic: '',
         buyerAddress: '',
@@ -31,7 +29,7 @@ const ProductSellModal = ({ selectedProduct, setSelectedProduct, handleSaveChang
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:5000/api/buyer/${selectedProduct.id}`, formData); // Pass the product ID
+            const response = await axios.put(`${config.BASE_URL}/api/buyer/${selectedProduct.id}`, formData); // Pass the product ID
             if (response.status === 201) {
                 alert('Data submitted successfully!');
                 handleClose();
@@ -44,7 +42,7 @@ const ProductSellModal = ({ selectedProduct, setSelectedProduct, handleSaveChang
             alert('Error submitting data');
         }
     };
-    
+
 
     return (
         <div className="modal fade" id="sellModal" tabIndex="-1" aria-labelledby="sellModalLabel" aria-hidden="true">

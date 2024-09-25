@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import './FormAdmin.css';
-
+import config from '../../../config';
 
 const Form = ({ onClose }) => {
     const [formData, setFormData] = useState({
@@ -21,14 +21,14 @@ const Form = ({ onClose }) => {
         estimateValue: '',
     });
 
-    const [categories, setCategories] = useState([]); 
-    const [models, setModels] = useState([]); 
+    const [categories, setCategories] = useState([]);
+    const [models, setModels] = useState([]);
 
     // Fetch categories from the database when the component mounts
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/categories');
+                const response = await axios.get(`${config.BASE_URL}/api/categories`);
                 setCategories(response.data); // Set the fetched categories to state
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -37,7 +37,7 @@ const Form = ({ onClose }) => {
 
         const fetchModels = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/models');
+                const response = await axios.get(`${config.BASE_URL}/api/models`);
                 setModels(response.data); // Set the fetched models to state
             } catch (error) {
                 console.error('Error fetching models:', error);
@@ -59,7 +59,7 @@ const Form = ({ onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/api/submit', formData);
+            const response = await axios.post(`${config.BASE_URL}/api/submit`, formData);
             if (response.status === 201) {
                 alert('Data submitted successfully!');
                 onClose();
@@ -173,7 +173,7 @@ const Form = ({ onClose }) => {
                             id="itemModel"
                             value={formData.itemModel}
                             onChange={handleChange}
-                            
+
                         >
                             <option value="" disabled>Select Item Model</option>
                             {models.map((model, index) => (
