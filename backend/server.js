@@ -282,7 +282,7 @@ app.post('/api/pawn-payment', (req, res) => {
     let query;
     let queryParams;
 
-    if (status === 'Pawned') {
+    if (status === 'Release') {
         const currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
         query = `
             UPDATE products SET 

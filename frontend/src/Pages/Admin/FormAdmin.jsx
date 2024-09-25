@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import './FormAdmin.css';
+<<<<<<< HEAD
 import config from '../../../config';
 
 const Form = ({ onClose }) => {
+=======
+
+const FormAdmin = ({ onClose, onSubmitSuccess }) => {
+>>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
     const [formData, setFormData] = useState({
         recepitNo: '',
         customerName: '',
@@ -23,13 +28,24 @@ const Form = ({ onClose }) => {
 
     const [categories, setCategories] = useState([]);
     const [models, setModels] = useState([]);
+<<<<<<< HEAD
+=======
+    const [productImages, setProductImages] = useState([]);
+    const [customerImages, setCustomerImages] = useState([]);
+    const [customerImagesBack, setCustomerImagesBack] = useState([]);
+>>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
 
     // Fetch categories from the database when the component mounts
     useEffect(() => {
         const fetchCategories = async () => {
             try {
+<<<<<<< HEAD
                 const response = await axios.get(`${config.BASE_URL}/api/categories`);
                 setCategories(response.data); // Set the fetched categories to state
+=======
+                const response = await axios.get('http://localhost:5000/api/categories');
+                setCategories(response.data);
+>>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }
@@ -37,8 +53,13 @@ const Form = ({ onClose }) => {
 
         const fetchModels = async () => {
             try {
+<<<<<<< HEAD
                 const response = await axios.get(`${config.BASE_URL}/api/models`);
                 setModels(response.data); // Set the fetched models to state
+=======
+                const response = await axios.get('http://localhost:5000/api/models');
+                setModels(response.data);
+>>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
             } catch (error) {
                 console.error('Error fetching models:', error);
             }
@@ -48,28 +69,95 @@ const Form = ({ onClose }) => {
         fetchModels();
     }, []);
 
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         const { id, value } = e.target;
         setFormData({
             ...formData,
             [id]: value,
         });
+
+        if (id === 'nic') {
+            if (value) {
+                try {
+                    const response = await axios.get(`http://localhost:5000/api/customer/${value}`);
+                    if (response.data) {
+                        setFormData(prevData => ({
+                            ...prevData,
+                            customerName: response.data.customerName,
+                            address: response.data.address,
+                            phone: response.data.phone,
+                        }));
+                    }
+                } catch (error) {
+                    setFormData(prevData => ({
+                        ...prevData,
+                        customerName: '',
+                        address: '',
+                        phone: '',
+                    }));
+                    if (error.response && error.response.status !== 404) {
+                        console.error('Error fetching customer data:', error);
+                    }
+                }
+            } else {
+                // Clear the auto-filled fields when NIC is empty
+                setFormData(prevData => ({
+                    ...prevData,
+                    customerName: '',
+                    address: '',
+                    phone: '',
+                }));
+            }
+        }
+    };
+
+    const handleProductImageChange = (e) => {
+        setProductImages([...e.target.files]);
+    };
+
+    const handleCustomerImageChange = (e) => {
+        setCustomerImages([...e.target.files]);
+    };
+    const handleCustomerImageBackChange = (e) => {
+        setCustomerImagesBack([...e.target.files]);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const formDataWithImages = new FormData();
+        for (const key in formData) {
+            formDataWithImages.append(key, formData[key]);
+        }
+        productImages.forEach((image) => {
+            formDataWithImages.append('productImages', image);
+        });
+        customerImages.forEach((image) => {
+            formDataWithImages.append('customerImages', image);
+        });
+        customerImagesBack.forEach((image) => {
+            formDataWithImages.append('customerImagesBack', image);
+        });
+
         try {
+<<<<<<< HEAD
             const response = await axios.post(`${config.BASE_URL}/api/submit`, formData);
+=======
+            const response = await axios.post('http://localhost:5000/api/submit', formDataWithImages, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+>>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
             if (response.status === 201) {
                 alert('Data submitted successfully!');
+                onSubmitSuccess();
                 onClose();
-                window.location.reload();
             } else {
                 alert('Unexpected response from server');
             }
         } catch (error) {
             console.error('Error submitting data', error);
-            alert('Error submitting data');
+            // alert('Error submitting data');
         }
     };
 
@@ -92,24 +180,24 @@ const Form = ({ onClose }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="customerName" className="form-label" style={{ fontSize: '0.9rem' }}>Customer Name</label>
-                        <input
-                            type="text"
-                            className="form-control form-control-sm"
-                            id="customerName"
-                            value={formData.customerName}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-2">
                         <label htmlFor="nic" className="form-label" style={{ fontSize: '0.9rem' }}>NIC</label>
                         <input
                             type="text"
                             className="form-control form-control-sm"
                             id="nic"
                             value={formData.nic}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-2">
+                        <label htmlFor="customerName" className="form-label" style={{ fontSize: '0.9rem' }}>Customer Name</label>
+                        <input
+                            type="text"
+                            className="form-control form-control-sm"
+                            id="customerName"
+                            value={formData.customerName}
                             onChange={handleChange}
                             required
                         />
@@ -138,10 +226,38 @@ const Form = ({ onClose }) => {
                         />
                     </div>
 
+
+
+                    <div className="mb-2">
+                        <label htmlFor="customerImages" className="form-label" style={{ fontSize: '0.9rem' }}>nic</label>
+                        <input
+                            type="file"
+                            className="form-control form-control-sm"
+                            id="customerImages"
+                            onChange={handleCustomerImageChange}
+                            accept="image/*"
+                            multiple
+                        />
+                    </div>
+
+                    {/* <div className="mb-2">
+                        <label htmlFor="customerImagesBack" className="form-label" style={{ fontSize: '0.9rem' }}>nic back</label>
+                        <input 
+                            type="file" 
+                            className="form-control form-control-sm" 
+                            id="customerImagesBack"
+                            onChange={handleCustomerImageBackChange} 
+                            accept="image/*" 
+                            multiple
+                            required
+                        />
+                    </div> */}
+
+
                     <div className="mb-2">
                         <label htmlFor="startDate" className="form-label" style={{ fontSize: '0.9rem' }}>Start Date</label>
                         <input
-                            type="date"
+                            type="datetime-local"
                             className="form-control form-control-sm"
                             id="startDate"
                             value={formData.startDate}
@@ -167,6 +283,7 @@ const Form = ({ onClose }) => {
                     </div>
 
                     <div className="mb-2">
+<<<<<<< HEAD
                         <label htmlFor="itemModel" className="form-label" style={{ fontSize: '0.9rem' }}>Item Model</label>
                         <select
                             className="form-select form-select-sm"
@@ -183,6 +300,8 @@ const Form = ({ onClose }) => {
                     </div>
 
                     <div className="mb-2">
+=======
+>>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
                         <label htmlFor="itemName" className="form-label" style={{ fontSize: '0.9rem' }}>Item Name</label>
                         <input
                             type="text"
@@ -195,7 +314,22 @@ const Form = ({ onClose }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="itemNo" className="form-label" style={{ fontSize: '0.9rem' }}>Item Number</label>
+                        <label htmlFor="itemModel" className="form-label" style={{ fontSize: '0.9rem' }}>Item Model</label>
+                        <select
+                            className="form-select form-select-sm"
+                            id="itemModel"
+                            value={formData.itemModel}
+                            onChange={handleChange}
+                        >
+                            <option value="" disabled>Select Item Model</option>
+                            {models.map((model, index) => (
+                                <option key={index} value={model.modelName}>{model.modelName}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="mb-2">
+                        <label htmlFor="itemNo" className="form-label" style={{ fontSize: '0.9rem' }}>Serial No/ IMEI </label>
                         <input
                             type="text"
                             className="form-control form-control-sm"
@@ -206,7 +340,7 @@ const Form = ({ onClose }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="size" className="form-label" style={{ fontSize: '0.9rem' }}>Item Size</label>
+                        <label htmlFor="size" className="form-label" style={{ fontSize: '0.9rem' }}>Item Weight</label>
                         <input
                             type="text"
                             className="form-control form-control-sm"
@@ -217,7 +351,19 @@ const Form = ({ onClose }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="marketValue" className="form-label" style={{ fontSize: '0.9rem' }}>Market Price</label>
+                        <label htmlFor="productImages" className="form-label" style={{ fontSize: '0.9rem' }}>Product Images</label>
+                        <input
+                            type="file"
+                            className="form-control form-control-sm"
+                            id="productImages"
+                            onChange={handleProductImageChange}
+                            accept="image/*"
+                            multiple
+                        />
+                    </div>
+
+                    <div className="mb-2">
+                        <label htmlFor="marketValue" className="form-label" style={{ fontSize: '0.9rem' }}>Estimate value</label>
                         <input
                             type="number"
                             className="form-control form-control-sm"
@@ -228,7 +374,7 @@ const Form = ({ onClose }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="estimateValue" className="form-label" style={{ fontSize: '0.9rem' }}>Estimated Price</label>
+                        <label htmlFor="estimateValue" className="form-label" style={{ fontSize: '0.9rem' }}>Pawning Advance</label>
                         <input
                             type="number"
                             className="form-control form-control-sm"
@@ -238,9 +384,9 @@ const Form = ({ onClose }) => {
                         />
                     </div>
 
-                    <div className="text-end mt-4">
-                        <button type="submit" className="btn btn-sm btn-primary">Submit</button>
-                        <button type="button" className="btn btn-sm btn-secondary ms-2" onClick={onClose}>Cancel</button>
+                    <div className="text-center">
+                        <button type="submit" className="btn btn-primary btn-sm">Submit</button>
+                        <button type="button" className="btn btn-secondary btn-sm ms-2" onClick={onClose}>Cancel</button>
                     </div>
                 </form>
             </div>
@@ -248,4 +394,4 @@ const Form = ({ onClose }) => {
     );
 };
 
-export default Form;
+export default FormAdmin;

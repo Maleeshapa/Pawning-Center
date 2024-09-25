@@ -243,7 +243,7 @@ const Products = () => {
                                         <td
                                             style={{
                                                 color:
-                                                    product.status === 'Pawned'
+                                                    product.status === 'Release'
                                                         ? 'green'
                                                         : product.status === 'Sold'
                                                             ? 'blue'
@@ -279,20 +279,35 @@ const Products = () => {
 
                                         <td>
 
-                                            <button className="btn btn-success me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#pawnPayModal" onClick={() => handlePawnPayClick(product)}>
-                                                උකස් ගෙවීම
-                                            </button>
+                                            {product.status === 'Release' || product.status === 'Sold' ? (
+                                                <div>
+                                                    <button className="btn btn-secondary me-2 btn-sm">
+                                                        උකස් ගෙවීම
+                                                    </button>
 
+                                                    <button className="btn btn-secondary me-2 btn-sm">
+                                                        විකුනීම
+                                                    </button>
 
-                                            <button className="btn btn-primary me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#sellModal" onClick={() => handleSellClick(product)}>
-                                                විකුනීම
-                                            </button>
+                                                    <button className="btn btn-secondary btn-sm">
+                                                        භාන්ඩ ඉවත් කිරීම
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <button className="btn btn-success me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#pawnPayModal" onClick={() => handlePawnPayClick(product)}>
+                                                        උකස් ගෙවීම
+                                                    </button>
 
-                                            <button className="btn btn-warning btn-sm" onClick={() => removeItem(product)} >
-                                                භාන්ඩ ඉවත් කිරීම
-                                            </button>
+                                                    <button className="btn btn-primary me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#sellModal" onClick={() => handleSellClick(product)}>
+                                                        විකුනීම
+                                                    </button>
 
-
+                                                    <button className="btn btn-warning btn-sm" onClick={() => removeItem(product)}>
+                                                        භාන්ඩ ඉවත් කිරීම
+                                                    </button>
+                                                </>
+                                            )}
                                         </td>
                                     </tr>
                                 ))}

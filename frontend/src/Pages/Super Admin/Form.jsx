@@ -235,7 +235,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     <div className="mb-2">
                         <label htmlFor="startDate" className="form-label" style={{ fontSize: '0.9rem' }}>Start Date</label>
                         <input
-                            type="date"
+                            type="datetime-local"
                             className="form-control form-control-sm"
                             id="startDate"
                             value={formData.startDate}
@@ -261,21 +261,6 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="itemModel" className="form-label" style={{ fontSize: '0.9rem' }}>Item Model</label>
-                        <select
-                            className="form-select form-select-sm"
-                            id="itemModel"
-                            value={formData.itemModel}
-                            onChange={handleChange}
-                        >
-                            <option value="" disabled>Select Item Model</option>
-                            {models.map((model, index) => (
-                                <option key={index} value={model.modelName}>{model.modelName}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="mb-2">
                         <label htmlFor="itemName" className="form-label" style={{ fontSize: '0.9rem' }}>Item Name</label>
                         <input
                             type="text"
@@ -288,7 +273,30 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="itemNo" className="form-label" style={{ fontSize: '0.9rem' }}>Item Number</label>
+                        <label htmlFor="itemModel" className="form-label" style={{ fontSize: '0.9rem' }}>Item Model</label>
+                        <input
+                            type="text"
+                            className="form-control form-control-sm"
+                            id="itemModel"
+                            value={formData.itemModel}
+                            onChange={handleChange}
+                            required
+                        />
+                        {/* <select
+                            className="form-select form-select-sm"
+                            id="itemModel"
+                            value={formData.itemModel}
+                            onChange={handleChange}
+                        >
+                            <option value="" disabled>Select Item Model</option>
+                            {models.map((model, index) => (
+                                <option key={index} value={model.modelName}>{model.modelName}</option>
+                            ))}
+                        </select> */}
+                    </div>
+
+                    <div className="mb-2">
+                        <label htmlFor="itemNo" className="form-label" style={{ fontSize: '0.9rem' }}>Serial No/ IMEI </label>
                         <input
                             type="text"
                             className="form-control form-control-sm"
@@ -299,7 +307,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="size" className="form-label" style={{ fontSize: '0.9rem' }}>Item Size</label>
+                        <label htmlFor="size" className="form-label" style={{ fontSize: '0.9rem' }}>Item Weight</label>
                         <input
                             type="text"
                             className="form-control form-control-sm"
@@ -310,7 +318,11 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
+<<<<<<< HEAD
                         <label htmlFor="productImages" className="form-label" style={{ fontSize: '0.9rem' }}>Upload Product Images</label>
+=======
+                        <label htmlFor="productImages" className="form-label" style={{ fontSize: '0.9rem' }}>Product Images</label>
+>>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
                         <input
                             type="file"
                             className="form-control form-control-sm"
@@ -322,7 +334,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="marketValue" className="form-label" style={{ fontSize: '0.9rem' }}>Market Price</label>
+                        <label htmlFor="marketValue" className="form-label" style={{ fontSize: '0.9rem' }}>Estimate value</label>
                         <input
                             type="number"
                             className="form-control form-control-sm"
@@ -333,7 +345,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
-                        <label htmlFor="estimateValue" className="form-label" style={{ fontSize: '0.9rem' }}>Estimated Price</label>
+                        <label htmlFor="estimateValue" className="form-label" style={{ fontSize: '0.9rem' }}>Pawning Advance</label>
                         <input
                             type="number"
                             className="form-control form-control-sm"
