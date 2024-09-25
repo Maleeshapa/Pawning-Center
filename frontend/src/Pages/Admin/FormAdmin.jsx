@@ -65,7 +65,7 @@ const Form = ({ onClose }) => {
             if (id === 'nic') {
                 if (value) {
                     try {
-                        const response = await axios.get(`${ config.BASE_URL }/api/customer/${value}`);
+                        const response = await axios.get(`${config.BASE_URL}/api/customer/${value}`);
                         if (response.data) {
                             setFormData(prevData => ({
                                 ...prevData,
@@ -265,115 +265,112 @@ const Form = ({ onClose }) => {
                         </div>
 
                         <div className="mb-2">
-<<<<<<< HEAD
-                        <label htmlFor="itemModel" className="form-label" style={{ fontSize: '0.9rem' }}>Item Model</label>
-                        <select
-                            className="form-select form-select-sm"
-                            id="itemModel"
-                            value={formData.itemModel}
-                            onChange={handleChange}
+                            <label htmlFor="itemModel" className="form-label" style={{ fontSize: '0.9rem' }}>Item Model</label>
+                            <select
+                                className="form-select form-select-sm"
+                                id="itemModel"
+                                value={formData.itemModel}
+                                onChange={handleChange}
 
-                        >
-                            <option value="" disabled>Select Item Model</option>
-                            {models.map((model, index) => (
-                                <option key={index} value={model.modelName}>{model.modelName}</option>
-                            ))}
-                        </select>
-                    </div >
+                            >
+                                <option value="" disabled>Select Item Model</option>
+                                {models.map((model, index) => (
+                                    <option key={index} value={model.modelName}>{model.modelName}</option>
+                                ))}
+                            </select>
+                        </div >
 
-                    <div className="mb-2">
-=======
->>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
-                        <label htmlFor="itemName" className="form-label" style={{ fontSize: '0.9rem' }}>Item Name</label>
-                        <input
-                            type="text"
-                            className="form-control form-control-sm"
-                            id="itemName"
-                            value={formData.itemName}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
+                        <div className="mb-2">
+                            <label htmlFor="itemName" className="form-label" style={{ fontSize: '0.9rem' }}>Item Name</label>
+                            <input
+                                type="text"
+                                className="form-control form-control-sm"
+                                id="itemName"
+                                value={formData.itemName}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
 
-                    <div className="mb-2">
-                        <label htmlFor="itemModel" className="form-label" style={{ fontSize: '0.9rem' }}>Item Model</label>
-                        <select
-                            className="form-select form-select-sm"
-                            id="itemModel"
-                            value={formData.itemModel}
-                            onChange={handleChange}
-                        >
-                            <option value="" disabled>Select Item Model</option>
-                            {models.map((model, index) => (
-                                <option key={index} value={model.modelName}>{model.modelName}</option>
-                            ))}
-                        </select>
-                    </div>
+                        <div className="mb-2">
+                            <label htmlFor="itemModel" className="form-label" style={{ fontSize: '0.9rem' }}>Item Model</label>
+                            <select
+                                className="form-select form-select-sm"
+                                id="itemModel"
+                                value={formData.itemModel}
+                                onChange={handleChange}
+                            >
+                                <option value="" disabled>Select Item Model</option>
+                                {models.map((model, index) => (
+                                    <option key={index} value={model.modelName}>{model.modelName}</option>
+                                ))}
+                            </select>
+                        </div>
 
-                    <div className="mb-2">
-                        <label htmlFor="itemNo" className="form-label" style={{ fontSize: '0.9rem' }}>Serial No/ IMEI </label>
-                        <input
-                            type="text"
-                            className="form-control form-control-sm"
-                            id="itemNo"
-                            value={formData.itemNo}
-                            onChange={handleChange}
-                        />
-                    </div>
+                        <div className="mb-2">
+                            <label htmlFor="itemNo" className="form-label" style={{ fontSize: '0.9rem' }}>Serial No/ IMEI </label>
+                            <input
+                                type="text"
+                                className="form-control form-control-sm"
+                                id="itemNo"
+                                value={formData.itemNo}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                    <div className="mb-2">
-                        <label htmlFor="size" className="form-label" style={{ fontSize: '0.9rem' }}>Item Weight</label>
-                        <input
-                            type="text"
-                            className="form-control form-control-sm"
-                            id="size"
-                            value={formData.size}
-                            onChange={handleChange}
-                        />
-                    </div>
+                        <div className="mb-2">
+                            <label htmlFor="size" className="form-label" style={{ fontSize: '0.9rem' }}>Item Weight</label>
+                            <input
+                                type="text"
+                                className="form-control form-control-sm"
+                                id="size"
+                                value={formData.size}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                    <div className="mb-2">
-                        <label htmlFor="productImages" className="form-label" style={{ fontSize: '0.9rem' }}>Product Images</label>
-                        <input
-                            type="file"
-                            className="form-control form-control-sm"
-                            id="productImages"
-                            onChange={handleProductImageChange}
-                            accept="image/*"
-                            multiple
-                        />
-                    </div>
+                        <div className="mb-2">
+                            <label htmlFor="productImages" className="form-label" style={{ fontSize: '0.9rem' }}>Product Images</label>
+                            <input
+                                type="file"
+                                className="form-control form-control-sm"
+                                id="productImages"
+                                onChange={handleProductImageChange}
+                                accept="image/*"
+                                multiple
+                            />
+                        </div>
 
-                    <div className="mb-2">
-                        <label htmlFor="marketValue" className="form-label" style={{ fontSize: '0.9rem' }}>Estimate value</label>
-                        <input
-                            type="number"
-                            className="form-control form-control-sm"
-                            id="marketValue"
-                            value={formData.marketValue}
-                            onChange={handleChange}
-                        />
-                    </div>
+                        <div className="mb-2">
+                            <label htmlFor="marketValue" className="form-label" style={{ fontSize: '0.9rem' }}>Estimate value</label>
+                            <input
+                                type="number"
+                                className="form-control form-control-sm"
+                                id="marketValue"
+                                value={formData.marketValue}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                    <div className="mb-2">
-                        <label htmlFor="estimateValue" className="form-label" style={{ fontSize: '0.9rem' }}>Pawning Advance</label>
-                        <input
-                            type="number"
-                            className="form-control form-control-sm"
-                            id="estimateValue"
-                            value={formData.estimateValue}
-                            onChange={handleChange}
-                        />
-                    </div>
+                        <div className="mb-2">
+                            <label htmlFor="estimateValue" className="form-label" style={{ fontSize: '0.9rem' }}>Pawning Advance</label>
+                            <input
+                                type="number"
+                                className="form-control form-control-sm"
+                                id="estimateValue"
+                                value={formData.estimateValue}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                    <div className="text-center">
-                        <button type="submit" className="btn btn-primary btn-sm">Submit</button>
-                        <button type="button" className="btn btn-secondary btn-sm ms-2" onClick={onClose}>Cancel</button>
-                    </div>
-                </form >
+                        <div className="text-center">
+                            <button type="submit" className="btn btn-primary btn-sm">Submit</button>
+                            <button type="button" className="btn btn-secondary btn-sm ms-2" onClick={onClose}>Cancel</button>
+                        </div>
+                    </form >
+                </div >
             </div >
-        </div >
-    );
-};
+        );
+    };
 
-export default FormAdmin;
+    export default FormAdmin;
