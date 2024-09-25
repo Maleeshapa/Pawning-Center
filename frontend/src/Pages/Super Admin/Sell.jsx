@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import config from '../../../config';
+import config from '../../config';
 
 const Sell = () => {
     const [products, setProducts] = useState([]);

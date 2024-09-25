@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import config from '../../config';
+import config from '../config';
 
 const ProtectedRoute = ({ children, allowedAccountTypes }) => {
   const navigate = useNavigate();

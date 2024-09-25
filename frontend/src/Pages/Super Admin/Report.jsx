@@ -4,7 +4,7 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import './Report.css';
-import config from '../../../config';
+import config from '../../config';
 
 const Report = () => {
   const [items, setItems] = useState([]);

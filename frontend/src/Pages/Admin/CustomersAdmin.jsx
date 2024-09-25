@@ -3,7 +3,7 @@ import axios from 'axios';
 import './Customers.css'
 import SidebarAdmin from '../../components/SidebarAdmin';
 import FormAdmin from './FormAdmin';
-import config from '../../../config'
+import config from '../../config'
 
 const CustomersAdmin = () => {
     const [customers, setCustomers] = useState([]);

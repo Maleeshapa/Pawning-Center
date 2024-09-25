@@ -9,7 +9,7 @@ import 'jspdf-autotable';
 import ProductUpdateModal from '../Modals/productUpdateModal';
 import ProductPawnModal from '../Modals/ProductPawnModal';
 import ProductSellModal from '../Modals/ProductSellModal';
-import config from '../../../config';
+import config from '../../config';
 
 
 const ProductsAdmin = () => {
@@ -289,15 +289,9 @@ const ProductsAdmin = () => {
                                                         උකස් ගෙවීම
                                                     </button>
 
-<<<<<<< HEAD
-                                            <button className="btn btn-warning btn-sm" onClick={() => removeItem(product)} >
-                                                භාන්ඩය ඉවත් කිරීම
-                                            </button>
-=======
                                                     <button className="btn btn-primary me-2 btn-sm" data-bs-toggle="modal" data-bs-target="#sellModal" onClick={() => handleSellClick(product)}>
                                                         විකුනීම
                                                     </button>
->>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
 
                                                     <button className="btn btn-warning btn-sm" onClick={() => removeItem(product)}>
                                                         භාන්ඩ ඉවත් කිරීම

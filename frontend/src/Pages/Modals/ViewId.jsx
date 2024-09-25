@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is included
 import 'bootstrap/dist/js/bootstrap.bundle.min'; // Ensure Bootstrap JS is included
-import config from '../../../config';
+import config from '../../config';
 
 const ViewImage = ({ selectedCustomer }) => {
   const [imageUrl, setImageUrl] = useState(null);

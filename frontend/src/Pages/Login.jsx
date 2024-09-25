@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import config from '../../config';
+import config from '../config';
 
 const Login = () => {
   const [username, setUsername] = useState('');

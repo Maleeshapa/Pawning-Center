@@ -10,7 +10,7 @@ import ProductSellModal from '../Modals/ProductSellModal';
 import ViewImage from '../Modals/ViewImage';
 // import jsPDF from 'jspdf';
 // import 'jspdf-autotable';
-import config from '../../../config';
+import config from '../../config';
 
 const Products = () => {
     const [products, setProducts] = useState([]);

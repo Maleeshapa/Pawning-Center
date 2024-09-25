@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import config from '../../../config';
+import config from '../../config';
 
 const Pawn = () => {
     const [products, setProducts] = useState([]);
@@ -18,13 +18,8 @@ const Pawn = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-<<<<<<< HEAD
                 const response = await axios.get(`${config.BASE_URL}/api/products`);
                 const soldProducts = response.data.filter(product => product.status === 'Pawned');
-=======
-                const response = await axios.get('http://localhost:5000/api/products');
-                const soldProducts = response.data.filter(product => product.status === 'Release');
->>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
                 setProducts(soldProducts);
                 console.log('Fetched products:', soldProducts);
             } catch (error) {
@@ -94,7 +89,7 @@ const Pawn = () => {
         };
 
         // Define table headers
-        const headers = [["Receipt No", "Customer Name", "Customer NIC", "Category", "Model", "Item", "Item No", "Size","Start Date","End Date", "Estimated Value", "Pawning Advance", "Total Interest", "Customer Paid", "Discount", "Profit"]];
+        const headers = [["Receipt No", "Customer Name", "Customer NIC", "Category", "Model", "Item", "Item No", "Size", "Start Date", "End Date", "Estimated Value", "Pawning Advance", "Total Interest", "Customer Paid", "Discount", "Profit"]];
         let totalEstimateValue = 0;
         let totalInterest = 0;
         let totalCustomerPaid = 0;
@@ -170,7 +165,6 @@ const Pawn = () => {
             styles: { fontSize: 8, halign: 'right' },
             columnStyles: {
                 0: { cellWidth: 50 },
-<<<<<<< HEAD
                 1: { cellWidth: 70 },
                 2: { cellWidth: 60 },
                 3: { cellWidth: 50 },
@@ -179,32 +173,17 @@ const Pawn = () => {
                 6: { cellWidth: 50 },
                 7: { cellWidth: 40 },
                 8: { cellWidth: 50 },
-                9: { fontStyle: 'bold', cellWidth: 50 }, // Estimate Price total
-                10: { fontStyle: 'bold', cellWidth: 50 }, // Total Interest
-                11: { fontStyle: 'bold', cellWidth: 50 }, // Customer Paid total
-                12: { cellWidth: 50 },
-                13: { fontStyle: 'bold', cellWidth: 50 },
-=======
-            1: { cellWidth: 70 },
-            2: { cellWidth: 60 },
-            3: { cellWidth: 50 },
-            4: { cellWidth: 50 },
-            5: { cellWidth: 60 },
-            6: { cellWidth: 50 },
-            7: { cellWidth: 40 },
-            8: { cellWidth: 50 },
-            9: { cellWidth: 50 },
-            10: { cellWidth: 50 },
-            11: { fontStyle: 'bold', cellWidth: 50 }, // Pawning Advance total
-            12: { fontStyle: 'bold', cellWidth: 50 }, // Total Interest
-            13: { fontStyle: 'bold', cellWidth: 50 }, // Customer Paid total
-            14: { cellWidth: 50 },
-            15: { fontStyle: 'bold', cellWidth: 50 }, 
->>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
+                9: { cellWidth: 50 },
+                10: { cellWidth: 50 },
+                11: { fontStyle: 'bold', cellWidth: 50 }, // Pawning Advance total
+                12: { fontStyle: 'bold', cellWidth: 50 }, // Total Interest
+                13: { fontStyle: 'bold', cellWidth: 50 }, // Customer Paid total
+                14: { cellWidth: 50 },
+                15: { fontStyle: 'bold', cellWidth: 50 },
             }
         });
         // Save the PDF
-    doc.save(`Pawn_History_${formatDateTime(startDate).replace(/[/:]/g, '-')}_to_${formatDateTime(endDate).replace(/[/:]/g, '-')}.pdf`);
+        doc.save(`Pawn_History_${formatDateTime(startDate).replace(/[/:]/g, '-')}_to_${formatDateTime(endDate).replace(/[/:]/g, '-')}.pdf`);
         setShowModal(false);
     };
 

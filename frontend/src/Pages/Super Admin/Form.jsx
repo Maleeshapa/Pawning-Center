@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import './Form.css';
-import config from '../../../config';
+import config from '../../config';
 
 const Form = ({ onClose, onSubmitSuccess }) => {
     const [formData, setFormData] = useState({
@@ -318,11 +318,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                     </div>
 
                     <div className="mb-2">
-<<<<<<< HEAD
-                        <label htmlFor="productImages" className="form-label" style={{ fontSize: '0.9rem' }}>Upload Product Images</label>
-=======
                         <label htmlFor="productImages" className="form-label" style={{ fontSize: '0.9rem' }}>Product Images</label>
->>>>>>> be547494e8dbfcfb27733d17ff6e137a51ac92ce
                         <input
                             type="file"
                             className="form-control form-control-sm"

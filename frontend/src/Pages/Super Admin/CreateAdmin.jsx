@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '../../components/Sidebar';
 import './CreateAdmin.css'
 import axios from 'axios';
-import config from '../../../config';
+import config from '../../config';
 
 const CreateAdmin = () => {
     const [username, setUsername] = useState('');

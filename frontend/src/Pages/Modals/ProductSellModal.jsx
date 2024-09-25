@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import config from "../../../config";
+import config from "../../config";
 
 const ProductSellModal = ({ selectedProduct, setSelectedProduct, handleSaveChanges, handleClose }) => {
     const [formData, setFormData] = useState({

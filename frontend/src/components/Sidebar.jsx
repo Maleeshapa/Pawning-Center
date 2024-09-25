@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Sidebar.css';
-import config from '../../config';
+import config from '../config';
 
 const Sidebar = () => {
     const navigate = useNavigate();

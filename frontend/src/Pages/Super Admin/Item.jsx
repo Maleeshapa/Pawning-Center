@@ -2,7 +2,7 @@ import './Dashboard.css';
 import Sidebar from '../../components/Sidebar';
 import React, { useState } from 'react';
 import axios from 'axios';
-import config from '../../../config';
+import config from '../../config';
 
 const Item = () => {
     const [categoryName, setCategoryName] = useState('');

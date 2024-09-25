@@ -4,7 +4,7 @@ import axios from 'axios';
 import './Customers.css';
 import Form from './Form';
 import ViewId from '../Modals/ViewId'
-import config from '../../../config';
+import config from '../../config';
 
 const Customers = () => {
     const [customers, setCustomers] = useState([]);
