@@ -282,8 +282,12 @@ app.post('/api/pawn-payment', (req, res) => {
     let query;
     let queryParams;
 
-    if (status === 'Release') {
-        const currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
+    // Automatically set status based on totalDue
+    let updatedStatus = totalDue === 0 ? 'Release' : 'Pawned'; // If totalDue is 0, status = 'Release', otherwise 'Pawned'
+    let endDate = totalDue === 0 ? new Date().toISOString().slice(0, 10) : null; // Set endDate if released, else null
+
+    // If the status is 'Release', update the endDate along with other fields
+    if (updatedStatus === 'Release') {
         query = `
             UPDATE products SET 
             status = ?,
@@ -297,10 +301,12 @@ app.post('/api/pawn-payment', (req, res) => {
             endDate = ?
             WHERE id = ?
         `;
-        queryParams = [status, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount, currentDate, id];
+        queryParams = [updatedStatus, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount, endDate, id];
     } else {
+        // If the status is not 'Release', we don't update the endDate
         query = `
             UPDATE products SET 
+            status = ?,
             totalDue = ?,
             monthlyInterest = ?, 
             totalInterest = ?,
@@ -310,9 +316,10 @@ app.post('/api/pawn-payment', (req, res) => {
             discount = ?
             WHERE id = ?
         `;
-        queryParams = [totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount, id];
+        queryParams = [updatedStatus, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount, id];
     }
 
+    // Execute the query to update the product
     connection.query(query, queryParams, (err, result) => {
         if (err) {
             console.error('Error updating product:', err);
@@ -321,6 +328,7 @@ app.post('/api/pawn-payment', (req, res) => {
         res.send('Product updated successfully');
     });
 });
+
 
 app.put('/api/remove-item/:id', (req, res) => {
     const itemId = req.params.id;

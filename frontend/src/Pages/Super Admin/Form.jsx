@@ -251,7 +251,7 @@ const Form = ({ onClose, onSubmitSuccess }) => {
                             id="itemCategory"
                             value={formData.itemCategory}
                             onChange={handleChange}
-                            required
+                            
                         >
                             <option value="" disabled>Select item category</option>
                             {categories.map((category, index) => (

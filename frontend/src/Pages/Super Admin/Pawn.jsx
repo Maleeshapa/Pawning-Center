@@ -19,7 +19,7 @@ const Pawn = () => {
         const fetchProducts = async () => {
             try {
                 const response = await axios.get(`${config.BASE_URL}/api/products`);
-                const soldProducts = response.data.filter(product => product.status === 'Pawned');
+                const soldProducts = response.data.filter(product => product.status === 'Release' || product.status === 'Pawned');
                 setProducts(soldProducts);
                 console.log('Fetched products:', soldProducts);
             } catch (error) {
@@ -323,9 +323,15 @@ const Pawn = () => {
 
                                             <td class="table-info">{profit}</td>
 
-                                            <td style={{ color: 'blue', fontWeight: 'bold' }}>
+                                            <td
+                                                style={{
+                                                    color: product.status === 'Release' ? 'green' : product.status === 'Pawned' ? 'red' : 'blue',
+                                                    fontWeight: 'bold'
+                                                }}
+                                            >
                                                 {product.status}
                                             </td>
+
                                         </tr>
                                     );
                                 })}

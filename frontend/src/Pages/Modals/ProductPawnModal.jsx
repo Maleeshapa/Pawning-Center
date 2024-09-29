@@ -74,32 +74,7 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
         }
     };
 
-    const handlePaymentReceived = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post(`${config.BASE_URL}/api/pawn-payment`, {
-                id: selectedProduct.id,
-                status: 'Release',
-                totalDue: dueAmount,
-                monthlyInterest,
-                totalInterest,
-                totalOutstanding,
-                customerPaid: parseFloat(selectedProduct.customerPaid || 0) + parseFloat(paid || 0),
-                dueAmount,
-                discount
-            });
-            if (response.status === 200) {
-                alert('Release successfully!');
-                handleClose();
-                window.location.reload();
-            } else {
-                alert('Unexpected response from server');
-            }
-        } catch (error) {
-            console.error('Error submitting payment data', error);
-            alert('Error submitting payment data');
-        }
-    };
+    
 
     return (
         <div className="modal fade" id="pawnPayModal" tabIndex="-1" aria-labelledby="pawnPayModalLabel" aria-hidden="true">
@@ -160,7 +135,7 @@ const ProductPawnModal = ({ selectedProduct, handleClose }) => {
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleClose}>Close</button>
                             <button type="submit" className="btn btn-primary">Save Changes</button>
-                            <button type="button" className="btn btn-success" onClick={handlePaymentReceived}>ගනුදෙනුව ඉවරයි</button>
+                           
                         </div>
                     </form>
                 </div>
