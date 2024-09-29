@@ -150,7 +150,7 @@ const Products = () => {
 
     const removeItem = async (product) => {
         try {
-            const response = await axios.put(`http://localhost:5000/api/remove-item/${product.id}`, {}, {
+            const response = await axios.put(`${config.BASE_URL}/api/remove-item/${product.id}`, {}, {
                 headers: { 'Content-Type': 'application/json' },
             });
             if (response.status === 200) {
