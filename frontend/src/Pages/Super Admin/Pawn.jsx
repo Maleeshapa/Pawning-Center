@@ -73,13 +73,13 @@ const Pawn = () => {
         const doc = new jsPDF('l', 'pt', 'a4');
         const data = filterByDateRange();
         console.log('Data for PDF:', data); // Debug log
-
+    
         if (data.length === 0) {
             console.log('No data available for the selected date range');
             alert('No data available for the selected date range');
             return;
         }
-
+    
         const formatDateTime = (dateString) => {
             const date = new Date(dateString);
             return date.toLocaleString('en-US', {
@@ -87,23 +87,22 @@ const Pawn = () => {
                 timeStyle: 'short'  // For example: '5:11 PM'
             });
         };
-
+    
         // Define table headers
-        const headers = [["Receipt No", "Customer Name", "Customer NIC", "Category", "Model", "Item", "Item No", "Size", "Start Date", "End Date", "Estimated Value", "Pawning Advance", "Total Interest", "Customer Paid", "Discount", "Profit"]];
+        const headers = [["Receipt No", "Customer Name", "Customer NIC", "Category", "Model", "Item", "Item No", "Size", "Start Date", "End Date", "Estimated Value", "Pawning Advance", "Customer Paid", "Discount", "Profit"]]; // Removed Total Interest
         let totalEstimateValue = 0;
-        let totalInterest = 0;
         let totalCustomerPaid = 0;
         let totalProfit = 0;
+    
         // Define table rows
         const rows = data.map((product) => {
             const profit = product.customerPaid - product.estimateValue - product.discount;
-
+    
             // Accumulate totals
             totalEstimateValue += product.estimateValue || 0;
-            totalInterest += product.totalInterest || 0;
             totalCustomerPaid += product.customerPaid || 0;
             totalProfit += profit;
-
+    
             return [
                 product.recepitNo,
                 product.customerName,
@@ -117,19 +116,18 @@ const Pawn = () => {
                 product.endDate ? formatDateTime(product.endDate) : 'N/A',
                 product.marketValue,
                 product.estimateValue,
-                product.totalInterest,
                 product.customerPaid,
                 product.discount,
                 profit,
             ];
         });
-
+    
         doc.setFontSize(8);
-
+    
         // Add title
         doc.text('Pawn History Report', 20, 20);
         doc.text(`From: ${formatDateTime(startDate)} To: ${formatDateTime(endDate)}`, 20, 35);
-
+    
         // Create PDF table with adjusted styles
         doc.autoTable({
             head: headers,
@@ -137,9 +135,9 @@ const Pawn = () => {
             startY: 50,
             styles: { fontSize: 6, cellPadding: 2 },
             columnStyles: {
-                0: { cellWidth: 50 },
+                0: { cellWidth: 30 },
                 1: { cellWidth: 70 },
-                2: { cellWidth: 60 },
+                2: { cellWidth: 50 },
                 3: { cellWidth: 50 },
                 4: { cellWidth: 50 },
                 5: { cellWidth: 60 },
@@ -152,56 +150,78 @@ const Pawn = () => {
                 12: { cellWidth: 50 },
                 13: { cellWidth: 50 },
                 14: { cellWidth: 50 },
-                15: { cellWidth: 50 },
             },
             headStyles: { fillColor: [66, 135, 245], textColor: 255 },
             alternateRowStyles: { fillColor: [240, 240, 240] },
         });
+        // Add this code after the autoTable for the main table
         doc.autoTable({
             body: [
-                ['Totals:', '', '', '', '', '', '', '', '', totalEstimateValue.toFixed(2), totalInterest.toFixed(2), totalCustomerPaid.toFixed(2), '', totalProfit.toFixed(2)]
+                [
+                    'Totals:', 
+                    '', 
+                    '', 
+                    '', 
+                    '', 
+                    '', 
+                    '', 
+                    '', 
+                    '', 
+                    '',
+                    '',
+                    
+                    totalEstimateValue.toFixed(2),  // Estimated Value
+                    totalCustomerPaid.toFixed(2),    // Pawning Advance
+                    totals.totaldiscount.toFixed(2),  // Customer Paid
+                                                  // Blank for Discount
+                    totalProfit.toFixed(2)            // Profit
+                ]
             ],
             startY: doc.autoTable.previous.finalY + 10, // Position it after the table
-            styles: { fontSize: 8, halign: 'right' },
+            styles: { fontSize: 6, cellPadding: 2 }, // Adjusted styles
             columnStyles: {
-                0: { cellWidth: 50 },
+                0: { cellWidth: 30 },
                 1: { cellWidth: 70 },
-                2: { cellWidth: 60 },
+                2: { cellWidth: 50 },
                 3: { cellWidth: 50 },
                 4: { cellWidth: 50 },
                 5: { cellWidth: 60 },
                 6: { cellWidth: 50 },
                 7: { cellWidth: 40 },
                 8: { cellWidth: 50 },
-                9: { cellWidth: 50 },
-                10: { cellWidth: 50 },
+                9: { cellWidth: 50 },  // End Date
+                10: { fontStyle: 'bold', cellWidth: 50 }, // Estimated Value total
                 11: { fontStyle: 'bold', cellWidth: 50 }, // Pawning Advance total
-                12: { fontStyle: 'bold', cellWidth: 50 }, // Total Interest
-                13: { fontStyle: 'bold', cellWidth: 50 }, // Customer Paid total
-                14: { cellWidth: 50 },
-                15: { fontStyle: 'bold', cellWidth: 50 },
+                12: { fontStyle: 'bold', cellWidth: 50 }, // Customer Paid total
+                14: { fontStyle: 'bold', cellWidth: 50 }, // Profit total
             }
         });
+
+    
         // Save the PDF
         doc.save(`Pawn_History_${formatDateTime(startDate).replace(/[/:]/g, '-')}_to_${formatDateTime(endDate).replace(/[/:]/g, '-')}.pdf`);
         setShowModal(false);
     };
+    
 
     const calculateTotals = () => {
         let totalEstimatePrice = 0;
         let totalCustomerPaid = 0;
         let totalProfitLoss = 0;
+        let totaldiscount = 0;
 
         filteredProducts.forEach(product => {
             totalEstimatePrice += product.estimateValue || 0;
             totalCustomerPaid += product.customerPaid || 0;
             totalProfitLoss += (product.customerPaid - product.estimateValue - product.discount) || 0;
+            totaldiscount += product.discount || 0;
         });
 
         return {
             totalEstimatePrice,
             totalCustomerPaid,
-            totalProfitLoss
+            totalProfitLoss,
+            totaldiscount
         };
     };
     const totals = calculateTotals();
@@ -284,7 +304,7 @@ const Pawn = () => {
                                     <th>Market price</th>
                                     <th>Estimated Price</th>
 
-                                    <th>Total Interest</th>
+                                    {/* <th>Total Interest</th> */}
                                     <th>Customer Paid</th>
                                     <th>Discount</th>
                                     <th>Profit/Loss</th>
@@ -316,7 +336,7 @@ const Pawn = () => {
                                             <td>{product.marketValue}</td>
                                             <td class="table-danger">{product.estimateValue}</td>
 
-                                            <td>{product.totalInterest}</td>
+                                            {/* <td>{product.totalInterest}</td> */}
                                             <td class="table-primary">{product.customerPaid}</td>
                                             <td>{product.discount}</td>
 
@@ -340,9 +360,9 @@ const Pawn = () => {
                                 <tr>
                                     <td colSpan="11" style={{ fontWeight: 'bold', textAlign: 'right' }}>Totals:</td>
                                     <td className="table-danger">{totals.totalEstimatePrice.toFixed(2)}</td>
-                                    <td></td>
+                                    {/* <td></td> */}
                                     <td className="table-primary">{totals.totalCustomerPaid.toFixed(2)}</td>
-                                    <td></td>
+                                    <td className="table-primary">{totals.totaldiscount.toFixed(2)}</td>
                                     <td className="table-info">{totals.totalProfitLoss.toFixed(2)}</td>
                                     <td></td>
                                 </tr>

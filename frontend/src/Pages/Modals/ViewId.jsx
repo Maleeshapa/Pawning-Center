@@ -28,7 +28,7 @@ const ViewImage = ({ selectedCustomer }) => {
     // Initialize the modal
     const modalElement = document.getElementById('imageModal');
     if (modalElement) {
-      const modal = new bootstrap.Modal(modalElement);
+      const modal = new window.bootstrap.Modal(modalElement);
       modal.show();
     }
 
