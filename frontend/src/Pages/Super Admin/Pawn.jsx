@@ -301,8 +301,8 @@ const Pawn = () => {
                                     <th>Start Date</th>
                                     <th>End Date</th>
 
-                                    <th>Market price</th>
-                                    <th>Estimated Price</th>
+                                    <th>Estimated Value</th>
+                                    <th>Pawning Advance</th>
 
                                     {/* <th>Total Interest</th> */}
                                     <th>Customer Paid</th>

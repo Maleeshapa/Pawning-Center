@@ -194,8 +194,8 @@ const ProductsAdmin = () => {
                                     <th>Item Name</th>
                                     <th>Item Number</th>
                                     <th>Item Size</th>
-                                    <th>Market price</th>
-                                    <th>Estimated Price</th>
+                                    <th>Estimated Value</th>
+                                    <th>Pawning Advance</th>
                                     <th>End Date</th>
                                     {/* <th>Interest %</th>
                                     <th>Total Price</th> */}

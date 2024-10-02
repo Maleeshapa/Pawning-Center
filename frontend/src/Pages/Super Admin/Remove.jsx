@@ -65,6 +65,21 @@ const Remove = () => {
     };
 
 
+    const calculateTotals = () => {
+        let totalLoss = 0;
+
+        filteredProducts.forEach(product => {
+            totalLoss += product.estimateValue || 0;
+            
+        });
+
+        return {
+            totalLoss
+        };
+
+    };
+    const totals = calculateTotals();
+
     return (
         <div className="container-fluid">
             <div className="row flex-nowrap">
@@ -93,8 +108,8 @@ const Remove = () => {
                                     <th>Item Name</th>
                                     <th>Item Number</th>
                                     <th>Item Size</th>
-                                    <th>Market price</th>
-                                    <th>Estimated Price (Loss) </th>
+                                    <th>Estimated Value</th>
+                                    <th>Pawning Advance (Loss) </th>
                                     <th>Status</th>
 
                                     <th> </th>
@@ -172,6 +187,11 @@ const Remove = () => {
                                     </tr>
                                 ))}
                             </tbody>
+                            <tfoot>
+                                <td colSpan='8' style={{fontWeight:'bold',textAlign:'right'}}>Total Loss:</td>
+                                <td></td>
+                                <td style={{fontWeight:'bold'}}> {totals.totalLoss} </td>
+                            </tfoot>
                         </table>
                     </div>
 

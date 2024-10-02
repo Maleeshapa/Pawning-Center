@@ -170,7 +170,7 @@ const ProductSellModal = ({ selectedProduct, setSelectedProduct, handleSaveChang
                                 </div> */}
 
                                 <div className="mb-2">
-                                    <label className="form-label">Estimated Price</label>
+                                    <label className="form-label">Pawning Advance</label>
                                     <input
                                         type="number"
                                         className="form-control form-control-sm"

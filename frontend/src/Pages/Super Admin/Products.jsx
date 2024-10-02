@@ -168,6 +168,24 @@ const Products = () => {
         }
     };
 
+    const calculateTotals = () => {
+        let totalEstimatePrice = 0;
+        let totalPawningAdvance= 0;
+        
+
+        filteredProducts.forEach(product => {
+            totalEstimatePrice += product.marketValue || 0;
+            totalPawningAdvance += product.estimateValue || 0;
+        });
+
+        return {
+            totalEstimatePrice,
+            totalPawningAdvance
+        };
+    };
+    const totals = calculateTotals();
+
+    
 
     return (
         <div className="container-fluid">
@@ -200,8 +218,8 @@ const Products = () => {
                                     <th>Item Name</th>
                                     <th>Item Number</th>
                                     <th>Item Size</th>
-                                    <th>Market price</th>
-                                    <th>Estimated Price</th>
+                                    <th>Estimated Value</th>
+                                    <th>Pawning Advance</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
                                     {/* <th>Interest %</th>
@@ -312,6 +330,20 @@ const Products = () => {
                                     </tr>
                                 ))}
                             </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <td colSpan="10" style={{ fontWeight: 'bold', textAlign: 'right' }}>Totals:</td>
+                                    <td className="table-danger">{totals.totalEstimatePrice.toFixed(2)}</td>
+                                    
+                                    <td className="table-primary">{totals.totalPawningAdvance.toFixed(2)}</td>
+                                    
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+
+
+
                         </table>
                     </div>
 

@@ -58,7 +58,7 @@ const Sell = () => {
         const data = filterByDateRange();
 
         // Define table headers
-        const headers = [["ID", "Receipt No", "Buyer Name", "Buyer NIC", "Category", "Model", "Item", "Item No", "Size", "Market Price", "Estimate Price", "Sold Date", "Sold Price", "Profit/Loss"]];
+        const headers = [["ID", "Receipt No", "Buyer Name", "Buyer NIC", "Category", "Model", "Item", "Item No", "Size", "Estimated Value", "Estimate Price", "Sold Date", "Sold Price", "Profit/Loss"]];
 
         // Define table rows
         const rows = data.map((product, index) => [
@@ -88,6 +88,28 @@ const Sell = () => {
         doc.save(`Sold_History_${startDate}_to_${endDate}.pdf`);
         setShowModal(false);
     };
+
+    const calculateTotals = () =>{
+
+        let totalPawningAdvance = 0;
+        let totalSellPrice = 0;
+        let totalProfitLoss = 0;
+
+        filteredProducts.forEach(product => {
+            
+            totalPawningAdvance += product.estimateValue || 0;
+            totalSellPrice += product.sellPrice || 0;
+            totalProfitLoss += (product.sellPrice || 0) - (product.estimateValue || 0);
+        });
+
+        return {
+            
+            totalPawningAdvance,
+            totalSellPrice,
+            totalProfitLoss
+        };
+    };
+    const totals = calculateTotals();
 
     return (
         <div className="container-fluid">
@@ -165,8 +187,8 @@ const Sell = () => {
                                     <th>Item Name</th>
                                     <th>Item Number</th>
                                     <th>Item Size</th>
-                                    <th>Market price</th>
-                                    <th>Estimated Price</th>
+                                    <th>Estimated Value</th>
+                                    <th>Pawning Advance</th>
                                     <th>Sold Date</th>
                                     <th>Sold Price</th>
                                     <th>Profit/Loss</th>
@@ -200,6 +222,15 @@ const Sell = () => {
                                     </tr>
                                 ))}
                             </tbody>
+                            <tfoot>
+                                <td colSpan='11' style={{fontWeight:'Bold', textAlign:'right'}}>Total:</td>
+                                <td ></td>
+                                <td className="table-danger">{totals.totalPawningAdvance}</td>
+                                <td></td>
+                                <td className="table-primary">{totals.totalSellPrice}</td>
+                                <td className="table-primary">{totals.totalProfitLoss}</td>
+
+                            </tfoot>
                         </table>
                     </div>
                 </div>
