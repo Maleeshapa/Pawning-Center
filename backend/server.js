@@ -9,6 +9,7 @@ const mysql = require('mysql2');
 const jsPDF = require('jspdf');
 require('jspdf-autotable');
 const fs = require('fs');
+const moment = require('moment-timezone');
 
 const app = express();
 const port = 5000;
@@ -277,17 +278,20 @@ app.get('/api/products', (req, res) => {
 
 // Route to Update Product Payment Details
 app.post('/api/pawn-payment', (req, res) => {
-    const { id, status, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount } = req.body;
+    const { id, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount } = req.body;
 
     let query;
     let queryParams;
 
     // Automatically set status based on totalDue
-    let updatedStatus = totalDue === 0 ? 'Release' : 'Pawned'; // If totalDue is 0, status = 'Release', otherwise 'Pawned'
-    let endDate = totalDue === 0 ? new Date().toISOString().slice(0, 10) : null; // Set endDate if released, else null
+    let updatedStatus = totalDue === 0 ? 'Release' : 'Pawned';
+    
+    // Get current date and time in the correct time zone
+    let endDateTime = null;
 
-    // If the status is 'Release', update the endDate along with other fields
+    // If the status is 'Release', update the endDateTime along with other fields
     if (updatedStatus === 'Release') {
+        endDateTime = moment().tz('Asia/Colombo').format('YYYY-MM-DD HH:mm:ss');
         query = `
             UPDATE products SET 
             status = ?,
@@ -301,9 +305,9 @@ app.post('/api/pawn-payment', (req, res) => {
             endDate = ?
             WHERE id = ?
         `;
-        queryParams = [updatedStatus, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount, endDate, id];
+        queryParams = [updatedStatus, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount, endDateTime, id];
     } else {
-        // If the status is not 'Release', we don't update the endDate
+        // If the status is not 'Release', we don't update the endDateTime
         query = `
             UPDATE products SET 
             status = ?,
@@ -656,7 +660,7 @@ app.get('/api/generate-report', (req, res) => {
 
         const doc = new jsPDF();
         doc.autoTable({
-            head: [['ID', 'Receipt No', 'Customer Name', 'Category', 'Model', 'Item Name', 'Item No', 'Size', 'Market Value', 'Estimated Value', 'Status', 'Sold Date']],
+            head: [['ID', 'Receipt No', 'Customer Name', 'Category', 'Model', 'Item Name', 'Item No', 'Size', 'Estimated Value', 'Pawning Advance', 'Status', 'Sold Date']],
             body: results.map(item => [
                 item.id,
                 item.recepitNo,
