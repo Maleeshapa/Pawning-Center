@@ -16,6 +16,8 @@ const Products = () => {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [sortOrder, setSortOrder] = useState('asc'); 
+    const [sortColumn, setSortColumn] = useState('recepitNo');
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -29,6 +31,21 @@ const Products = () => {
 
         fetchProducts();
     }, []);
+
+    const sortProducts = (column) => {
+        const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+        const sortedProducts = [...products].sort((a, b) => {
+            if (newSortOrder === 'asc') {
+                return a[column] > b[column] ? 1 : -1;
+            } else {
+                return a[column] < b[column] ? 1 : -1;
+            }
+        });
+
+        setProducts(sortedProducts);
+        setSortOrder(newSortOrder);
+        setSortColumn(column);
+    };
 
 
     const handleSearchChange = (event) => {
@@ -208,7 +225,12 @@ const Products = () => {
                             <thead>
                                 <tr>
                                     {/* <th>ID</th> */}
-                                    <th>Receipt Number</th>
+                                    <th onClick={() => sortProducts('recepitNo')} style={{ cursor: 'pointer' }}>
+                                        Receipt Number
+                                        {sortColumn === 'recepitNo' && (
+                                            <span className={`ms-2 ${sortOrder === 'asc' ? 'bi bi-arrow-up' : 'bi bi-arrow-down'}`} />
+                                        )}
+                                    </th>
                                     <th>Name</th>
                                     <th>NIC</th>
                                     <th>Address</th>

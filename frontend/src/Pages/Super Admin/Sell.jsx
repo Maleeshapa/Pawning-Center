@@ -65,7 +65,7 @@ const Sell = () => {
         const data = filterByDateRange();
     
         // Define table headers
-        const headers = [["ID", "Receipt No", "Buyer Name", "Buyer NIC", "Category", "Model", "Item", "Item No", "Size", "Estimated Value", "Estimate Price", "Sold Date", "Sold Price", "Profit/Loss"]];
+        const headers = [["ID", "Receipt No", "Buyer Name", "Buyer NIC", "Category", "Model", "Item", "Item No", "Size", "Estimated Value", "Estimate Price", "Sold Date", "Sold Price", "Interest"]];
     
         // Define table rows
         const rows = data.map((product, index) => [
@@ -107,7 +107,7 @@ const Sell = () => {
                 10: { cellWidth: 20 }, // Estimate Price
                 11: { cellWidth: 20 }, // Sold Date
                 12: { cellWidth: 20 }, // Sold Price
-                13: { cellWidth: 20 }, // Profit/Loss
+                13: { cellWidth: 20 }, // Interest
             },
             // Optionally set a min width to prevent squeezing
             minCellHeight: 8,
@@ -222,7 +222,7 @@ const Sell = () => {
                                     <th>Pawning Advance</th>
                                     <th>Sold Date</th>
                                     <th>Sold Price</th>
-                                    <th>Profit/Loss</th>
+                                    <th>Interest</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>

@@ -221,8 +221,14 @@ const Pawn = () => {
         filteredProducts.forEach(product => {
             totalEstimatePrice += product.estimateValue || 0;
             totalCustomerPaid += product.customerPaid || 0;
-            totalProfitLoss += (product.customerPaid - product.estimateValue - product.discount) || 0;
             totaldiscount += product.discount || 0;
+            
+            // Calculate profit/loss based on status
+            if (product.status === 'Release') {
+                totalProfitLoss += (product.customerPaid - product.discount - product.estimateValue) || 0;
+            } else if (product.status === 'Pawned') {
+                totalProfitLoss += product.customerPaid || 0;
+            }
         });
 
         return {
@@ -232,7 +238,9 @@ const Pawn = () => {
             totaldiscount
         };
     };
+
     const totals = calculateTotals();
+
     return (
         <div className="container-fluid">
             <div className="row flex-nowrap">
@@ -315,7 +323,7 @@ const Pawn = () => {
                                     {/* <th>Total Interest</th> */}
                                     <th>Customer Paid</th>
                                     <th>Discount</th>
-                                    <th>Profit/Loss</th>
+                                    <th>Profit</th>
 
 
 
@@ -323,36 +331,28 @@ const Pawn = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredProducts.map((product, index) => {
-                                    const profit = product.customerPaid - product.estimateValue - product.discount;
+                                {filteredProducts.map((product) => {
+                                    const interest = product.status === 'Release' 
+                                        ? product.customerPaid - product.discount - product.estimateValue
+                                        : product.customerPaid;
 
                                     return (
                                         <tr key={product.id}>
                                             <td>{product.recepitNo}</td>
                                             <td>{product.customerName}</td>
                                             <td>{product.nic}</td>
-
                                             <td>{product.itemCategory}</td>
                                             <td>{product.itemModel}</td>
                                             <td>{product.itemName}</td>
                                             <td>{product.itemNo}</td>
                                             <td>{product.size}</td>
-
-                                            <td>{new Date(product.startDate).getFullYear()}/{(new Date(product.startDate).getMonth() + 1).toString().padStart(2, '0')}/{new Date(product.startDate).getDate().toString().padStart(2, '0')}</td>
-
-                                            <td>{product.endDate ? new Date(product.endDate).getFullYear() + '/' + (new Date(product.endDate).getMonth() + 1).toString().padStart(2, '0') + '/' + new Date(product.endDate).getDate().toString().padStart(2, '0') : 'N/A'}</td>
-
-
+                                            <td>{new Date(product.startDate).toLocaleDateString()}</td>
+                                            <td>{product.endDate ? new Date(product.endDate).toLocaleDateString() : 'N/A'}</td>
                                             <td>{product.marketValue}</td>
-                                            <td class="table-danger">{product.estimateValue}</td>
-
-                                            {/* <td>{product.totalInterest}</td> */}
-                                            <td class="table-primary">{product.customerPaid}</td>
+                                            <td className="table-danger">{product.estimateValue}</td>
+                                            <td className="table-primary">{product.customerPaid}</td>
                                             <td>{product.discount}</td>
-
-
-                                            <td class="table-info">{profit}</td>
-
+                                            <td className="table-info">{interest}</td>
                                             <td
                                                 style={{
                                                     color: product.status === 'Release' ? 'green' : product.status === 'Pawned' ? 'red' : 'blue',
@@ -361,7 +361,6 @@ const Pawn = () => {
                                             >
                                                 {product.status}
                                             </td>
-
                                         </tr>
                                     );
                                 })}
@@ -370,7 +369,6 @@ const Pawn = () => {
                                 <tr>
                                     <td colSpan="11" style={{ fontWeight: 'bold', textAlign: 'right' }}>Totals:</td>
                                     <td className="table-danger">{totals.totalEstimatePrice.toFixed(2)}</td>
-                                    {/* <td></td> */}
                                     <td className="table-primary">{totals.totalCustomerPaid.toFixed(2)}</td>
                                     <td className="table-primary">{totals.totaldiscount.toFixed(2)}</td>
                                     <td className="table-info">{totals.totalProfitLoss.toFixed(2)}</td>
