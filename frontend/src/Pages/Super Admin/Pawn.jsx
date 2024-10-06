@@ -82,11 +82,19 @@ const Pawn = () => {
     
         const formatDateTime = (dateString) => {
             const date = new Date(dateString);
-            return date.toLocaleString('en-US', {
-                dateStyle: 'short', // For example: '9/27/2024'
-                timeStyle: 'short'  // For example: '5:11 PM'
-            });
+            
+            // Format the date to YYYY/MM/DD
+            const formattedDate = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+            
+            // Format the time to HH:mm AM/PM
+            const hours = date.getHours();
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedTime = `${hours % 12 || 12}.${minutes} ${ampm}`;
+        
+            return `${formattedDate}, ${formattedTime}`;
         };
+        
     
         // Define table headers
         const headers = [["Receipt No", "Customer Name", "Customer NIC", "Category", "Model", "Item", "Item No", "Size", "Start Date", "End Date", "Estimated Value", "Pawning Advance", "Customer Paid", "Discount", "Profit"]]; // Removed Total Interest
@@ -330,8 +338,10 @@ const Pawn = () => {
                                             <td>{product.itemNo}</td>
                                             <td>{product.size}</td>
 
-                                            <td>{new Date(product.startDate).toLocaleDateString()}</td>
-                                            <td>{product.endDate ? new Date(product.endDate).toLocaleDateString() : 'N/A'}</td>
+                                            <td>{new Date(product.startDate).getFullYear()}/{(new Date(product.startDate).getMonth() + 1).toString().padStart(2, '0')}/{new Date(product.startDate).getDate().toString().padStart(2, '0')}</td>
+
+                                            <td>{product.endDate ? new Date(product.endDate).getFullYear() + '/' + (new Date(product.endDate).getMonth() + 1).toString().padStart(2, '0') + '/' + new Date(product.endDate).getDate().toString().padStart(2, '0') : 'N/A'}</td>
+
 
                                             <td>{product.marketValue}</td>
                                             <td class="table-danger">{product.estimateValue}</td>

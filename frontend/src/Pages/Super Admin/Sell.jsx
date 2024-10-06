@@ -54,12 +54,19 @@ const Sell = () => {
 
     // Step 3: Generate PDF
     const generatePDF = () => {
-        const doc = new jsPDF();
+        const doc = new jsPDF({
+            orientation: 'landscape', // Landscape orientation
+            unit: 'mm', // Use mm for consistent measurement
+            format: 'a4', // A4 format
+            putOnlyUsedFonts: true,
+            floatPrecision: 16,
+        });
+        
         const data = filterByDateRange();
-
+    
         // Define table headers
         const headers = [["ID", "Receipt No", "Buyer Name", "Buyer NIC", "Category", "Model", "Item", "Item No", "Size", "Estimated Value", "Estimate Price", "Sold Date", "Sold Price", "Profit/Loss"]];
-
+    
         // Define table rows
         const rows = data.map((product, index) => [
             index + 1,
@@ -73,21 +80,45 @@ const Sell = () => {
             product.size,
             product.marketValue,
             product.estimateValue,
-            new Date(product.sellDate).toLocaleDateString(),
+            new Date(product.sellDate).toLocaleDateString('en-CA'),
             product.sellPrice,
             (parseFloat(product.sellPrice) - parseFloat(product.estimateValue)).toFixed(2)
         ]);
-
-        // Create PDF table
+    
+        // Create PDF table with custom width and smaller font size
         doc.autoTable({
             head: headers,
             body: rows,
+            theme: 'grid',
+            styles: { fontSize: 9 }, // Adjust font size as needed
+            margin: { top: 30 },
+            columnStyles: {
+                // Adjust widths for long data
+                0: { cellWidth: 8 },  // ID
+                1: { cellWidth: 20 },  // Receipt No
+                2: { cellWidth: 30 },  // Buyer Name
+                3: { cellWidth: 15 },  // Buyer NIC
+                4: { cellWidth: 18 },  // Category
+                5: { cellWidth: 20 },  // Model
+                6: { cellWidth: 15 },  // Item
+                7: { cellWidth: 20 },  // Item No
+                8: { cellWidth: 20 },  // Size
+                9: { cellWidth: 20 },  // Estimated Value
+                10: { cellWidth: 20 }, // Estimate Price
+                11: { cellWidth: 20 }, // Sold Date
+                12: { cellWidth: 20 }, // Sold Price
+                13: { cellWidth: 20 }, // Profit/Loss
+            },
+            // Optionally set a min width to prevent squeezing
+            minCellHeight: 8,
+            cellWidth: 'auto',
         });
-
+    
         // Save the PDF
         doc.save(`Sold_History_${startDate}_to_${endDate}.pdf`);
         setShowModal(false);
     };
+    
 
     const calculateTotals = () =>{
 
@@ -211,7 +242,8 @@ const Sell = () => {
                                         <td>{product.size}</td>
                                         <td>{product.marketValue}</td>
                                         <td>{product.estimateValue}</td>
-                                        <td>{new Date(product.sellDate).toLocaleDateString()}</td>
+                                        <td>{new Date(product.sellDate).toLocaleDateString('en-CA')}</td>
+
                                         <td>{product.sellPrice}</td>
                                         <td style={{ color: parseFloat(product.sellPrice) - parseFloat(product.estimateValue) >= 0 ? 'green' : 'red' }}>
                                             {(parseFloat(product.sellPrice) - parseFloat(product.estimateValue)).toFixed(2)}
