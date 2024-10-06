@@ -94,6 +94,9 @@ const Pawn = () => {
         
             return `${formattedDate}, ${formattedTime}`;
         };
+
+        
+       
         
     
         // Define table headers
@@ -241,6 +244,11 @@ const Pawn = () => {
 
     const totals = calculateTotals();
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+    };
+
     return (
         <div className="container-fluid">
             <div className="row flex-nowrap">
@@ -346,8 +354,8 @@ const Pawn = () => {
                                             <td>{product.itemName}</td>
                                             <td>{product.itemNo}</td>
                                             <td>{product.size}</td>
-                                            <td>{new Date(product.startDate).toLocaleDateString()}</td>
-                                            <td>{product.endDate ? new Date(product.endDate).toLocaleDateString() : 'N/A'}</td>
+                                            <td>{formatDate(product.startDate)}</td>
+                                            <td>{product.endDate ? formatDate(product.endDate) : 'N/A'}</td>
                                             <td>{product.marketValue}</td>
                                             <td className="table-danger">{product.estimateValue}</td>
                                             <td className="table-primary">{product.customerPaid}</td>
