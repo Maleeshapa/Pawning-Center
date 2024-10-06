@@ -174,7 +174,7 @@ app.get('/api/products_images/:id/image', (req, res) => {
         if (result.length > 0) {
             const image = result[0].image_data;
             console.log('Image data fetched for product ID:', productId);
-            res.setHeader('Content-Type', 'image/jpeg'); // Adjust MIME type if necessary
+            res.setHeader('Content-Type', 'image/jpeg');  
             res.send(image);
         } else {
             console.error('Image not found for product ID:', productId);
@@ -196,7 +196,7 @@ app.get('/api/customer_images/:id/image', (req, res) => {
         if (result.length > 0) {
             const image = result[0].image_data;
             console.log('Image data fetched for product ID:', cusID);
-            res.setHeader('Content-Type', 'image/jpeg'); // Adjust MIME type if necessary
+            res.setHeader('Content-Type', 'image/jpeg');  
             res.send(image);
         } else {
             console.error('Image not found for product ID:', cusID);
@@ -276,20 +276,19 @@ app.get('/api/products', (req, res) => {
     });
 });
 
-// Route to Update Product Payment Details
+
 app.post('/api/pawn-payment', (req, res) => {
     const { id, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount } = req.body;
 
     let query;
     let queryParams;
 
-    // Automatically set status based on totalDue
     let updatedStatus = totalDue === 0 ? 'Release' : 'Pawned';
     
-    // Get current date and time in the correct time zone
+    
     let endDateTime = null;
 
-    // If the status is 'Release', update the endDateTime along with other fields
+   
     if (updatedStatus === 'Release') {
         endDateTime = moment().tz('Asia/Colombo').format('YYYY-MM-DD HH:mm:ss');
         query = `
@@ -307,7 +306,7 @@ app.post('/api/pawn-payment', (req, res) => {
         `;
         queryParams = [updatedStatus, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount, endDateTime, id];
     } else {
-        // If the status is not 'Release', we don't update the endDateTime
+        
         query = `
             UPDATE products SET 
             status = ?,
@@ -323,7 +322,7 @@ app.post('/api/pawn-payment', (req, res) => {
         queryParams = [updatedStatus, totalDue, monthlyInterest, totalInterest, totalOutstanding, customerPaid, dueAmount, discount, id];
     }
 
-    // Execute the query to update the product
+    
     connection.query(query, queryParams, (err, result) => {
         if (err) {
             console.error('Error updating product:', err);
@@ -352,7 +351,7 @@ app.put('/api/remove-item/:id', (req, res) => {
 
 app.put('/api/buyer/:id', (req, res) => {
     const { status, buyerName, buyerNic, buyerAddress, buyerPhone, sellDate, sellPrice } = req.body;
-    const { id } = req.params; // Get product ID from URL params
+    const { id } = req.params; 
 
     const query = `
         UPDATE products SET 
@@ -441,7 +440,6 @@ app.put('/api/customers/:id', (req, res) => {
 });
 
 // Update item 
-// In server.js
 
 app.put('/api/products/:id', (req, res) => {
     const { id } = req.params;
