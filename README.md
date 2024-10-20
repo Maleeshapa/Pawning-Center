@@ -4,8 +4,6 @@
 ✅ PDF generate
 ✅ Admin, SuperAdmin Controll
 
-username - abc
-password - 123
 
 ![screenshot-1729404012805](https://github.com/user-attachments/assets/03631114-7337-4410-88a6-56788139aaad)
 ![screenshot-1729404047005](https://github.com/user-attachments/assets/79d28ee3-0022-414c-aeef-b28ec0f9ec19)
