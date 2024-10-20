@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Outfit:wght@100..900&family=Righteous&family=Spinnaker&family=Sulphur+Point:wght@300;400;700&family=Titan+One&display=swap');
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+}
+
+.form-group input {
+    color: #222;
+    background-color: #fff;
+    box-shadow: 1px 3px 10px 1px rgba(0, 0, 0, 0.200);
+    width: 250px;
+    font-size: 13px;
+    font-weight: 400;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 20px;
+    margin: 10px;
+    outline: none;
+}
+
+form {
+    display: inline-block;
+    margin: 0 auto;
+    margin-top: 5%;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+.form-group label {
+    margin-right: 1rem;
+    white-space: nowrap;
+}
+
+.form-control {
+    flex: 1;
+    max-width: 200px;
+}
+
+label,
+p {
+    font-family: "Lato", sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: #222;
+}
+
+.output {
+    padding: 10px;
+    display: inline-block;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.output-text {
+    color: #222;
+    font-size: max(1vw, 16px);
+    margin-right: 10px;
+}
+
+.output-text span {
+    padding: 1px 10px;
+    color: rgb(8, 47, 118);
+    font-weight: 600;
+}
+
+.error p {
+    color: red;
+}
+
+@media (max-width: 768px) {
+    .calculater {
+        flex-direction: column;
+    }
+
+    .calculater-left,
+    .calculater-right {
+        min-width: 100%;
+        margin-bottom: 20px;
+    }
+    .caption{
+        font-size: 20px;
+    }
+input[type=number] {
+    margin: 5px;
+}
+
+}
+
+@media (max-width: 580px) {
+    .form-group {
+        flex-direction: column;
+    }
+    label {
+        display: none;
+    }
+
+    .form-group label {
+        margin-bottom: 0.5rem;
+        margin-right: 0;
+    }
+    .output-text p{
+        font-size: 14px;
+        margin: 3px;
+        text-align: left;
+    }
+}
+
+@media (max-width: 490px) {
+    input[type=number] {
+        padding:6px 16px;
+        width: 100%;
+    }
+    .btn {
+        left: 4%;
+    }
+}

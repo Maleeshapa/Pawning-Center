@@ -1,0 +1,72 @@
+.container-fluid {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+.row {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+}
+
+.sidebar {
+    flex: 0 0 250px;
+}
+
+.content-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.tabs{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+    color: #000;
+    height: 150px;
+    border-radius: 50px;
+    
+}
+.cusTab{
+    background-color: #fff6a3;
+}
+.calTab{
+    background-color: #f9cbfd;
+}
+.addTab{
+    background-color: #a3fdff;
+}
+.createAdTab{
+    background-color: #a3ffb5;
+}
+.reportTab{
+    background-color: #FFB3A3;
+}
+
+.pawnTab{
+    background-color: #C8EAE9;
+}
+
+.removeTab{
+    background-color: #E2E3E5;
+}
+.setTab{
+    background-color: #cbffa3;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        flex: 0 0 100px;
+    }
+    .tabs{
+        height: 50px;
+    }
+}
+
+#dMain {
+    padding-top: 20px;
+}
+

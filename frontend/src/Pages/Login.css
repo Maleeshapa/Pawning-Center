@@ -1,0 +1,114 @@
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh; 
+    padding: 0 20px; 
+}
+
+.login-form {
+    font-family: "Sulphur Point", sans-serif;
+    font-weight: 400;
+    width: 100%;
+    max-width: 500px; 
+    padding: 20px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #fff; 
+    border-radius: 10px; 
+}
+
+.caption-login {
+    font-size: 2.5rem; 
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+.form-com {
+    margin-bottom: 20px; 
+}
+
+.form-com label {
+    font-size: 0.875rem; 
+    font-weight: 500;
+}
+
+.text-box {
+    color: #222;
+    background-color: #fff;
+    box-shadow: 1px 3px 10px 1px rgba(0, 0, 0, 0.200);
+    width: 100%; 
+    font-size: 0.875rem; 
+    border: none;
+    border-radius: 15px;
+    padding: 10px 15px; 
+    outline: none;
+    font-family: "Lato", sans-serif;
+}
+
+.btnLog {
+    font-size: 1rem;
+    color: #fff;
+    font-weight: 900;
+    padding: 12px 40px;
+    background: #0064B1;
+    border: none;
+    border-radius: 20px; 
+    display: block;
+    margin: 0 auto; 
+}
+
+.form-com.position-relative {
+    position: relative;
+}
+
+.show-password-btn {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+    .caption-login {
+        font-size: 2rem; 
+    }
+
+    .form-com {
+        margin-bottom: 15px; 
+    }
+
+    .text-box {
+        padding: 10px;
+    }
+
+    .btnLog {
+        font-size: 0.875rem; 
+        padding: 10px 30px; 
+    }
+}
+
+@media (max-width: 480px) {
+    .caption-login {
+        font-size: 1.5rem; 
+    }
+
+    .form-com {
+        margin-bottom: 10px;
+    }
+
+    .text-box {
+        padding: 8px; 
+    }
+
+    .btnLog {
+        font-size: 0.75rem; 
+        padding: 8px 20px;
+    }
+}

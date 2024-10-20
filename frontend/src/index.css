@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Outfit:wght@100..900&family=Righteous&family=Spinnaker&family=Sulphur+Point:wght@300;400;700&family=Titan+One&display=swap');
+
+body {
+  margin: 0;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: "Lato", sans-serif;
+}
+
+.caption {
+  font-family: "Sulphur Point", sans-serif;
+  font-weight: 400;
+  font-size: 30px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.btnall {
+  width: max(10vw, 170px);
+  font-family: system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 20px;
+  border: none;
+  padding: 8px 0px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.btnSave {
+  background-color: #6de56d;
+}
+
+.btnSave:hover {
+  background-color: #a0ffa0;
+}
+
+.btnReset {
+  background-color: #e56d6d;
+}
+
+.btnReset:hover {
+  background-color: #ffa0a0;
+}
+
+.btnUpdate {
+  background-color: #00d107;
+  border: none;
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+.btnDelete {
+  background-color: #d10000;
+  border: none;
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .btnall {
+    font-size: 12px;
+    width: 110px;
+  }
+
+  input[type=number] {
+    margin: 5px;
+  }
+
+}
+@media (max-width: 590px) {
+  input {
+      padding:8px 16px;
+      width: 100%;
+      margin: 4px;
+  }
+}

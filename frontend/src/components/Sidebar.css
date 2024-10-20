@@ -1,0 +1,133 @@
+.sidebar {
+    background-color: #343a40;
+    color: #ffffff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-pills .navlink,
+.logout {
+    color: #ffffff;
+    background-color: #5827d2;
+    width: max(10vw, 150px);
+    font-family: system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 20px;
+    border: none;
+    padding: 4px 0px;
+    border-radius: 15px;
+    cursor: pointer;
+    gap: 10px;
+}
+
+.nav-pills .navlink.active,
+.nav-pills .show>.navlink {
+    color: #ffffff;
+    background-color: #495057;
+}
+
+.nav-pills .navlink:hover {
+    color: #ffffff;
+    background-color: #007AFF;
+}
+
+.nav-link .fs-4 {
+    font-size: 1.5rem;
+}
+
+/* List item styles */
+.nav-item {
+    width: 100%;
+}
+
+.logout {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    padding: 6px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.logout:hover {
+    opacity: 0.9;
+}
+
+ul {
+    padding-left: 0;
+}
+
+ul li {
+    list-style: none;
+    
+}
+
+.nav.flex-column .nav-link {
+    padding: 0.5rem 1rem;
+}
+.sidebar-center{
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.nav-item span {
+    font-size: 10px;
+}
+
+@media (max-width: 1360px) {
+    .nav-item span {
+        font-size: 10px;
+    }
+}
+@media (max-width: 768px) {
+    .caption {
+        font-size: 10px;
+    }
+
+    .fixed-sidebar,
+    .sidebar {
+        width: 100%;
+    }
+
+    .nav-pills .navlink {
+        width: auto;
+    }
+
+    .btn .btn-danger {
+        width: auto;
+    }
+
+    .fs-5,
+    .d-none.d-sm-inline {
+        display: none !important;
+    }
+
+    .content-area {
+        margin-left: 0px;
+    }
+
+    .logout {
+        font-size: 13px; 
+        padding: 6px 12px;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+}
+
+.sidebar {
+    background-color: #343a40;
+    color: #ffffff;
+    height: 120vh;
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    overflow: hidden;
+}
