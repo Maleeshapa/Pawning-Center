@@ -1,5 +1,8 @@
 ✅ Sinhala Language
 ✅ Mobile Responsive
+✅ Income , Outgoings Calculate
+✅ PDF generate
+✅ Admin, SuperAdmin Controll
 
 username - abc
 password - 123
