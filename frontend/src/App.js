@@ -19,6 +19,7 @@ import Pawn from "./Pages/Super Admin/Pawn";
 import Sell from "./Pages/Super Admin/Sell";
 import Remove from "./Pages/Super Admin/Remove";
 import Item from "./Pages/Super Admin/Item";
+import Release from "./Pages/Super Admin/Release";
 
 function App() {
   return (
@@ -69,6 +70,12 @@ function App() {
           <Route path="/Pawn" element={
             <ProtectedRoute allowedAccountTypes={['superadmin']}>
               <Pawn />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/Release" element={
+            <ProtectedRoute allowedAccountTypes={['superadmin']}>
+              <Release />
             </ProtectedRoute>
           } />
 

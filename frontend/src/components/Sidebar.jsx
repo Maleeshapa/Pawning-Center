@@ -56,6 +56,13 @@ const Sidebar = () => {
                         <li className="nav-item">
                             <NavLink to="/Pawn" className={({ isActive }) => "navlink btn px-3 align-middle mb-4 " + (isActive ? "active" : "")}>
                                 <i class="fs-4 bi bi-wallet2"></i>
+                                <span className="ms-1 d-none d-sm-inline">උකස් වර්තමානය</span>
+                            </NavLink>
+                        </li>
+
+                        <li className="nav-item">
+                            <NavLink to="/Release" className={({ isActive }) => "navlink btn px-3 align-middle mb-4 " + (isActive ? "active" : "")}>
+                            <i class="fs-4 bi bi-calendar-check"></i>
                                 <span className="ms-1 d-none d-sm-inline">උකස් ඉතිහාසය</span>
                             </NavLink>
                         </li>

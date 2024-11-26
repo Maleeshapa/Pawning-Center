@@ -8,7 +8,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import config from '../../config';
 
-const Pawn = () => {
+const Release = () => {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [showModal, setShowModal] = useState(false);
@@ -19,7 +19,8 @@ const Pawn = () => {
         const fetchProducts = async () => {
             try {
                 const response = await axios.get(`${config.BASE_URL}/api/products`);
-                const soldProducts = response.data.filter(product => product.status === 'Pawned');
+                const soldProducts = response.data.filter(product => product.status === 'Release' );
+                //const soldProducts = response.data.filter(product => product.status === 'Release' || product.status === 'Pawned');
                 setProducts(soldProducts);
                 console.log('Fetched products:', soldProducts);
             } catch (error) {
@@ -254,7 +255,7 @@ const Pawn = () => {
             <div className="row flex-nowrap">
                 <Sidebar />
                 <div className="col py-3 content-area">
-                    <h1 className="text-center caption mb-4">උකස් වර්තමානය</h1>
+                    <h1 className="text-center caption mb-4">උකස් ඉතිහාසය</h1>
 
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
                         <div className="input-group w-100 w-md-50 mb-3 mb-md-0">
@@ -391,4 +392,4 @@ const Pawn = () => {
     );
 };
 
-export default Pawn;
+export default Release;
