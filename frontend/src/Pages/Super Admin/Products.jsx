@@ -59,7 +59,8 @@ const Products = () => {
         return (
             (product.customerName || '').toLowerCase().includes(lowerCaseQuery) ||
             (product.nic || '').toLowerCase().includes(lowerCaseQuery) ||
-            (product.itemName || '').toLowerCase().includes(lowerCaseQuery)
+            (product.itemName || '').toLowerCase().includes(lowerCaseQuery)||
+            (product.recepitNo || '').toLowerCase().includes(lowerCaseQuery)
         );
     });
 
@@ -192,10 +193,10 @@ const Products = () => {
 
 
         filteredProducts.forEach(product => {
-            if (!['Release', 'Sold', 'Removed'].includes(product.status)){
-            totalEstimatePrice += product.marketValue || 0;           
-            totalPawningAdvance += product.estimateValue || 0;
-        }
+            if (!['Release', 'Sold', 'Removed'].includes(product.status)) {
+                totalEstimatePrice += product.marketValue || 0;
+                totalPawningAdvance += product.estimateValue || 0;
+            }
         });
 
         return {
@@ -269,8 +270,9 @@ const Products = () => {
                                         <td>{product.itemName}</td>
                                         <td> {product.itemNo}</td>
                                         <td> {product.size}</td>
-                                        <td>{product.marketValue}</td>
-                                        <td>{product.estimateValue}</td>
+                                        <td className="text-end">{product.marketValue.toLocaleString()}</td>
+<td className="text-end">{product.estimateValue.toLocaleString()}</td>
+
                                         <td>{moment(product.startDate).format('YYYY-MM-DD HH:mm:ss')}</td>
                                         <td>{product.endDate ? moment(product.endDate).tz('Asia/Colombo').format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</td>
 
@@ -361,9 +363,9 @@ const Products = () => {
                             <tfoot>
                                 <tr>
                                     <td colSpan="10" style={{ fontWeight: 'bold', textAlign: 'right' }}>Totals:</td>
-                                    <td className="table-danger">{totals.totalEstimatePrice.toFixed(2)}</td>
+                                    <td className="table-danger text-end">{totals.totalEstimatePrice.toLocaleString()}</td>
+                                    <td className="table-primary text-end">{totals.totalPawningAdvance.toLocaleString()}</td>
 
-                                    <td className="table-primary">{totals.totalPawningAdvance.toFixed(2)}</td>
 
                                     <td></td>
                                 </tr>

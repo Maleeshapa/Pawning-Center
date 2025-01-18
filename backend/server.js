@@ -127,8 +127,10 @@ app.post('/api/submit', upload.fields([
         }
 
         function insertProduct() {
-            const createItemQuery = `INSERT INTO Products (recepitNo,customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue) VALUES (?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-            connection.query(createItemQuery, [recepitNo, customerName, nic, address, phone, correctedStartDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue], (err, result) => {
+            const currentDateTime = moment().tz('Asia/Colombo').format('YYYY-MM-DD HH:mm:ss');
+    
+            const createItemQuery = `INSERT INTO Products (recepitNo,customerName, nic, address, phone, startDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue,dateTime) VALUES (?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            connection.query(createItemQuery, [recepitNo, customerName, nic, address, phone, correctedStartDate, itemCategory, itemModel, itemName, itemNo, size, marketValue, estimateValue, currentDateTime], (err, result) => {
                 if (err) {
                     console.error('Error saving item:', err);
                     return res.status(500).json({ message: 'Error saving item', error: err.message });
@@ -279,6 +281,32 @@ app.get('/api/products', (req, res) => {
         res.status(200).json(formattedResults);
     });
 });
+
+
+app.get('/api/today', (req, res) => {
+    // Get today's date in Sri Lanka timezone
+    const colomboDate = moment().tz('Asia/Colombo').format('YYYY-MM-DD');
+    
+    const getProductsQuery = `
+        SELECT * 
+        FROM products 
+        WHERE DATE(dateTime) = ?`;
+        
+    console.log('Searching for date:', colomboDate); // Debug log
+
+    connection.query(getProductsQuery, [colomboDate], (err, results) => {
+        if (err) {
+            console.error('Error fetching products:', err);
+            return res.status(500).json({ message: 'Error fetching products' });
+        }
+        
+        console.log('Found records:', results.length); // Debug log
+        console.log('Records:', results); // Debug log
+        
+        res.status(200).json(results);
+    });
+});
+
 
 
 app.post('/api/pawn-payment', (req, res) => {

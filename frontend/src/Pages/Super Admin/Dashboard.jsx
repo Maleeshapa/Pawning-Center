@@ -4,6 +4,7 @@ import Sidebar from '../../components/Sidebar';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import config from '../../config';
+import DashboardTotals from './DashboardTotal';
 
 const Dashboard = () => {
     const [customerCount, setCustomerCount] = useState(0);
@@ -53,6 +54,7 @@ const Dashboard = () => {
                 <Sidebar />
                 <div className="col py-3 content-area">
                     <h3 className='caption'>Dashboard</h3>
+                    <DashboardTotals />
                     <main className="col-md-12 p-3 bg-white">
 
                         {/* <div className="row">
@@ -106,12 +108,22 @@ const Dashboard = () => {
                             </div>
                             <div className="col-md-4 mb-3" id="dMain">
                                 <NavLink
-                                    to="/Pawn"
+                                    to="/Release"
                                     className="p-3 tabs reportTab d-flex align-items-center justify-content-center text-decoration-none"
+                                >
+                                    උකස් ගනුදෙනු වර්තමානය
+                                </NavLink>
+                            </div>
+
+                            <div className="col-md-4 mb-3" id="dMain">
+                                <NavLink
+                                    to="/Pawn"
+                                    className="p-3 tabs reportTab2 d-flex align-items-center justify-content-center text-decoration-none"
                                 >
                                     උකස් ගනුදෙනු ඉතිහසය
                                 </NavLink>
                             </div>
+
                             <div className="col-md-4 mb-3" id="dMain">
                                 <NavLink
                                     to="/sell"

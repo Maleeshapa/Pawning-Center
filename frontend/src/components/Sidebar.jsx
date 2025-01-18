@@ -89,6 +89,13 @@ const Sidebar = () => {
                         </li>
 
                         <li className="nav-item">
+                            <NavLink to="/today" className={({ isActive }) => "navlink btn px-3 align-middle mb-4 " + (isActive ? "active" : "")}>
+                                <i class="fs-4 bi bi-calendar-check"></i>
+                                <span className="ms-1 d-none d-sm-inline">අද ගණුදෙනු</span>
+                            </NavLink>
+                        </li>
+
+                        <li className="nav-item">
                             <NavLink to="/CreateAdmin" className={({ isActive }) => "navlink btn px-3 align-middle mb-4 " + (isActive ? "active" : "")}>
                                 <i className="fs-4 bi bi-person-plus"></i>
                                 <span className="ms-1 d-none d-sm-inline">Create Admin</span>
